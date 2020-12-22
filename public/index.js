@@ -20,7 +20,7 @@ app.get('/search/:search', async function (req, res) {
 // const options = {
 //   index: 'index.html',
 // };
-app.use('/', express.static('/home/site/wwwroot/public', options));
+app.use('/', express.static('/home/site/wwwroot/build', options));
 
 // app.use(express.static('public'));
 
