@@ -16,7 +16,12 @@ app.get('/api/search/:search', async function (req, res) {
   }
 });
 
-app.use(express.static('public'));
+const options = {
+  index: 'index.html',
+};
+app.use('/', express.static('/home/site/wwwroot/public', options));
+
+// app.use(express.static('public'));
 
 const server = app.listen(process.env.PORT || 8081, '0.0.0.0', function () {
   const host = server.address().address;
