@@ -17,9 +17,10 @@ app.get('/search/:search', async function (req, res) {
   }
 });
 
-// const options = {
-//   index: 'index.html',
-// };
+console.log('Running ', process.env.PORT);
+const options = {
+  index: 'index.html',
+};
 app.use('/', express.static('/home/site/wwwroot/build', options));
 
 // app.use(express.static('public'));
