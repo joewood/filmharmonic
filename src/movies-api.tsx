@@ -16,7 +16,7 @@ export interface Data {
 
 /** Function that calls `fetch` calling the server to get the movies */
 export async function searchMovies(search: string): Promise<Data> {
-  const searchResponse = await fetch('/api/search/' + encodeURIComponent(search));
+  const searchResponse = await fetch('/search/' + encodeURIComponent(search));
   return (await searchResponse.json()) as Data;
 }
 

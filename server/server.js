@@ -1,8 +1,9 @@
 const express = require('express');
 const app = express();
 const fetch = require('node-fetch');
+const port = process.env.PORT || 9000;
 
-app.get('/api/search/:search', async function (req, res) {
+app.get('/search/:search', async function (req, res) {
   const search = req.params.search;
   const omdbRequest = await fetch(`http://www.omdbapi.com/?apikey=d88baf32&s=${search}`, { method: 'GET' });
   if (omdbRequest.ok) {
@@ -16,16 +17,11 @@ app.get('/api/search/:search', async function (req, res) {
   }
 });
 
-const options = {
-  index: 'index.html',
-};
-app.use('/', express.static('/home/site/wwwroot/public', options));
+// const options = {
+//   index: 'index.html',
+// };
+// app.use('/', express.static('/home/site/wwwroot/public', options));
 
 // app.use(express.static('public'));
 
-const server = app.listen(process.env.PORT || 8081, '0.0.0.0', function () {
-  const host = server.address().address;
-  const port = server.address().port;
-
-  console.log('Example app listening at http://0.0.0.0:%s', host, port);
-});
+const server = app.listen(port);
