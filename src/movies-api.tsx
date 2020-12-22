@@ -1,5 +1,3 @@
-import { QueryFunctionContext, useQuery } from 'react-query';
-
 /**  Movie Search Results from the search */
 export interface Movie {
   /** Poster URL image */

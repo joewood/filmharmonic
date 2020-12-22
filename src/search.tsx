@@ -47,7 +47,7 @@ function App() {
       <ul>
         {movies.map((movie) => (
           <div className="movie" key={movie.Title}>
-            <img src={movie.Poster} width={100}></img>
+            <img src={movie.Poster} alt={movie.Title} width={100}></img>
           </div>
         ))}
       </ul>
