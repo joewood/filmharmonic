@@ -3,7 +3,7 @@ import { FormEventHandler, useRef, useState } from 'react';
 import { Movie, searchMovies } from './movies-api';
 
 /** In React a Function is like an HTML element, this is the <App> Component used in index.tsx */
-function App() {
+export function Search() {
   // in React the `useRef` function gives us a ref object that can be used to link to an HTML Element
   // this ref will link to the Search Input element below
   const searchRefInputElement = useRef<HTMLInputElement>(null);
@@ -29,7 +29,8 @@ function App() {
       setMovies(movies.Search);
     }
   };
-
+  /** The React elements are the same as HTML other than `className` is used rather than `class`
+   * and style looks a bit different. */
   return (
     <div className="App">
       <header className="App-header">
@@ -54,5 +55,3 @@ function App() {
     </div>
   );
 }
-
-export default App;
