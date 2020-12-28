@@ -20,6 +20,12 @@ export async function searchMovies(search: string): Promise<Data> {
   return (await searchResponse.json()) as Data;
 }
 
+/** Function that calls `fetch` calling the server to get the movies */
+export async function fetchMovie(id: string): Promise<Data> {
+  const searchResponse = await fetch('/movie/' + id);
+  return (await searchResponse.json()) as Data;
+}
+
 /** React Hook to search for a movie, returns a list of Movies */
 // export function useSearchMovies(search: string): Movie[] {
 //   const { isLoading, error, data } = useQuery<Data, string>({ queryFn: searchMovies, queryKey: ['search', search] });

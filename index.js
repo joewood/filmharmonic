@@ -19,6 +19,20 @@ app.get('/search/:search', async function (req, res) {
   }
 });
 
+app.get('/movie/:id', async function (req, res) {
+  const id = req.params.id;
+  const omdbRequest = await fetch(`http://www.omdbapi.com/?apikey=d88baf32&i=${id}`, { method: 'GET' });
+  if (omdbRequest.ok) {
+    const data = await omdbRequest.json();
+    res.send(JSON.stringify(data, null, 2));
+    res.status(200);
+  } else {
+    console.error(omdbRequest.statusText);
+    res.status(omdbRequest.status || 501);
+    res.send(omdbRequest.statusText);
+  }
+});
+
 console.log('Running ', process.env.PORT);
 const options = {
   index: 'index.html',
