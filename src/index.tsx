@@ -9,7 +9,7 @@ import { Search } from './search';
 
 interface CBProps extends RouteComponentProps {}
 
-const CB: FC<CBProps> = ({}) => (
+const CB: FC<CBProps> = () => (
   <Callback
     onSuccess={(user) => {
       // `user.state` will reflect the state that was passed in via signinArgs.

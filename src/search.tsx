@@ -43,7 +43,7 @@ export const Search: FC<SearchProps> = ({ user }) => {
         <h1>Film Harmonic</h1>
         <div className="user">{user?.profile.email}</div>
         <div className="user">{user?.profile.name}</div>
-        <img width={100} src={user?.profile.picture} />
+        <img width={100} src={user?.profile.picture} alt="profile" />
       </header>
       <div className="search">
         <form onSubmit={onSubmit} method="POST">
