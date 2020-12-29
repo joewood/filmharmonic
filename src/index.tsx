@@ -20,12 +20,16 @@ const CB: FC<CBProps> = () => (
   />
 );
 
+const here = `${window.location.protocol}//${window.location.hostname}${
+  window.location.port ? ':' + window.location.port : ''
+}`;
+
 const userManagerConfig: UserManagerSettings = {
   client_id: '1006758276859-dtpr1lapbjv51g8cust93dac1qaiemav.apps.googleusercontent.com',
   response_type: 'id_token token',
   scope: 'openid email profile',
   authority: 'https://accounts.google.com',
-  redirect_uri: 'http://localhost:3000/callback',
+  redirect_uri: `${here}/callback`,
 };
 const userManager = makeUserManager(userManagerConfig);
 
