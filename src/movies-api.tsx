@@ -15,8 +15,10 @@ export interface Data {
 }
 
 /** Function that calls `fetch` calling the server to get the movies */
-export async function searchMovies(search: string): Promise<Data> {
-  const searchResponse = await fetch('/search/' + encodeURIComponent(search));
+export async function searchMovies(token: string, search: string): Promise<Data> {
+  const searchResponse = await fetch('/search/' + encodeURIComponent(search), {
+    headers: { Authorization: 'Bearer ' + token },
+  });
   return (await searchResponse.json()) as Data;
 }
 

@@ -21,6 +21,10 @@ html * {
   color: white;
 }
 
+.App-header user {
+  float: right;
+}
+
 .movie {
   padding: 10px;
   display: inline-block;
