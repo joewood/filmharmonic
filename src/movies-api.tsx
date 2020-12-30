@@ -4,10 +4,44 @@ export interface Movie {
   Poster: string;
   /** TItle of the Movie */
   Title: string;
+  Type: string;
   /** Year that it was released */
   Year: string;
   /** imdbID code to use to get the movie details */
   imdbID: string;
+}
+
+interface Rating {
+  Source: string;
+  Value: string;
+}
+
+export interface MovieDetails {
+  Title: string;
+  Year: string;
+  Rated: string;
+  Released: string;
+  Runtime: string;
+  Genre: string;
+  Director: string;
+  Writer: string;
+  Actors: string;
+  Plot: string;
+  Language: string;
+  Country: string;
+  Awards: string;
+  Poster: string;
+  Ratings: Rating[];
+  Metascore: string;
+  imdbRating: string;
+  imdbVotes: string;
+  imdbID: string;
+  Type: string;
+  DVD: string;
+  BoxOffice: string;
+  Production: string;
+  Website: string;
+  Response: string;
 }
 
 export interface Data {
@@ -23,9 +57,11 @@ export async function searchMovies(token: string, search: string): Promise<Data>
 }
 
 /** Function that calls `fetch` calling the server to get the movies */
-export async function fetchMovie(id: string): Promise<Data> {
-  const searchResponse = await fetch('/movie/' + id);
-  return (await searchResponse.json()) as Data;
+export async function fetchMovie(token: string, id: string): Promise<MovieDetails> {
+  const searchResponse = await fetch('/movie/' + id, {
+    headers: { Authorization: 'Bearer ' + token },
+  });
+  return (await searchResponse.json()) as MovieDetails;
 }
 
 /** React Hook to search for a movie, returns a list of Movies */

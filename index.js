@@ -39,6 +39,7 @@ const options = {
 };
 app.use('/', express.static('/home/site/wwwroot/build', options));
 app.use('/callback', express.static('/home/site/wwwroot/build', options));
+app.use('/showmovie/*', express.static('/home/site/wwwroot/build', options));
 
 // app.use(express.static('public'));
 

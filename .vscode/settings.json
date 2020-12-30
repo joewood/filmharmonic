@@ -2,6 +2,8 @@
     "prettier.printWidth": 120,
     "editor.formatOnSave": true,
     "cSpell.words": [
+        "Metascore",
+        "imdb",
         "oidc",
         "signin"
     ]
