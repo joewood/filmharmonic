@@ -7,6 +7,7 @@ import { Movie, searchMovies } from './movies-api';
 interface SearchProps extends RouteComponentProps {
   user: User | null;
 }
+
 /** In React a Function is like an HTML element, this is the <App> Component used in index.tsx */
 export const Search: FC<SearchProps> = ({ user }) => {
   // in React the `useRef` function gives us a ref object that can be used to link to an HTML Element
@@ -57,10 +58,7 @@ export const Search: FC<SearchProps> = ({ user }) => {
       <ul>
         {movies.map((movie) => (
           <div className="movie" key={movie.Title}>
-            <a href={`/showmovie/${movie.imdbID}`}>
-              <img src={movie.Poster} alt={movie.Title} width={100}></img>
-              <p>{`${movie.Title} (${movie.Type})`}</p>
-            </a>
+            <img src={movie.Poster} alt={movie.Title} width={100}></img>
           </div>
         ))}
       </ul>
