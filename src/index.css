@@ -5,11 +5,7 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 
-<<<<<<< HEAD
-  background-image: url("../images/film.jpeg");
-=======
   background-image: url('./images/film.jpeg');
->>>>>>> d239d67a323b56833f9e4b7fb1f4417398e35654
 }
 
 html * {
