@@ -26,6 +26,9 @@ html * {
 .App-header user {
   float: right;
 }
+.App {
+  text-align: center;
+}
 
 .movie {
   padding: 10px;
