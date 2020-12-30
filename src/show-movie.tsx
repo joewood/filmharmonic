@@ -1,4 +1,3 @@
-import { RouteComponentProps, useParams } from '@reach/router';
 import { User } from 'oidc-client';
 import * as React from 'react';
 import { FC, useEffect, useState } from 'react';
