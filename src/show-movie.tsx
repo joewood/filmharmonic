@@ -4,13 +4,14 @@ import * as React from 'react';
 import { FC, useEffect, useState } from 'react';
 import { fetchMovie, MovieDetails } from './movies-api';
 
-interface ShowMovieProps extends RouteComponentProps<{ movieId: string }> {
+interface ShowMovieProps {
   user: User | null;
+  movieId: string | undefined;
 }
 /** In React a Function is like an HTML element, this is the <App> Component used in index.tsx */
-export const ShowMovie: FC<ShowMovieProps> = ({ user }) => {
+export const ShowMovie: FC<ShowMovieProps> = ({ user, movieId }) => {
   const [movie, setMovie] = useState<MovieDetails | null>(null);
-  const { movieId } = useParams();
+
   useEffect(() => {
     if (movieId && user) fetchMovie(user?.access_token, movieId).then(setMovie);
   }, [movieId, user]);

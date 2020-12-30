@@ -27,8 +27,8 @@ const AuthorizedSearch: FC<RouteComponentProps> = () => (
   <UserData.Consumer>{(context) => <Search user={context.user} />}</UserData.Consumer>
 );
 
-const AuthorizedShowMovie: FC<RouteComponentProps> = () => (
-  <UserData.Consumer>{(context) => <ShowMovie user={context.user} />}</UserData.Consumer>
+const AuthorizedShowMovie: FC<RouteComponentProps<{ movieId: string }>> = ({ movieId }) => (
+  <UserData.Consumer>{(context) => <ShowMovie user={context.user} movieId={movieId} />}</UserData.Consumer>
 );
 
 const SearchWithAuth = makeAuthenticator({ userManager })(AuthorizedSearch);
