@@ -5,7 +5,7 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 
-  background-image: url("film.jpg");
+  background-image: url(("../images/film.jpeg");
 }
 
 html * {
