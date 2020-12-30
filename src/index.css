@@ -1,15 +1,11 @@
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans',
-    'Droid Sans', 'Helvetica Neue', sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans",
+    "Droid Sans", "Helvetica Neue", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 
-<<<<<<< HEAD
-  background-image: url("../images/film.jpeg");
-=======
-  background-image: url('./images/film.jpeg');
->>>>>>> d239d67a323b56833f9e4b7fb1f4417398e35654
+  background-image: url("./images/film.jpeg");
 }
 
 html * {
@@ -34,6 +30,8 @@ html * {
 .movie {
   padding: 10px;
   display: inline-block;
+  color: white;
+  background-color: black;
 }
 
 .search {
