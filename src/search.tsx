@@ -2,6 +2,7 @@ import { RouteComponentProps } from '@reach/router';
 import { User } from 'oidc-client';
 import * as React from 'react';
 import { FC, FormEventHandler, useRef, useState } from 'react';
+import { Header } from './header';
 import { Movie, searchMovies } from './movies-api';
 
 interface SearchProps extends RouteComponentProps {
@@ -12,7 +13,6 @@ interface SearchProps extends RouteComponentProps {
 export const Search: FC<SearchProps> = ({ user }) => {
   // in React the `useRef` function gives us a ref object that can be used to link to an HTML Element
   // this ref will link to the Search Input element below
-  console.log('Other', user);
   const searchRefInputElement = useRef<HTMLInputElement>(null);
 
   // in React a Component can have state. These are special values that when they change will cause
@@ -40,12 +40,7 @@ export const Search: FC<SearchProps> = ({ user }) => {
    * and style looks a bit different. */
   return (
     <div className="App">
-      <header className="App-header">
-        <h1>Film Harmonic</h1>
-        <div className="user">{user?.profile.email}</div>
-        <div className="user">{user?.profile.name}</div>
-        <img width={100} src={user?.profile.picture} alt="profile" />
-      </header>
+      <Header user={user} />
       <div className="search">
         <form onSubmit={onSubmit} method="POST">
           <label>
@@ -59,9 +54,15 @@ export const Search: FC<SearchProps> = ({ user }) => {
       <ul>
         {movies.map((movie) => (
           <div className="movie" key={movie.Title}>
+<<<<<<< HEAD
             <a href={`/showmovie/${movie.imdbID}`}>
               <img src={movie.Poster} className= "film" alt={movie.Title} width={100}></img>
               <p className = "title">{movie.Title}</p>
+=======
+            <a href={`/movie/${movie.imdbID}`}>
+              <img src={movie.Poster} alt={movie.Title} width={100}></img>
+              <p>{movie.Title}</p>
+>>>>>>> 9f220769dfcb6a16bc4d4a5d50f836bb3b8fb9f9
             </a>
           </div>
         ))}
