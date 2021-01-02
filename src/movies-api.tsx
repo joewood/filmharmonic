@@ -104,6 +104,15 @@ export async function makeProposal(token: string, userId: string, id: string): P
   return await updateUserState(token, userId, userDetails);
 }
 
+export async function voteOnMovie(token: string, userId: string, id: string): Promise<UserState> {
+  const searchResponse = await fetch('/api/user/' + encodeURIComponent(userId), {
+    headers: { Authorization: 'Bearer ' + token },
+  });
+  const userDetails = (await searchResponse.json()) as UserState;
+  userDetails.vote = id;
+  return await updateUserState(token, userId, userDetails);
+}
+
 /** React Hook to search for a movie, returns a list of Movies */
 // export function useSearchMovies(search: string): Movie[] {
 //   const { isLoading, error, data } = useQuery<Data, string>({ queryFn: searchMovies, queryKey: ['search', search] });

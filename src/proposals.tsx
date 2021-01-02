@@ -1,7 +1,8 @@
+import { navigate } from '@reach/router';
 import { User } from 'oidc-client';
 import * as React from 'react';
-import { FC, useEffect, useState } from 'react';
-import { fetchMovie, fetchUsers, MovieDetails, UserState } from './movies-api';
+import { FC, useCallback, useEffect, useState } from 'react';
+import { fetchMovie, fetchUsers, MovieDetails, UserState, voteOnMovie } from './movies-api';
 
 interface ProposalsProps {
   user: User | null;
@@ -27,6 +28,14 @@ export const Proposals: FC<ProposalsProps> = ({ user }) => {
     request();
   }, [user]);
 
+  const onVote = useCallback(
+    (movieId: string) => {
+      if (!user?.access_token || !user?.profile?.email) return;
+      voteOnMovie(user?.access_token, user?.profile?.email, movieId).then(() => navigate('/'));
+    },
+    [user?.access_token, user?.profile?.email]
+  );
+
   /** The React elements are the same as HTML other than `className` is used rather than `class`
    * and style looks a bit different. */
   return (
@@ -41,7 +50,7 @@ export const Proposals: FC<ProposalsProps> = ({ user }) => {
         <img width={100} src={user?.profile.picture} alt="profile" />
       </header>
       <h1>{user?.profile?.name}</h1>
-      <div style={{ display: 'grid' }}>
+      <div style={{ display: 'grid', backgroundColor: 'rgba(255,255,255,0.5)' }}>
         {movies.map((u, n) => (
           <>
             <div key={'IMG' + u?.imdbID} style={{ gridRow: n + 1, gridColumn: 1 }}>
@@ -69,7 +78,7 @@ export const Proposals: FC<ProposalsProps> = ({ user }) => {
                 .filter((uu) => uu.vote === u.imdbID)
                 .map((uu) => uu.RowKey)
                 .join(', ')}
-              <button>Vote</button>
+              <button onClick={() => onVote(u.imdbID)}>Vote</button>
             </div>
           </>
         ))}
