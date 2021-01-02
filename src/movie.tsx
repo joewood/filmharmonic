@@ -4,12 +4,12 @@ import { FC, useCallback, useEffect, useState } from 'react';
 import { fetchMovie, makeProposal, MovieDetails } from './movies-api';
 import { navigate } from '@reach/router';
 
-interface ShowMovieProps {
+interface MovieProps {
   user: User | null;
   movieId: string | undefined;
 }
 /** In React a Function is like an HTML element, this is the <App> Component used in index.tsx */
-export const ShowMovie: FC<ShowMovieProps> = ({ user, movieId }) => {
+export const Movie: FC<MovieProps> = ({ user, movieId }) => {
   const [movie, setMovie] = useState<MovieDetails | null>(null);
   const onPropose = useCallback(() => {
     if (user?.access_token && user?.profile?.email && movieId)

@@ -3,11 +3,11 @@ import * as React from 'react';
 import { FC, useEffect, useState } from 'react';
 import { fetchMovie, fetchUser, MovieDetails } from './movies-api';
 
-interface ShowUserProps {
+interface ProfileProps {
   user: User | null;
 }
 /** In React a Function is like an HTML element, this is the <App> Component used in index.tsx */
-export const ShowUser: FC<ShowUserProps> = ({ user }) => {
+export const Profile: FC<ProfileProps> = ({ user }) => {
   const [proposed, setProposed] = useState<MovieDetails | null>(null);
   const [voted, setVoted] = useState<MovieDetails | null>(null);
 

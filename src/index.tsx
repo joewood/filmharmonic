@@ -5,14 +5,16 @@ import { FC } from 'react';
 import ReactDOM from 'react-dom';
 import { Callback, makeAuthenticator, makeUserManager, UserData } from 'react-oidc';
 import './index.css';
-import { ShowMovie } from './show-movie';
+import { Movie } from './movie';
 import { Search } from './search';
-import { ShowUser } from './user';
-import { ShowWishlist } from './show-wishlist';
+import { Profile } from './profile';
+import { Proposals } from './proposals';
 
-interface CBProps extends RouteComponentProps {}
+interface CallbackProps extends RouteComponentProps {}
 
-const CB: FC<CBProps> = () => <Callback onSuccess={(user) => navigate('/')} userManager={userManager} />;
+const CallbackScreen: FC<CallbackProps> = () => (
+  <Callback onSuccess={(user) => navigate('/')} userManager={userManager} />
+);
 
 const userManagerConfig: UserManagerSettings = {
   client_id: '1006758276859-dtpr1lapbjv51g8cust93dac1qaiemav.apps.googleusercontent.com',
@@ -24,37 +26,32 @@ const userManagerConfig: UserManagerSettings = {
   }/callback`,
 };
 const userManager = makeUserManager(userManagerConfig);
+const authUser = makeAuthenticator({ userManager });
 
-const AuthorizedSearch: FC<RouteComponentProps> = () => (
+const SearchProposal = authUser<RouteComponentProps>(() => (
   <UserData.Consumer>{(context) => <Search user={context.user} />}</UserData.Consumer>
-);
+));
 
-const AuthorizedShowMovie: FC<RouteComponentProps<{ movieId: string }>> = ({ movieId }) => (
-  <UserData.Consumer>{(context) => <ShowMovie user={context.user} movieId={movieId} />}</UserData.Consumer>
-);
+const AuthMovie = authUser<RouteComponentProps<{ movieId: string }>>(({ movieId }) => (
+  <UserData.Consumer>{(context) => <Movie user={context.user} movieId={movieId} />}</UserData.Consumer>
+));
 
-const AuthorizedShowUser: FC<RouteComponentProps> = () => (
-  <UserData.Consumer>{(context) => <ShowUser user={context.user} />}</UserData.Consumer>
-);
+const AuthProfile = authUser<RouteComponentProps>(() => (
+  <UserData.Consumer>{(context) => <Profile user={context.user} />}</UserData.Consumer>
+));
 
-const AuthorizedWishlist: FC<RouteComponentProps> = () => (
-  <UserData.Consumer>{(context) => <ShowWishlist user={context.user} />}</UserData.Consumer>
-);
-
-const SearchWithAuth = makeAuthenticator({ userManager })(AuthorizedSearch);
-const MovieWithAuth = makeAuthenticator({ userManager })(AuthorizedShowMovie);
-const UserWithAuth = makeAuthenticator({ userManager })(AuthorizedShowUser);
-const WishlistWithAuth = makeAuthenticator({ userManager })(AuthorizedWishlist);
+const AuthProposals = authUser<RouteComponentProps>(() => (
+  <UserData.Consumer>{(context) => <Proposals user={context.user} />}</UserData.Consumer>
+));
 
 const Root = () => (
   <React.StrictMode>
     <Router>
-      <CB path="/callback" />
-      <WishlistWithAuth path="/" />
-      <SearchWithAuth path="/search" />
-
-      <MovieWithAuth path="/showmovie/:movieId" />
-      <UserWithAuth path="/showuser" />
+      <CallbackScreen path="/callback" />
+      <AuthProposals path="/" />
+      <SearchProposal path="/search" />
+      <AuthMovie path="/movie/:movieId" />
+      <AuthProfile path="/user" />
     </Router>
   </React.StrictMode>
 );

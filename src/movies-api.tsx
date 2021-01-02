@@ -58,7 +58,7 @@ export interface UserState {
 
 /** Function that calls `fetch` calling the server to get the movies */
 export async function searchMovies(token: string, search: string): Promise<Data> {
-  const searchResponse = await fetch('/search/' + encodeURIComponent(search), {
+  const searchResponse = await fetch('/api/search/' + encodeURIComponent(search), {
     headers: { Authorization: 'Bearer ' + token },
   });
   return (await searchResponse.json()) as Data;
@@ -66,28 +66,28 @@ export async function searchMovies(token: string, search: string): Promise<Data>
 
 /** Function that calls `fetch` calling the server to get the movies */
 export async function fetchMovie(token: string, id: string): Promise<MovieDetails> {
-  const searchResponse = await fetch('/movie/' + id, {
+  const searchResponse = await fetch('/api/movie/' + id, {
     headers: { Authorization: 'Bearer ' + token },
   });
   return (await searchResponse.json()) as MovieDetails;
 }
 
 export async function fetchUser(token: string, id: string): Promise<UserState> {
-  const searchResponse = await fetch('/user/' + encodeURIComponent(id), {
+  const searchResponse = await fetch('/api/user/' + encodeURIComponent(id), {
     headers: { Authorization: 'Bearer ' + token },
   });
   return (await searchResponse.json()) as UserState;
 }
 
 export async function fetchUsers(token: string): Promise<UserState[]> {
-  const searchResponse = await fetch('/group', {
+  const searchResponse = await fetch('/api/group', {
     headers: { Authorization: 'Bearer ' + token },
   });
   return (await searchResponse.json()) as UserState[];
 }
 
 async function updateUserState(token: string, userId: string, userState: UserState): Promise<UserState> {
-  const searchResponse = await fetch('/user/' + encodeURIComponent(userId), {
+  const searchResponse = await fetch('/api/user/' + encodeURIComponent(userId), {
     method: 'PUT',
     headers: { Authorization: 'Bearer ' + token, 'Content-Type': 'application/json' },
     body: JSON.stringify(userState),
@@ -96,11 +96,10 @@ async function updateUserState(token: string, userId: string, userState: UserSta
 }
 
 export async function makeProposal(token: string, userId: string, id: string): Promise<UserState> {
-  const searchResponse = await fetch('/user/' + encodeURIComponent(userId), {
+  const searchResponse = await fetch('/api/user/' + encodeURIComponent(userId), {
     headers: { Authorization: 'Bearer ' + token },
   });
   const userDetails = (await searchResponse.json()) as UserState;
-
   userDetails.proposed = id;
   return await updateUserState(token, userId, userDetails);
 }

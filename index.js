@@ -11,7 +11,7 @@ const storageClient = storage.createTableService(process.env['COSMOS']);
 const bodyParser = require('body-parser');
 app.use(bodyParser.json());
 
-app.get('/search/:search', async function (req, res) {
+app.get('/api/search/:search', async function (req, res) {
   const search = req.params.search;
   const omdbRequest = await fetch(`http://www.omdbapi.com/?apikey=d88baf32&s=${search}`, { method: 'GET' });
   if (omdbRequest.ok) {
@@ -25,7 +25,7 @@ app.get('/search/:search', async function (req, res) {
   }
 });
 
-app.get('/movie/:id', async function (req, res) {
+app.get('/api/movie/:id', async function (req, res) {
   const id = req.params.id;
   const omdbRequest = await fetch(`http://www.omdbapi.com/?apikey=d88baf32&i=${id}`, { method: 'GET' });
   if (omdbRequest.ok) {
@@ -39,7 +39,7 @@ app.get('/movie/:id', async function (req, res) {
   }
 });
 
-app.get('/votes', async function (req, res) {
+app.get('/api/votes', async function (req, res) {
   const out = {
     proposals: {
       movieId: 'tt6723592',
@@ -56,7 +56,7 @@ app.get('/votes', async function (req, res) {
   res.status(200);
 });
 
-app.get('/user/:id', async function (req, res) {
+app.get('/api/user/:id', async function (req, res) {
   let out = {};
   try {
     out = await new Promise((resolve, reject) =>
@@ -83,14 +83,12 @@ app.get('/user/:id', async function (req, res) {
   res.status(200);
 });
 
-app.put('/user/:id', async function (req, res) {
+app.put('/api/user/:id', async function (req, res) {
   let out = {};
   const RowKey = decodeURIComponent(req.params.id);
   const PartitionKey = 'woods';
-  console.log('BODY', req.body);
   try {
     let newUser = { ...req.body, PartitionKey, RowKey };
-    console.log('NEW', newUser);
     out = await new Promise((resolve, reject) =>
       storageClient.insertOrReplaceEntity('user', newUser, (e, r) => (e ? reject(e) : resolve(r)))
     );
@@ -104,7 +102,7 @@ app.put('/user/:id', async function (req, res) {
   res.status(200);
 });
 
-app.get('/group', async function (req, res) {
+app.get('/api/group', async function (req, res) {
   let resultSet = {};
   try {
     resultSet = await new Promise((resolve, reject) =>
@@ -138,10 +136,7 @@ app.get('/group', async function (req, res) {
 const options = {
   index: 'index.html',
 };
-app.use('/', express.static('/home/site/wwwroot/build', options));
-app.use('/callback', express.static('/home/site/wwwroot/build', options));
-app.use('/showmovie/*', express.static('/home/site/wwwroot/build', options));
-app.use('/showuser/*', express.static('/home/site/wwwroot/build', options));
+app.use('/**/*', express.static('/home/site/wwwroot/build', options));
 
 console.log('Port ' + port);
 

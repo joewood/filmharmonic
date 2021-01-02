@@ -12,7 +12,6 @@ interface SearchProps extends RouteComponentProps {
 export const Search: FC<SearchProps> = ({ user }) => {
   // in React the `useRef` function gives us a ref object that can be used to link to an HTML Element
   // this ref will link to the Search Input element below
-  console.log('Other', user);
   const searchRefInputElement = useRef<HTMLInputElement>(null);
 
   // in React a Component can have state. These are special values that when they change will cause
@@ -43,7 +42,7 @@ export const Search: FC<SearchProps> = ({ user }) => {
       <header className="App-header">
         <h1>Film Harmonic</h1>
         <div className="user">{user?.profile.email}</div>
-        <a className="user" href="/showuser">
+        <a className="user" href="/user">
           {user?.profile.name}
         </a>
         <img width={100} src={user?.profile.picture} alt="profile" />
@@ -60,7 +59,7 @@ export const Search: FC<SearchProps> = ({ user }) => {
       <ul>
         {movies.map((movie) => (
           <div className="movie" key={movie.Title}>
-            <a href={`/showmovie/${movie.imdbID}`}>
+            <a href={`/movie/${movie.imdbID}`}>
               <img src={movie.Poster} alt={movie.Title} width={100}></img>
               <p>{movie.Title}</p>
             </a>

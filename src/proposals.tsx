@@ -3,11 +3,11 @@ import * as React from 'react';
 import { FC, useEffect, useState } from 'react';
 import { fetchMovie, fetchUsers, MovieDetails, UserState } from './movies-api';
 
-interface ShowWishlistProps {
+interface ProposalsProps {
   user: User | null;
 }
 /** In React a Function is like an HTML element, this is the <App> Component used in index.tsx */
-export const ShowWishlist: FC<ShowWishlistProps> = ({ user }) => {
+export const Proposals: FC<ProposalsProps> = ({ user }) => {
   const [users, setUsers] = useState<UserState[]>([]);
   const [movies, setMovies] = useState<MovieDetails[]>([]);
 
@@ -34,7 +34,7 @@ export const ShowWishlist: FC<ShowWishlistProps> = ({ user }) => {
       <header className="App-header">
         <h1>Film Harmonic</h1>
         <div className="user">{user?.profile.email}</div>
-        <a className="user" href="/showuser">
+        <a className="user" href="/user">
           {user?.profile.name}
         </a>
 
