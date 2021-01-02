@@ -7,6 +7,7 @@ import { Callback, makeAuthenticator, makeUserManager, UserData } from 'react-oi
 import './index.css';
 import { ShowMovie } from './show-movie';
 import { Search } from './search';
+import { ShowUser } from './user';
 
 interface CBProps extends RouteComponentProps {}
 
@@ -31,8 +32,13 @@ const AuthorizedShowMovie: FC<RouteComponentProps<{ movieId: string }>> = ({ mov
   <UserData.Consumer>{(context) => <ShowMovie user={context.user} movieId={movieId} />}</UserData.Consumer>
 );
 
+const AuthorizedShowUser: FC<RouteComponentProps> = () => (
+  <UserData.Consumer>{(context) => <ShowUser user={context.user} />}</UserData.Consumer>
+);
+
 const SearchWithAuth = makeAuthenticator({ userManager })(AuthorizedSearch);
 const MovieWithAuth = makeAuthenticator({ userManager })(AuthorizedShowMovie);
+const UserWithAuth = makeAuthenticator({ userManager })(AuthorizedShowUser);
 
 const Root = () => (
   <React.StrictMode>
@@ -40,6 +46,7 @@ const Root = () => (
       <CB path="/callback" />
       <SearchWithAuth path="/" />
       <MovieWithAuth path="/showmovie/:movieId" />
+      <UserWithAuth path="/showuser" />
     </Router>
   </React.StrictMode>
 );

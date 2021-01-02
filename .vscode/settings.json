@@ -5,6 +5,7 @@
         "Metascore",
         "imdb",
         "oidc",
+        "omdb",
         "signin"
     ]
 }

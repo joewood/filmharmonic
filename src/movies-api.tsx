@@ -48,6 +48,14 @@ export interface Data {
   Search: Movie[];
 }
 
+export interface UserState {
+  RowKey: string;
+  PartitionKey: string;
+  proposed?: string;
+  vote?: string;
+  wishlist?: string;
+}
+
 /** Function that calls `fetch` calling the server to get the movies */
 export async function searchMovies(token: string, search: string): Promise<Data> {
   const searchResponse = await fetch('/search/' + encodeURIComponent(search), {
@@ -62,6 +70,13 @@ export async function fetchMovie(token: string, id: string): Promise<MovieDetail
     headers: { Authorization: 'Bearer ' + token },
   });
   return (await searchResponse.json()) as MovieDetails;
+}
+
+export async function fetchUser(token: string, id: string): Promise<UserState> {
+  const searchResponse = await fetch('/user/' + encodeURIComponent(id), {
+    headers: { Authorization: 'Bearer ' + token },
+  });
+  return (await searchResponse.json()) as UserState;
 }
 
 /** React Hook to search for a movie, returns a list of Movies */

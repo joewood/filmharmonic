@@ -43,7 +43,9 @@ export const Search: FC<SearchProps> = ({ user }) => {
       <header className="App-header">
         <h1>Film Harmonic</h1>
         <div className="user">{user?.profile.email}</div>
-        <div className="user">{user?.profile.name}</div>
+        <a className="user" href="/showuser">
+          {user?.profile.name}
+        </a>
         <img width={100} src={user?.profile.picture} alt="profile" />
       </header>
       <div className="search">
