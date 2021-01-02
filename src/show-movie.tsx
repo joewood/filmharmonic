@@ -1,7 +1,8 @@
 import { User } from 'oidc-client';
 import * as React from 'react';
-import { FC, useEffect, useState } from 'react';
-import { fetchMovie, MovieDetails } from './movies-api';
+import { FC, useCallback, useEffect, useState } from 'react';
+import { fetchMovie, makeProposal, MovieDetails } from './movies-api';
+import { navigate } from '@reach/router';
 
 interface ShowMovieProps {
   user: User | null;
@@ -10,7 +11,10 @@ interface ShowMovieProps {
 /** In React a Function is like an HTML element, this is the <App> Component used in index.tsx */
 export const ShowMovie: FC<ShowMovieProps> = ({ user, movieId }) => {
   const [movie, setMovie] = useState<MovieDetails | null>(null);
-
+  const onPropose = useCallback(() => {
+    if (user?.access_token && user?.profile?.email && movieId)
+      makeProposal(user?.access_token, user?.profile?.email, movieId).then(() => navigate('/showuser'));
+  }, [movieId, user?.access_token, user?.profile?.email]);
   useEffect(() => {
     if (movieId && user) fetchMovie(user?.access_token, movieId).then(setMovie);
   }, [movieId, user]);
@@ -32,6 +36,7 @@ export const ShowMovie: FC<ShowMovieProps> = ({ user, movieId }) => {
       <p>Director: {movie?.Director}</p>
       <p>Metascore: {movie?.Metascore}</p>
       <img src={movie?.Poster} alt="poster" width="200" />
+      <button onClick={onPropose}>Make My Proposal</button>
     </div>
   );
 };

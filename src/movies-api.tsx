@@ -79,6 +79,25 @@ export async function fetchUser(token: string, id: string): Promise<UserState> {
   return (await searchResponse.json()) as UserState;
 }
 
+async function updateUserState(token: string, userId: string, userState: UserState): Promise<UserState> {
+  const searchResponse = await fetch('/user/' + encodeURIComponent(userId), {
+    method: 'PUT',
+    headers: { Authorization: 'Bearer ' + token, 'Content-Type': 'application/json' },
+    body: JSON.stringify(userState),
+  });
+  return await searchResponse.json();
+}
+
+export async function makeProposal(token: string, userId: string, id: string): Promise<UserState> {
+  const searchResponse = await fetch('/user/' + encodeURIComponent(userId), {
+    headers: { Authorization: 'Bearer ' + token },
+  });
+  const userDetails = (await searchResponse.json()) as UserState;
+
+  userDetails.proposed = id;
+  return await updateUserState(token, userId, userDetails);
+}
+
 /** React Hook to search for a movie, returns a list of Movies */
 // export function useSearchMovies(search: string): Movie[] {
 //   const { isLoading, error, data } = useQuery<Data, string>({ queryFn: searchMovies, queryKey: ['search', search] });
