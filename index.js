@@ -109,7 +109,7 @@ app.get('/api/group', async function (req, res) {
       storageClient.queryEntities(
         'user',
         new TableQuery()
-          .select('proposed', 'vote', 'wishlist', 'RowKey')
+          .select('proposed', 'vote', 'wishlist', 'RowKey', 'name')
           .where(TableQuery.stringFilter('PartitionKey', TableUtilities.QueryComparisons.EQUAL, 'woods')),
         null,
         {},

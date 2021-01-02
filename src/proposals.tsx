@@ -1,84 +1,80 @@
-import { navigate } from '@reach/router';
 import { User } from 'oidc-client';
 import * as React from 'react';
 import { FC, useCallback, useEffect, useState } from 'react';
-import { fetchMovie, fetchUsers, MovieDetails, UserState, voteOnMovie } from './movies-api';
+import { Header } from './header';
+import { getMoviesFromVotes, MovieDetails, UserVote, voteAndRefresh } from './movies-api';
 
 interface ProposalsProps {
   user: User | null;
 }
 /** In React a Function is like an HTML element, this is the <App> Component used in index.tsx */
 export const Proposals: FC<ProposalsProps> = ({ user }) => {
-  const [users, setUsers] = useState<UserState[]>([]);
+  const [userProposals, setUserProposals] = useState<UserVote[]>([]);
   const [movies, setMovies] = useState<MovieDetails[]>([]);
 
+  // this runs when `user` changes its value (e.g. when logged in). It uses the API to get all the users' proposals
+  // and their movie details using the state hook variables above
   useEffect(() => {
-    async function request() {
-      if (!user?.profile?.email) return;
-      const users = await fetchUsers(user?.access_token);
-      setUsers(users);
-      const movies = await Promise.all(
-        users
-          .map((u) => u.proposed)
-          .filter((p) => !!p)
-          .map((p) => fetchMovie(user.access_token, p!))
-      );
-      setMovies(movies);
-    }
-    request();
+    if (user)
+      getMoviesFromVotes(user.access_token).then(([userProposals, movies]) => {
+        setUserProposals(userProposals);
+        setMovies(movies);
+      });
   }, [user]);
 
+  // find the Proposal that belongs to the current logged in user (could use `useMemo` here)
+  const myProposal = userProposals.find((proposal) => proposal.RowKey === user?.profile?.email);
+
+  // Run when the user clicks "vote". Calls `voteAndRefresh` which returns the list of proposals. We use
+  // the return value to update the state variable `userProposals`
   const onVote = useCallback(
-    (movieId: string) => {
-      if (!user?.access_token || !user?.profile?.email) return;
-      voteOnMovie(user?.access_token, user?.profile?.email, movieId).then(() => navigate('/'));
+    (imdbId: string) => {
+      if (user) voteAndRefresh(user, imdbId).then(setUserProposals);
     },
-    [user?.access_token, user?.profile?.email]
+    [user]
   );
 
   /** The React elements are the same as HTML other than `className` is used rather than `class`
    * and style looks a bit different. */
   return (
     <div className="App">
-      <header className="App-header">
-        <h1>Film Harmonic</h1>
-        <div className="user">{user?.profile.email}</div>
-        <a className="user" href="/user">
-          {user?.profile.name}
-        </a>
-
-        <img width={100} src={user?.profile.picture} alt="profile" />
-      </header>
+      <Header user={user} />
       <h1>{user?.profile?.name}</h1>
       <div style={{ display: 'grid', backgroundColor: 'rgba(255,255,255,0.5)' }}>
-        {movies.map((u, n) => (
+        {movies.map((movie, index) => (
           <>
-            <div key={'IMG' + u?.imdbID} style={{ gridRow: n + 1, gridColumn: 1 }}>
-              <img height={150} src={u.Poster} alt={u.Title} />
+            <div key={'IMG' + movie?.imdbID} style={{ gridRow: index + 1, gridColumn: 1 }}>
+              <img height={150} src={movie.Poster} alt={movie.Title} />
             </div>
-            <div key={u?.imdbID} style={{ gridRow: n + 1, gridColumn: 2 }}>
-              <p style={{ fontWeight: 'bold' }}>{u.Title}</p>
+            <div key={movie?.imdbID} style={{ gridRow: index + 1, gridColumn: 2 }}>
+              <p style={{ fontWeight: 'bold' }}>{movie.Title}</p>
             </div>
-            <div key={'Details' + u?.imdbID} style={{ gridRow: n + 1, gridColumn: 3 }}>
-              <p>{u.Year}</p>
-              <p>{u.Genre}</p>
-              <p>{u.Rated}</p>
-              <p>Metacritic: {u.Metascore}%</p>
+            <div key={'Details' + movie?.imdbID} style={{ gridRow: index + 1, gridColumn: 3 }}>
+              <p>{movie.Year}</p>
+              <p>{movie.Genre}</p>
+              <p>{movie.Rated}</p>
+              <p>Metacritic: {movie.Metascore}%</p>
             </div>
-            <div key={'Proposed' + u?.imdbID} style={{ gridRow: n + 1, gridColumn: 4 }}>
+            <div key={'Proposed' + movie?.imdbID} style={{ gridRow: index + 1, gridColumn: 4 }}>
               <span>Proposed by: </span>
-              {users
-                .filter((uu) => uu.proposed === u.imdbID)
-                .map((uu) => uu.RowKey)
+              {userProposals
+                .filter((user) => user.proposed === movie.imdbID)
+                .map((user) => user.name || user.RowKey)
                 .join(', ')}
+              <br />
+              {/* If this movie is not my proposed movie then show a vote button, otherwise show a link to edit the proposal */}
+              {myProposal?.proposed !== movie.imdbID ? (
+                <button onClick={() => onVote(movie.imdbID)}>Vote</button>
+              ) : (
+                <a href="/search">Edit Proposal</a>
+              )}
             </div>
-            <div key={'Votes' + u?.imdbID} style={{ gridRow: n + 1, gridColumn: 5 }}>
+            <div key={'Votes' + movie?.imdbID} style={{ gridRow: index + 1, gridColumn: 5 }}>
               <span>Voted by: </span>
-              {users
-                .filter((uu) => uu.vote === u.imdbID)
-                .map((uu) => uu.RowKey)
+              {userProposals
+                .filter((user) => user.vote === movie.imdbID)
+                .map((user) => user.name || user.RowKey)
                 .join(', ')}
-              <button onClick={() => onVote(u.imdbID)}>Vote</button>
             </div>
           </>
         ))}

@@ -2,6 +2,7 @@ import { RouteComponentProps } from '@reach/router';
 import { User } from 'oidc-client';
 import * as React from 'react';
 import { FC, FormEventHandler, useRef, useState } from 'react';
+import { Header } from './header';
 import { Movie, searchMovies } from './movies-api';
 
 interface SearchProps extends RouteComponentProps {
@@ -39,14 +40,7 @@ export const Search: FC<SearchProps> = ({ user }) => {
    * and style looks a bit different. */
   return (
     <div className="App">
-      <header className="App-header">
-        <h1>Film Harmonic</h1>
-        <div className="user">{user?.profile.email}</div>
-        <a className="user" href="/user">
-          {user?.profile.name}
-        </a>
-        <img width={100} src={user?.profile.picture} alt="profile" />
-      </header>
+      <Header user={user} />
       <div className="search">
         <form onSubmit={onSubmit} method="POST">
           <label>

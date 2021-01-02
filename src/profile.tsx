@@ -1,6 +1,7 @@
 import { User } from 'oidc-client';
 import * as React from 'react';
 import { FC, useEffect, useState } from 'react';
+import { Header } from './header';
 import { fetchMovie, fetchUser, MovieDetails } from './movies-api';
 
 interface ProfileProps {
@@ -15,7 +16,6 @@ export const Profile: FC<ProfileProps> = ({ user }) => {
     async function request() {
       if (!user?.profile?.email) return;
       const userDetails = await fetchUser(user?.access_token, user?.profile.email);
-      console.log(userDetails);
       if (userDetails?.proposed) {
         const proposed = await fetchMovie(user.access_token, userDetails.proposed);
         setProposed(proposed);
@@ -31,13 +31,7 @@ export const Profile: FC<ProfileProps> = ({ user }) => {
    * and style looks a bit different. */
   return (
     <div className="App">
-      <header className="App-header">
-        <h1>Film Harmonic</h1>
-        <a href="/">List</a>
-        <div className="user">{user?.profile.email}</div>
-        <div className="user">{user?.profile.name}</div>
-        <img width={100} src={user?.profile.picture} alt="profile" />
-      </header>
+      <Header user={user} />
       <h1>{user?.profile?.name}</h1>
       <a href="/search">Edit Proposal</a>
       <p>Proposed: {proposed?.Title}</p>
