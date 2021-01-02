@@ -55,16 +55,18 @@ export const Search: FC<SearchProps> = ({ user }) => {
           <input type="submit" value="Search" />
         </form>
       </div>
+      <div className="con">
       <ul>
         {movies.map((movie) => (
           <div className="movie" key={movie.Title}>
             <a href={`/showmovie/${movie.imdbID}`}>
-              <img src={movie.Poster} alt={movie.Title} width={100}></img>
-              <p>{movie.Title}</p>
+              <img src={movie.Poster} className= "film" alt={movie.Title} width={100}></img>
+              <p className = "title">{movie.Title}</p>
             </a>
           </div>
         ))}
       </ul>
+      </div>
     </div>
   );
 };

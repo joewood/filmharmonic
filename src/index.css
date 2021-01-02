@@ -34,13 +34,31 @@ html * {
   padding: 10px;
   display: inline-block;
   color: white;
-  background-color: black;
 }
-
+.con {
+  margin: 0 10%;
+  justify-content: space-between;
+  padding: 20px;
+  display: flex;
+  flex-wrap: wrap;
+}
 .search {
   background-color: #a0a0a0;
   height: auto;
   width: 100vw;
   padding-top: 10px;
   padding-bottom: 10px;
+}
+.film {
+  padding: 10px;
+  background-color: black;
+  border: 1px solid black;
+}
+.title {
+  color: black;
+  font-weight: bold;
+}
+
+@media only screen and (max-width: 768px) {
+  /* For mobile phones: */
 }
