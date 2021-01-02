@@ -39,7 +39,7 @@ export const Proposals: FC<ProposalsProps> = ({ user }) => {
   return (
     <div className="App">
       <Header user={user} />
-      <h1>{user?.profile?.name}</h1>
+      <h1>Proposed Movies in Group: woods</h1>
       <div style={{ display: 'grid', backgroundColor: 'rgba(255,255,255,0.5)' }}>
         {movies.map((movie, index) => (
           <>
@@ -66,7 +66,9 @@ export const Proposals: FC<ProposalsProps> = ({ user }) => {
               {myProposal?.proposed !== movie.imdbID ? (
                 <button onClick={() => onVote(movie.imdbID)}>Vote</button>
               ) : (
-                <a href="/search">Edit Proposal</a>
+                <b>
+                  <a href="/search">Change My Proposal</a>
+                </b>
               )}
             </div>
             <div key={'Votes' + movie?.imdbID} style={{ gridRow: index + 1, gridColumn: 5 }}>
