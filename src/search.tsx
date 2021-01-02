@@ -54,15 +54,9 @@ export const Search: FC<SearchProps> = ({ user }) => {
       <ul>
         {movies.map((movie) => (
           <div className="movie" key={movie.Title}>
-<<<<<<< HEAD
-            <a href={`/showmovie/${movie.imdbID}`}>
-              <img src={movie.Poster} className= "film" alt={movie.Title} width={100}></img>
-              <p className = "title">{movie.Title}</p>
-=======
             <a href={`/movie/${movie.imdbID}`}>
               <img src={movie.Poster} alt={movie.Title} width={100}></img>
               <p>{movie.Title}</p>
->>>>>>> 9f220769dfcb6a16bc4d4a5d50f836bb3b8fb9f9
             </a>
           </div>
         ))}
