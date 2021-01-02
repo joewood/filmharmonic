@@ -136,8 +136,9 @@ app.get('/api/group', async function (req, res) {
 const options = {
   index: 'index.html',
 };
-app.get('*', express.static('/home/site/wwwroot/build', options));
-app.get('/', express.static('/home/site/wwwroot/build', options));
+
+app.use('*', express.static('/home/site/wwwroot/build', options));
+app.use('/', express.static('/home/site/wwwroot/build', options));
 
 console.log('Port ' + port);
 
