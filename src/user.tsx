@@ -1,14 +1,13 @@
 import { User } from 'oidc-client';
 import * as React from 'react';
 import { FC, useEffect, useState } from 'react';
-import { fetchMovie, fetchUser, MovieDetails, UserState } from './movies-api';
+import { fetchMovie, fetchUser, MovieDetails } from './movies-api';
 
 interface ShowUserProps {
   user: User | null;
 }
 /** In React a Function is like an HTML element, this is the <App> Component used in index.tsx */
 export const ShowUser: FC<ShowUserProps> = ({ user }) => {
-  const [userDetails, setUser] = useState<UserState | null>(null);
   const [proposed, setProposed] = useState<MovieDetails | null>(null);
   const [voted, setVoted] = useState<MovieDetails | null>(null);
 
@@ -25,7 +24,6 @@ export const ShowUser: FC<ShowUserProps> = ({ user }) => {
         const vote = await fetchMovie(user.access_token, userDetails.vote);
         setVoted(vote);
       }
-      setUser(userDetails);
     }
     request();
   }, [user]);
@@ -35,14 +33,15 @@ export const ShowUser: FC<ShowUserProps> = ({ user }) => {
     <div className="App">
       <header className="App-header">
         <h1>Film Harmonic</h1>
+        <a href="/">List</a>
         <div className="user">{user?.profile.email}</div>
         <div className="user">{user?.profile.name}</div>
         <img width={100} src={user?.profile.picture} alt="profile" />
       </header>
       <h1>{user?.profile?.name}</h1>
+      <a href="/search">Edit Proposal</a>
       <p>Proposed: {proposed?.Title}</p>
       <p>Vote: {voted?.Title}</p>
-      <p>Wishlist: {userDetails?.wishlist}</p>
     </div>
   );
 };

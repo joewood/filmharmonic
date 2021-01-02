@@ -13,7 +13,7 @@ export const ShowMovie: FC<ShowMovieProps> = ({ user, movieId }) => {
   const [movie, setMovie] = useState<MovieDetails | null>(null);
   const onPropose = useCallback(() => {
     if (user?.access_token && user?.profile?.email && movieId)
-      makeProposal(user?.access_token, user?.profile?.email, movieId).then(() => navigate('/showuser'));
+      makeProposal(user?.access_token, user?.profile?.email, movieId).then(() => navigate('/'));
   }, [movieId, user?.access_token, user?.profile?.email]);
   useEffect(() => {
     if (movieId && user) fetchMovie(user?.access_token, movieId).then(setMovie);
@@ -29,6 +29,8 @@ export const ShowMovie: FC<ShowMovieProps> = ({ user, movieId }) => {
         <img width={100} src={user?.profile.picture} alt="profile" />
       </header>
       <h1>{movie?.Title}</h1>
+      <button onClick={onPropose}>Make My Proposal</button>
+
       <p>{movie?.Plot}</p>
       <p>Year: {movie?.Year}</p>
       <p>Rated: {movie?.Rated}</p>
@@ -36,7 +38,6 @@ export const ShowMovie: FC<ShowMovieProps> = ({ user, movieId }) => {
       <p>Director: {movie?.Director}</p>
       <p>Metascore: {movie?.Metascore}</p>
       <img src={movie?.Poster} alt="poster" width="200" />
-      <button onClick={onPropose}>Make My Proposal</button>
     </div>
   );
 };

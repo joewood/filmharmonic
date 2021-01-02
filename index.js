@@ -4,11 +4,9 @@ const express = require('express');
 const app = express();
 const fetch = require('node-fetch');
 const port = process.env.PORT || 8081;
-const cosmos = require('@azure/cosmos');
-const { promisify } = require('util');
 
 const storage = require('azure-storage');
-const { TableQuery } = require('azure-storage');
+const { TableQuery, TableUtilities } = require('azure-storage');
 const storageClient = storage.createTableService(process.env['COSMOS']);
 const bodyParser = require('body-parser');
 app.use(bodyParser.json());
@@ -103,6 +101,37 @@ app.put('/user/:id', async function (req, res) {
     return;
   }
   res.send(JSON.stringify(out));
+  res.status(200);
+});
+
+app.get('/group', async function (req, res) {
+  let resultSet = {};
+  try {
+    resultSet = await new Promise((resolve, reject) =>
+      storageClient.queryEntities(
+        'user',
+        new TableQuery()
+          .select('proposed', 'vote', 'wishlist', 'RowKey')
+          .where(TableQuery.stringFilter('PartitionKey', TableUtilities.QueryComparisons.EQUAL, 'woods')),
+        null,
+        {},
+        (e, r) => (e ? reject(e) : resolve(r))
+      )
+    );
+  } catch (e) {
+    console.error(e);
+    res.status(503);
+    res.send(JSON.stringify(e));
+    return;
+  }
+  for (const out of resultSet.entries || []) {
+    for (const k in out) {
+      if ('_' in out[k]) out[k] = out[k]._;
+    }
+    delete out['.metadata'];
+    delete out.etag;
+  }
+  res.send(JSON.stringify(resultSet.entries));
   res.status(200);
 });
 

@@ -79,6 +79,13 @@ export async function fetchUser(token: string, id: string): Promise<UserState> {
   return (await searchResponse.json()) as UserState;
 }
 
+export async function fetchUsers(token: string): Promise<UserState[]> {
+  const searchResponse = await fetch('/group', {
+    headers: { Authorization: 'Bearer ' + token },
+  });
+  return (await searchResponse.json()) as UserState[];
+}
+
 async function updateUserState(token: string, userId: string, userState: UserState): Promise<UserState> {
   const searchResponse = await fetch('/user/' + encodeURIComponent(userId), {
     method: 'PUT',

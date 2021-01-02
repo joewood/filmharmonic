@@ -8,6 +8,7 @@ import './index.css';
 import { ShowMovie } from './show-movie';
 import { Search } from './search';
 import { ShowUser } from './user';
+import { ShowWishlist } from './show-wishlist';
 
 interface CBProps extends RouteComponentProps {}
 
@@ -36,15 +37,22 @@ const AuthorizedShowUser: FC<RouteComponentProps> = () => (
   <UserData.Consumer>{(context) => <ShowUser user={context.user} />}</UserData.Consumer>
 );
 
+const AuthorizedWishlist: FC<RouteComponentProps> = () => (
+  <UserData.Consumer>{(context) => <ShowWishlist user={context.user} />}</UserData.Consumer>
+);
+
 const SearchWithAuth = makeAuthenticator({ userManager })(AuthorizedSearch);
 const MovieWithAuth = makeAuthenticator({ userManager })(AuthorizedShowMovie);
 const UserWithAuth = makeAuthenticator({ userManager })(AuthorizedShowUser);
+const WishlistWithAuth = makeAuthenticator({ userManager })(AuthorizedWishlist);
 
 const Root = () => (
   <React.StrictMode>
     <Router>
       <CB path="/callback" />
-      <SearchWithAuth path="/" />
+      <WishlistWithAuth path="/" />
+      <SearchWithAuth path="/search" />
+
       <MovieWithAuth path="/showmovie/:movieId" />
       <UserWithAuth path="/showuser" />
     </Router>
