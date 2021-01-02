@@ -137,8 +137,8 @@ const options = {
   index: 'index.html',
 };
 
-app.use('*', express.static('/home/site/wwwroot/build', options));
-app.use('/', express.static('/home/site/wwwroot/build', options));
+app.use(express.static(__dirname + '/build', options));
+app.get('*', (req, res) => res.sendFile(__dirname + '/build/index.html'));
 
 console.log('Port ' + port);
 
