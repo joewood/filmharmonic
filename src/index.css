@@ -14,13 +14,16 @@ html * {
 
 .App-header {
   background-color: #0a94be;
-  min-height: 20vh;
+  min-height: 10vh;
   display: flex;
   align-items: baseline;
-  justify-content: flex-start;
+  justify-content: flex-end;
   font-size: calc(10px + 2vmin);
   color: white;
-  flex-direction: row;
+  flex-direction: row-reverse;
+}
+header h1 {
+  margin: 0 auto;
 }
 
 header img {
