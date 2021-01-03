@@ -13,23 +13,24 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@master
+      - uses: actions/checkout@master
 
-    - name: Set up Node.js version
-      uses: actions/setup-node@v1
-      with:
-        node-version: '14.x'
+      - name: Set up Node.js version
+        uses: actions/setup-node@v1
+        with:
+          node-version: '14.x'
 
-    - name: npm install, build, and test
-      run: |
-        npm install
-        npm run build --if-present
-        npm run test --if-present
+      - name: npm install, build, and test
+        run: |
+          npm ci 
+          npm run build --if-present
+          npm run test --if-present
+          npm ci --production-only
 
-    - name: 'Deploy to Azure Web App'
-      uses: azure/webapps-deploy@v2
-      with:
-        app-name: 'filmharmonic'
-        slot-name: 'production'
-        publish-profile: ${{ secrets.AzureAppService_PublishProfile_e648b38a2d83475e889a7c26c2c9454b }}
-        package: .
+      - name: 'Deploy to Azure Web App'
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: 'filmharmonic'
+          slot-name: 'production'
+          publish-profile: ${{ secrets.AzureAppService_PublishProfile_e648b38a2d83475e889a7c26c2c9454b }}
+          package: .
