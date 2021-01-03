@@ -41,6 +41,7 @@ html * {
   padding: 20px;
   display: flex;
   flex-wrap: wrap;
+  margin: 0, 10%;
 }
 .search {
   background-color: #a0a0a0;
