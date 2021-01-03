@@ -16,15 +16,23 @@ html * {
   background-color: #0a94be;
   min-height: 20vh;
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  align-items: baseline;
+  justify-content: flex-start;
   font-size: calc(10px + 2vmin);
   color: white;
+  flex-direction: row;
 }
 
+}
+.header-object {
+  padding: 10px;
+}
+
+header img {
+  width: 40px;
+}
 .App-header user {
-  float: right;
+  float: left;
 }
 .App {
   text-align: center;
