@@ -22,7 +22,7 @@ jobs:
 
       - name: npm install, build, and test
         run: |
-          npm ci
+          npm ci --production-only
           npm run build --if-present
           npm run test --if-present
 
