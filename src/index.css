@@ -23,11 +23,6 @@ html * {
   flex-direction: row;
 }
 
-}
-.header-object {
-  padding: 10px;
-}
-
 header img {
   width: 40px;
 }
