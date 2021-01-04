@@ -45,7 +45,7 @@ export const Search: FC<SearchProps> = ({ user }) => {
         <form onSubmit={onSubmit} method="POST">
           <label>
             Search
-            <input ref={searchRefInputElement} name="search" type="text" spellCheck={false} />
+            <input className="searchbar" ref={searchRefInputElement} name="search" type="text" spellCheck={false} />
           </label>
           <input type="submit" value="Search" />
         </form>

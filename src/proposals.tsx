@@ -56,11 +56,13 @@ export const Proposals: FC<ProposalsProps> = ({ user }) => {
               <p>Metacritic: {movie.Metascore}%</p>
             </div>
             <div key={'Proposed' + movie?.imdbID} style={{ gridRow: index + 1, gridColumn: 4 }}>
-              <span>Proposed by: </span>
+              <p>Proposed by: </p>
+              <ul>
               {userProposals
                 .filter((user) => user.proposed === movie.imdbID)
-                .map((user) => user.name || user.RowKey)
-                .join(', ')}
+                .map((user) => (<li>{user.name || user.RowKey}</li>))
+                }
+                </ul>
               <br />
               {/* If this movie is not my proposed movie then show a vote button, otherwise show a link to edit the proposal */}
               {myProposal?.proposed !== movie.imdbID ? (
@@ -72,11 +74,13 @@ export const Proposals: FC<ProposalsProps> = ({ user }) => {
               )}
             </div>
             <div key={'Votes' + movie?.imdbID} style={{ gridRow: index + 1, gridColumn: 5 }}>
-              <span>Voted by: </span>
+              <p>Voted by: </p>
+              <ul style={{textAlign:"left"}}>
               {userProposals
                 .filter((user) => user.vote === movie.imdbID)
-                .map((user) => user.name || user.RowKey)
-                .join(', ')}
+                .map((user) => (<li>{`👍 ${user.name || user.RowKey}`}</li>))
+               }
+               </ul>
             </div>
           </>
         ))}
