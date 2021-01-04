@@ -23,7 +23,7 @@ html * {
   flex-direction: row-reverse;
 }
 header h1 {
-  margin: 0 auto;
+  margin: 0 35% 0 27%;
 }
 
 header img {
@@ -75,4 +75,11 @@ header img {
 
 @media only screen and (max-width: 768px) {
   /* For mobile phones: */
+}
+
+.movieinfo {
+  background-color: white;
+  border: 5px ridge#0a94be;
+  margin: 5% 25%;
+  padding: 1%;
 }
