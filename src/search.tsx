@@ -47,7 +47,7 @@ export const Search: FC<SearchProps> = ({ user }) => {
             Search
             <input className="searchbar" placeholder="Search.." ref={searchRefInputElement} name="search" type="text" spellCheck={false} />
           </label>
-          <input type="submit" value="Search" />
+          <input type="submit" value="🎥" />
         </form>
       </div>
       <div className="con">
