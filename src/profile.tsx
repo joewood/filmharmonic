@@ -32,10 +32,12 @@ export const Profile: FC<ProfileProps> = ({ user }) => {
   return (
     <div className="App">
       <Header user={user} />
+      <div className = "profilelayout">
       <h1>{user?.profile?.name}</h1>
       <a href="/search">Edit Proposal</a>
       <p>Proposed: {proposed?.Title}</p>
       <p>Vote: {voted?.Title}</p>
+      </div>
     </div>
   );
 };
