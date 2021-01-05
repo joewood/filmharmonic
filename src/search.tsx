@@ -26,7 +26,7 @@ export const Search: FC<SearchProps> = ({ user }) => {
     // if the ref is null clear the movie list
     if (search === null || search === '' || !user) setMovies([]);
     else {
-      searchMovies(user.access_token, search).then((movies) => setMovies(movies.Search));
+      searchMovies(user.access_token, search).then((movies) => setMovies(movies.Search || []));
     }
   }, [search, user]);
   /** The React elements are the same as HTML other than `className` is used rather than `class`
@@ -35,6 +35,7 @@ export const Search: FC<SearchProps> = ({ user }) => {
     <div className="App">
       <Header user={user} />
       <div className="con">
+        {movies.length === 0 && <p>No Results Found</p>}
         <ul>
           {movies.map((movie) => (
             <div className="movie" key={movie.Title}>
