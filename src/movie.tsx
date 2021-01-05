@@ -23,6 +23,7 @@ export const Movie: FC<MovieProps> = ({ user, movieId }) => {
   return (
     <div className="App">
       <Header user={user} />
+      <div className="movieinfo">
       <h1>{movie?.Title}</h1>
       <button onClick={onPropose}>Make My Proposal</button>
       <p>{movie?.Plot}</p>
@@ -32,6 +33,7 @@ export const Movie: FC<MovieProps> = ({ user, movieId }) => {
       <p>Director: {movie?.Director}</p>
       <p>Metascore: {movie?.Metascore}</p>
       <img src={movie?.Poster} alt="poster" width="200" />
+      </div>
     </div>
   );
 };

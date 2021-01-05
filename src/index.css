@@ -7,37 +7,79 @@ body {
 
   background-image: url("./images/film.jpeg");
 }
-
+/*Header */
 html * {
   box-sizing: border-box;
 }
 
 .App-header {
   background-color: #0a94be;
-  min-height: 20vh;
+  min-height: 10vh;
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  align-items: baseline;
+  justify-content: flex-end;
   font-size: calc(10px + 2vmin);
   color: white;
+  flex-direction: row-reverse;
+}
+header h1 {
+  margin: 0 35% 0 27%;
 }
 
+header img {
+  width: 40px;
+}
 .App-header user {
-  float: right;
+  float: left;
+}
+/*Body */
+.App {
+  text-align: center;
 }
 
 .movie {
   padding: 10px;
   display: inline-block;
   color: white;
-  background-color: black;
 }
-
+.con {
+  margin: 0 10%;
+  justify-content: space-between;
+  padding: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0, 10%;
+}
+/* search */
 .search {
-  background-color: #a0a0a0;
+  background-color: black;
   height: auto;
   width: 100vw;
   padding-top: 10px;
   padding-bottom: 10px;
+}
+.searchbar {
+  border: 1px solid white;
+  color: white;
+  background-color: black;
+}
+.film {
+  padding: 10px;
+  background-color: black;
+  border: 1px solid black;
+}
+.title {
+  color: black;
+  font-weight: bold;
+}
+
+@media only screen and (max-width: 768px) {
+  /* For mobile phones: */
+}
+
+.movieinfo {
+  background-color: white;
+  border: 5px ridge#0a94be;
+  margin: 5% 25%;
+  padding: 1%;
 }

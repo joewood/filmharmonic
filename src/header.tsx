@@ -4,10 +4,10 @@ import { FC } from 'react';
 
 export const Header: FC<{ user: User | null }> = ({ user }) => (
   <header className="App-header">
-    <h1>Film Harmonic</h1>
-    <a className="user" href="/user">
+    <h1 className= "header-object">Film Harmonic</h1>
+    <a className="user header-object" href="/user">
       {user?.profile.name}
     </a>
-    <img width={100} src={user?.profile.picture} alt="profile" />
+    <img className= "header-object" width={100} src={user?.profile.picture} alt="profile" />
   </header>
 );

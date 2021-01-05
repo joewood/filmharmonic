@@ -51,11 +51,12 @@ export const Search: FC<SearchProps> = ({ user }) => {
         <form onSubmit={onSubmit} method="POST">
           <label>
             Search
-            <input ref={searchRefInputElement} name="search" type="text" spellCheck={false} />
+            <input className="searchbar" placeholder="Search.." ref={searchRefInputElement} name="search" type="text" spellCheck={false} />
           </label>
-          <input type="submit" value="Search" />
+          <input type="submit" value="🎥" />
         </form>
       </div>
+      <div className="con">
       <ul>
         {movies.map((movie) => (
           <div className="movie" key={movie.Title}>
@@ -66,6 +67,7 @@ export const Search: FC<SearchProps> = ({ user }) => {
           </div>
         ))}
       </ul>
+      </div>
     </div>
   );
 };
