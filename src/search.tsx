@@ -1,11 +1,11 @@
-import { RouteComponentProps, navigate, useLocation } from '@reach/router';
+import { RouteComponentProps, useLocation } from '@reach/router';
 import { User } from 'oidc-client';
+import { parse } from 'query-string';
 import * as React from 'react';
-import { FC, FormEventHandler, useEffect, useRef, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { Header } from './header';
 import { Movie, searchMovies } from './movies-api';
 
-import { parse } from 'query-string';
 // then
 interface SearchProps extends RouteComponentProps {
   user: User | null;
