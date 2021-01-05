@@ -10,6 +10,7 @@
     "@types/react": "^17.0.0",
     "@types/react-dom": "^17.0.0",
     "oidc-client": "^1.10.1",
+    "query-string": "^6.13.8",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "react-oidc": "^1.0.3",
