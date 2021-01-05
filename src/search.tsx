@@ -1,10 +1,12 @@
-import { RouteComponentProps } from '@reach/router';
+import { RouteComponentProps, navigate, useLocation } from '@reach/router';
 import { User } from 'oidc-client';
 import * as React from 'react';
-import { FC, FormEventHandler, useRef, useState } from 'react';
+import { FC, FormEventHandler, useEffect, useRef, useState } from 'react';
 import { Header } from './header';
 import { Movie, searchMovies } from './movies-api';
 
+import { parse } from 'query-string';
+// then
 interface SearchProps extends RouteComponentProps {
   user: User | null;
 }
@@ -14,6 +16,9 @@ export const Search: FC<SearchProps> = ({ user }) => {
   // in React the `useRef` function gives us a ref object that can be used to link to an HTML Element
   // this ref will link to the Search Input element below
   const searchRefInputElement = useRef<HTMLInputElement>(null);
+
+  const location = useLocation();
+  const { search } = parse(location.search) as { search: string };
 
   // in React a Component can have state. These are special values that when they change will cause
   // the component to update (to re-render or redraw). The `useState` function returns an array where
@@ -27,15 +32,16 @@ export const Search: FC<SearchProps> = ({ user }) => {
   const onSubmit: FormEventHandler<HTMLFormElement> = async (event) => {
     // preventDefault - stop the Form posting to the server
     event.preventDefault();
-    // if the ref is null clear the movie list
-    if (searchRefInputElement.current === null || !user) setMovies([]);
-    else {
-      // if there's an input box then call `searchMovies` with the value
-      const movies = await searchMovies(user.access_token, searchRefInputElement.current.value);
-      // update the state of this component with the movies list
-      setMovies(movies.Search);
-    }
+    navigate(`/search?search=${searchRefInputElement.current?.value || ''}`);
   };
+
+  useEffect(() => {
+    // if the ref is null clear the movie list
+    if (search === null || search === '' || !user) setMovies([]);
+    else {
+      searchMovies(user.access_token, search).then((movies) => setMovies(movies.Search));
+    }
+  }, [search, user]);
   /** The React elements are the same as HTML other than `className` is used rather than `class`
    * and style looks a bit different. */
   return (
