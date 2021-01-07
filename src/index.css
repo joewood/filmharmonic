@@ -4,16 +4,15 @@ body {
     "Droid Sans", "Helvetica Neue", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-
-  background-image: url("./images/film.jpeg");
 }
-/*Header */
+
+/*Header 
 html * {
   box-sizing: border-box;
 }
 
 .App-header {
-  background-color: #0a94be;
+  background-color: #eff5f7;
   min-height: 10vh;
   display: flex;
   align-items: baseline;
@@ -25,14 +24,16 @@ html * {
 header h1 {
   margin: 0 35% 0 27%;
 }
-
+.logo {
+  width: 100px;
+}
 header img {
   width: 40px;
 }
 .App-header user {
   float: left;
 }
-/*Body */
+/*Body 
 .App {
   text-align: center;
 }
@@ -50,7 +51,7 @@ header img {
   flex-wrap: wrap;
   margin: 0, 10%;
 }
-/* search */
+/* search 
 .search {
   background-color: black;
   height: auto;
@@ -74,25 +75,60 @@ header img {
 }
 
 @media only screen and (max-width: 768px) {
-  /* For mobile phones: */
+  /* For mobile phones: 
 }
-
+/* movie
 .movieinfo {
   background-color: white;
   border: 5px ridge#0a94be;
   margin: 5% 25%;
   padding: 1%;
 }
-/* profile */
+/* profile 
 .profilelayout {
   background-color: white;
   border: 5px ridge#0a94be;
   margin: 5% 25%;
   padding: 1%;
 }
-/* ul */
+/* ul 
 ul {
   list-style-type: none;
   margin: 0;
   padding: 0;
+}
+*/
+Body html {
+  height: 100%;
+}
+/*Header*/
+Header {
+  background-image: url("./images/film.jpeg");
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+  position: relative;
+  background-repeat: no-repeat;
+
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  flex-grow: 10;
+}
+/*logo*/
+.logo {
+  background-color: white;
+  height: 32px;
+  margin-left: 5%;
+}
+.search {
+  margin-right: 5%;
+  width: 200px;
+}
+.user-image {
+  border-radius: 25px;
+  border: 0px solid black;
 }
