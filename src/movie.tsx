@@ -1,9 +1,10 @@
-import { User } from 'oidc-client';
-import * as React from 'react';
-import { FC, useCallback, useEffect, useState } from 'react';
-import { fetchMovie, makeProposal, MovieDetails } from './movies-api';
-import { navigate } from '@reach/router';
-import { Header } from './header';
+import { User } from "oidc-client";
+import * as React from "react";
+import { FC, useCallback, useEffect, useState } from "react";
+import { fetchMovie, makeProposal, MovieDetails } from "./movies-api";
+import { navigate } from "@reach/router";
+import { Header } from "./header";
+import pop from "./images/pop.jpg";
 
 interface MovieProps {
   user: User | null;
@@ -13,7 +14,7 @@ interface MovieProps {
 export const Movie: FC<MovieProps> = ({ user, movieId }) => {
   const [movie, setMovie] = useState<MovieDetails | null>(null);
   const onPropose = useCallback(() => {
-    if (user && movieId) makeProposal(user, movieId).then(() => navigate('/'));
+    if (user && movieId) makeProposal(user, movieId).then(() => navigate("/"));
   }, [movieId, user]);
   useEffect(() => {
     if (movieId && user) fetchMovie(user?.access_token, movieId).then(setMovie);
@@ -24,15 +25,15 @@ export const Movie: FC<MovieProps> = ({ user, movieId }) => {
     <div className="App">
       <Header user={user} />
       <div className="movieinfo">
-      <h1>{movie?.Title}</h1>
-      <button onClick={onPropose}>Make My Proposal</button>
-      <p>{movie?.Plot}</p>
-      <p>Year: {movie?.Year}</p>
-      <p>Rated: {movie?.Rated}</p>
-      <p>Box Office: {movie?.BoxOffice}</p>
-      <p>Director: {movie?.Director}</p>
-      <p>Metascore: {movie?.Metascore}</p>
-      <img src={movie?.Poster} alt="poster" width="200" />
+        <h1>{movie?.Title}</h1>
+        <button onClick={onPropose}>Make My Proposal</button>
+        <p>{movie?.Plot}</p>
+        <p>Year: {movie?.Year}</p>
+        <p>Rated: {movie?.Rated}</p>
+        <p>Box Office: {movie?.BoxOffice}</p>
+        <p>Director: {movie?.Director}</p>
+        <p>Metascore: {movie?.Metascore}</p>
+        <img src={movie?.Poster || pop} alt="poster" width="200" />
       </div>
     </div>
   );

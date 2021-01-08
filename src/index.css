@@ -7,14 +7,7 @@ body {
 }
 
 /*Header*/
-Header {
-  background-image: url("./images/film.jpeg");
-  height: 100%;
-  background-size: cover;
-  background-position: center;
-  position: relative;
-  background-repeat: no-repeat;
-
+.App-header {
   display: flex;
   width: 100%;
   align-items: center;
@@ -22,6 +15,21 @@ Header {
   flex-direction: row;
   flex-wrap: nowrap;
   flex-grow: 10;
+}
+header {
+  background-image: url("./images/film.jpeg");
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+  position: relative;
+  background-repeat: no-repeat;
+}
+header h1,
+h2 {
+  margin-left: 8%;
+  text-align: left;
+  width: 30%;
+  padding: 1% 1% 2% 1%;
 }
 /*logo*/
 .logo {
@@ -88,4 +96,6 @@ ul {
   display: flex;
   flex-wrap: wrap;
   margin: 0, 10%;
+  font-size: 20px;
+  border: 2px black solid;
 }

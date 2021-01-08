@@ -21,28 +21,36 @@ export const Header: FC<{ user: User | null }> = ({ user }) => {
   };
   console.log(logo);
   return (
-    <header className="App-header">
-      <img className="header-object logo" alt="logo" src={logo} />
-      <div className="user">
-        <img className="header-object user-image" height={"32"} src={user?.profile.picture} alt="profile" />
-        <a className="user header-object" href="/user">
-          {user?.profile.name}
+    <header>
+      <div className="App-header">
+        <a href="/">
+          <img className="header-object logo" alt="logo" src={logo} />
         </a>
-      </div>
+        <div className="user">
+          <img className="header-object user-image" height={"32"} src={user?.profile.picture} alt="profile" />
+          <a className="user header-object" href="/user">
+            {user?.profile.name}
+          </a>
+        </div>
 
-      <div className="search header-object">
-        <form onSubmit={onSubmit} method="POST">
-          <input
-            className="searchbar"
-            placeholder="Search.."
-            ref={searchRefInputElement}
-            name="search"
-            defaultValue={search}
-            type="text"
-            spellCheck={false}
-          />
-          <input type="submit" value="🎥" />
-        </form>
+        <div className="search header-object">
+          <form onSubmit={onSubmit} method="POST">
+            <input
+              className="searchbar"
+              placeholder="Search.."
+              ref={searchRefInputElement}
+              name="search"
+              defaultValue={search}
+              type="text"
+              spellCheck={false}
+            />
+            <input type="submit" value="🎥" />
+          </form>
+        </div>
+      </div>
+      <div className="header-text">
+        <h1>Make movie nights easier!</h1>
+        <h2>Vote for your favorite choice, or search to add one of your own.</h2>
       </div>
     </header>
   );
