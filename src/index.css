@@ -31,28 +31,13 @@ html * {
   flex-wrap: wrap;
   margin: 0, 10%;
 }
-/* search 
-.search {
-  background-color: black;
-  height: auto;
-  width: 100vw;
-  padding-top: 10px;
-  padding-bottom: 10px;
-}
-.searchbar {
-  border: 1px solid white;
-  color: white;
-  background-color: black;
-}
+
 .film {
   padding: 10px;
   background-color: black;
   border: 1px solid black;
 }
-.title {
-  color: black;
-  font-weight: bold;
-}
+
 
 
 
