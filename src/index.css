@@ -11,27 +11,7 @@ html * {
   box-sizing: border-box;
 }
 
-.App-header {
-  background-color: #eff5f7;
-  min-height: 10vh;
-  display: flex;
-  align-items: baseline;
-  justify-content: flex-end;
-  font-size: calc(10px + 2vmin);
-  color: white;
-  flex-direction: row-reverse;
-}
-header h1 {
-  margin: 0 35% 0 27%;
-}
-.logo {
-  width: 100px;
-}
-header img {
-  width: 40px;
-}
-.App-header user {
-  float: left;
+
 }
 /*Body 
 .App {
@@ -124,10 +104,25 @@ Header {
   height: 32px;
   margin-left: 5%;
 }
+/*search*/
 .search {
   margin-right: 5%;
   width: 200px;
 }
+/*user*/
+.user {
+  display: flex;
+  align-items: center;
+}
 .user-image {
   border-radius: 25px;
+}
+
+/*Body*/
+h1 {
+  text-align: center;
+}
+.app-body {
+  text-align: left;
+  margin-left: 5%;
 }
