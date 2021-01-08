@@ -126,3 +126,28 @@ h1 {
   text-align: left;
   margin-left: 5%;
 }
+
+/*Propositions page*/
+/* ul */
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+/*Profile page*/
+.profilelayout {
+  background-color: #0a94be;
+  margin: 5% 25%;
+  padding: 1%;
+  text-align: center;
+}
+
+/*Movies*/
+/* movie
+.movieinfo {
+  background-color: white;
+  border: 5px ridge#0a94be;
+  margin: 5% 25%;
+  padding: 1%;
+}
