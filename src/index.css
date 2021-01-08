@@ -6,43 +6,6 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-/*Header 
-html * {
-  box-sizing: border-box;
-}
-
-
-}
-/*Body 
-.App {
-  text-align: center;
-}
-
-.movie {
-  padding: 10px;
-  display: inline-block;
-  color: white;
-}
-.con {
-  margin: 0 10%;
-  justify-content: space-between;
-  padding: 20px;
-  display: flex;
-  flex-wrap: wrap;
-  margin: 0, 10%;
-}
-
-.film {
-  padding: 10px;
-  background-color: black;
-  border: 1px solid black;
-}
-
-
-
-
-
-
 /*Header*/
 Header {
   background-image: url("./images/film.jpeg");
@@ -112,4 +75,17 @@ ul {
   border: 5px ridge#0a94be;
   margin: 5% 25%;
   padding: 1%;
+}
+.movie {
+  padding: 10px;
+  display: inline-block;
+  color: white;
+}
+.con {
+  margin: 0 10%;
+  justify-content: space-between;
+  padding: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0, 10%;
 }
