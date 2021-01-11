@@ -31,6 +31,10 @@ h2 {
   width: 30%;
   padding: 1% 1% 2% 1%;
 }
+.user {
+  color: black;
+  text-decoration: none;
+}
 /*logo*/
 .logo {
   background-color: white;
