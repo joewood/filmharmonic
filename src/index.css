@@ -41,12 +41,14 @@ h2 {
 .logo {
   background-color: white;
   height: 32px;
-  margin-left: 5%;
+  margin-left: 50%;
 }
 /*search*/
 .search {
-  margin-right: 5%;
+  margin-right: 10%;
   width: 100px;
+  display: flex;
+  justify-content: flex-end;
 }
 /*user*/
 .user {
