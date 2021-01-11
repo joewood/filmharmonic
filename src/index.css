@@ -19,7 +19,7 @@ body {
   flex-grow: 10;
 }
 header {
-  background-image: url("./images/film.jpeg");
+  background-color: #aeeeb1;
   height: 100%;
   background-size: cover;
   background-position: center;
@@ -46,7 +46,7 @@ h2 {
 /*search*/
 .search {
   margin-right: 5%;
-  width: 200px;
+  width: 100px;
 }
 /*user*/
 .user {

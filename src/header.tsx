@@ -48,10 +48,6 @@ export const Header: FC<{ user: User | null }> = ({ user }) => {
           </form>
         </div>
       </div>
-      <div className="header-text">
-        <h1>Make movie nights easier!</h1>
-        <h2>Vote for your favorite choice, or search to add one of your own.</h2>
-      </div>
     </header>
   );
 };
