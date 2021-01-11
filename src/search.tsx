@@ -1,10 +1,11 @@
-import { RouteComponentProps, useLocation } from '@reach/router';
-import { User } from 'oidc-client';
-import { parse } from 'query-string';
-import * as React from 'react';
-import { FC, useEffect, useState } from 'react';
-import { Header } from './header';
-import { Movie, searchMovies } from './movies-api';
+import { RouteComponentProps, useLocation } from "@reach/router";
+import { User } from "oidc-client";
+import { parse } from "query-string";
+import * as React from "react";
+import { FC, useEffect, useState } from "react";
+import { Header } from "./header";
+import { Movie, searchMovies } from "./movies-api";
+import pop from "./images/pop.jpg";
 
 // then
 interface SearchProps extends RouteComponentProps {
@@ -24,7 +25,7 @@ export const Search: FC<SearchProps> = ({ user }) => {
 
   useEffect(() => {
     // if the ref is null clear the movie list
-    if (search === null || search === '' || !user) setMovies([]);
+    if (search === null || search === "" || !user) setMovies([]);
     else {
       searchMovies(user.access_token, search).then((movies) => setMovies(movies.Search || []));
     }
@@ -40,7 +41,11 @@ export const Search: FC<SearchProps> = ({ user }) => {
           {movies.map((movie) => (
             <div className="movie" key={movie.Title}>
               <a href={`/movie/${movie.imdbID}`}>
-                <img src={movie.Poster} alt={movie.Title} width={100}></img>
+                <img
+                  src={!Image.poster || Image.poster === "N/A" ? pop : Image.poster}
+                  alt={movie.Title}
+                  width={100}
+                ></img>
                 <p>{movie.Title}</p>
               </a>
             </div>

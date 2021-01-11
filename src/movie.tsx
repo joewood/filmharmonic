@@ -1,10 +1,10 @@
-import { navigate } from '@reach/router';
-import { User } from 'oidc-client';
-import * as React from 'react';
-import { FC, useCallback, useEffect, useState } from 'react';
-import { Header } from './header';
-import pop from './images/pop.jpg';
-import { fetchMovie, makeProposal, MovieDetails, updateWishlist } from './movies-api';
+import { navigate } from "@reach/router";
+import { User } from "oidc-client";
+import * as React from "react";
+import { FC, useCallback, useEffect, useState } from "react";
+import { Header } from "./header";
+import pop from "./images/pop.jpg";
+import { fetchMovie, makeProposal, MovieDetails, updateWishlist } from "./movies-api";
 
 interface MovieProps {
   user: User | null;
@@ -14,10 +14,10 @@ interface MovieProps {
 export const Movie: FC<MovieProps> = ({ user, movieId }) => {
   const [movie, setMovie] = useState<MovieDetails | null>(null);
   const onPropose = useCallback(() => {
-    if (user && movieId) makeProposal(user, movieId).then(() => navigate('/'));
+    if (user && movieId) makeProposal(user, movieId).then(() => navigate("/"));
   }, [movieId, user]);
   const onWish = useCallback(() => {
-    if (user && movieId) updateWishlist(user, movieId, 'ADD').then(() => navigate('/user'));
+    if (user && movieId) updateWishlist(user, movieId, "ADD").then(() => navigate("/user"));
   }, [movieId, user]);
   useEffect(() => {
     if (movieId && user) fetchMovie(user?.access_token, movieId).then(setMovie);
@@ -38,7 +38,7 @@ export const Movie: FC<MovieProps> = ({ user, movieId }) => {
         <p>Box Office: {movie?.BoxOffice}</p>
         <p>Director: {movie?.Director}</p>
         <p>Metascore: {movie?.Metascore}</p>
-        <img src={movie?.Poster || pop} alt="poster" width="200" />
+        <img src={!Image.poster || Image.poster === "N/A" ? pop : Image.poster} alt="poster" width="200" />
       </div>
     </div>
   );
