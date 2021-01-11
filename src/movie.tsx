@@ -1,10 +1,10 @@
-import { User } from "oidc-client";
-import * as React from "react";
-import { FC, useCallback, useEffect, useState } from "react";
-import { fetchMovie, makeProposal, MovieDetails } from "./movies-api";
-import { navigate } from "@reach/router";
-import { Header } from "./header";
-import pop from "./images/pop.jpg";
+import { navigate } from '@reach/router';
+import { User } from 'oidc-client';
+import * as React from 'react';
+import { FC, useCallback, useEffect, useState } from 'react';
+import { Header } from './header';
+import pop from './images/pop.jpg';
+import { fetchMovie, makeProposal, MovieDetails, updateWishlist } from './movies-api';
 
 interface MovieProps {
   user: User | null;
@@ -14,11 +14,15 @@ interface MovieProps {
 export const Movie: FC<MovieProps> = ({ user, movieId }) => {
   const [movie, setMovie] = useState<MovieDetails | null>(null);
   const onPropose = useCallback(() => {
-    if (user && movieId) makeProposal(user, movieId).then(() => navigate("/"));
+    if (user && movieId) makeProposal(user, movieId).then(() => navigate('/'));
+  }, [movieId, user]);
+  const onWish = useCallback(() => {
+    if (user && movieId) updateWishlist(user, movieId, 'ADD').then(() => navigate('/user'));
   }, [movieId, user]);
   useEffect(() => {
     if (movieId && user) fetchMovie(user?.access_token, movieId).then(setMovie);
   }, [movieId, user]);
+
   /** The React elements are the same as HTML other than `className` is used rather than `class`
    * and style looks a bit different. */
   return (
@@ -27,6 +31,7 @@ export const Movie: FC<MovieProps> = ({ user, movieId }) => {
       <div className="movieinfo">
         <h1>{movie?.Title}</h1>
         <button onClick={onPropose}>Make My Proposal</button>
+        <button onClick={onWish}>Add to Wishlist</button>
         <p>{movie?.Plot}</p>
         <p>Year: {movie?.Year}</p>
         <p>Rated: {movie?.Rated}</p>

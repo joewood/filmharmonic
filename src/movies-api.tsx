@@ -1,4 +1,5 @@
 import { User } from 'oidc-client';
+import { uniq } from 'lodash';
 
 /**  Movie Search Results from the search */
 export interface Movie {
@@ -79,8 +80,8 @@ export async function fetchMovie(token: string, imdbId: string): Promise<MovieDe
   return (await searchResponse.json()) as MovieDetails;
 }
 
-export async function fetchUser(token: string, imdbId: string): Promise<UserVote> {
-  const searchResponse = await fetch('/api/user/' + encodeURIComponent(imdbId), {
+export async function fetchUser(token: string, email: string): Promise<UserVote> {
+  const searchResponse = await fetch('/api/user/' + encodeURIComponent(email), {
     headers: { Authorization: 'Bearer ' + token },
   });
   return (await searchResponse.json()) as UserVote;
@@ -93,13 +94,13 @@ export async function fetchUsers(token: string): Promise<UserVote[]> {
   return (await searchResponse.json()) as UserVote[];
 }
 
-async function updateUserState(user: User, userState: UserVote): Promise<UserVote> {
+async function updateUserState(user: User, userVote: UserVote): Promise<UserVote> {
   if (!user.profile?.email) throw new Error('No Email in profile');
   if (!user.access_token) throw new Error('Not Authenticated');
   const searchResponse = await fetch('/api/user/' + encodeURIComponent(user.profile.email), {
     method: 'PUT',
     headers: { Authorization: 'Bearer ' + user.access_token, 'Content-Type': 'application/json' },
-    body: JSON.stringify(userState),
+    body: JSON.stringify(userVote),
   });
   return await searchResponse.json();
 }
@@ -107,11 +108,25 @@ async function updateUserState(user: User, userState: UserVote): Promise<UserVot
 export async function makeProposal(user: User, imdbId: string): Promise<UserVote> {
   if (!user.profile?.email) throw new Error('No Email in profile');
   if (!user.access_token) throw new Error('Not Authenticated');
-  const searchResponse = await fetch('/api/user/' + encodeURIComponent(user.profile.email), {
-    headers: { Authorization: 'Bearer ' + user.access_token },
-  });
-  const userDetails = (await searchResponse.json()) as UserVote;
+  const userDetails = await fetchUser(user.access_token, user.profile.email);
   userDetails.proposed = imdbId;
+  return await updateUserState(user, userDetails);
+}
+
+export const addWish = (imdbMovie: string, wishlist: string | undefined) =>
+  uniq([imdbMovie, ...(wishlist || '').split(',')]).join(',');
+export const removeWish = (imdbMovie: string, wishlist: string | undefined) =>
+  (wishlist || '')
+    .split(',')
+    .filter((m) => m !== imdbMovie)
+    .join(',');
+
+export async function updateWishlist(user: User, imdbId: string, addRemove: 'ADD' | 'REMOVE'): Promise<UserVote> {
+  if (!user.profile?.email) throw new Error('No Email in profile');
+  if (!user.access_token) throw new Error('Not Authenticated');
+  const userDetails = await fetchUser(user.access_token, user.profile.email);
+  userDetails.wishlist =
+    addRemove === 'ADD' ? addWish(imdbId, userDetails.wishlist) : removeWish(imdbId, userDetails.wishlist);
   return await updateUserState(user, userDetails);
 }
 
@@ -119,10 +134,7 @@ export async function makeProposal(user: User, imdbId: string): Promise<UserVote
 async function voteOnMovie(user: User, imdbId: string): Promise<UserVote> {
   if (!user.profile?.email) throw new Error('No Email in profile');
   if (!user.access_token) throw new Error('Not Authenticated');
-  const searchResponse = await fetch('/api/user/' + encodeURIComponent(user.profile.email), {
-    headers: { Authorization: 'Bearer ' + user.access_token },
-  });
-  const userDetails = (await searchResponse.json()) as UserVote;
+  const userDetails = await fetchUser(user.access_token, user.profile.email);
   userDetails.vote = imdbId;
   userDetails.name = user.profile.name;
   return await updateUserState(user, userDetails);
