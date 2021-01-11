@@ -42,7 +42,7 @@ export const Search: FC<SearchProps> = ({ user }) => {
             <div className="movie" key={movie.Title}>
               <a href={`/movie/${movie.imdbID}`}>
                 <img
-                  src={!Image.poster || Image.poster === "N/A" ? pop : Image.poster}
+                  src={!movie?.Poster || movie.Poster === "N/A" ? pop : movie.Poster}
                   alt={movie.Title}
                   width={100}
                 ></img>

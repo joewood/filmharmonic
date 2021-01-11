@@ -38,7 +38,7 @@ export const Movie: FC<MovieProps> = ({ user, movieId }) => {
         <p>Box Office: {movie?.BoxOffice}</p>
         <p>Director: {movie?.Director}</p>
         <p>Metascore: {movie?.Metascore}</p>
-        <img src={!Image.poster || Image.poster === "N/A" ? pop : Image.poster} alt="poster" width="200" />
+        <img src={!movie?.Poster || movie.Poster === "N/A" ? pop : movie.Poster} alt="poster" width="200" />
       </div>
     </div>
   );
