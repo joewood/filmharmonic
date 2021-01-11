@@ -50,6 +50,9 @@ h2 {
   display: flex;
   justify-content: flex-end;
 }
+form {
+  width: 100%;
+}
 /*user*/
 .user {
   display: flex;
@@ -65,7 +68,7 @@ h1 {
 }
 .app-body {
   text-align: left;
-  margin-left: 5%;
+  margin: 5%;
 }
 
 /*Propositions page*/
