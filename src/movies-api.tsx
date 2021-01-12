@@ -1,5 +1,6 @@
 import { User } from 'oidc-client';
-import { uniq } from 'lodash';
+import { flatten, uniq } from 'lodash';
+import { useCallback, useEffect, useState } from 'react';
 
 /**  Movie Search Results from the search */
 export interface Movie {
@@ -158,4 +159,72 @@ export async function getMoviesFromVotes(token: string): Promise<[UserVote[], Mo
       .map((p) => fetchMovie(token, p!))
   );
   return [users, movies];
+}
+
+export async function getMoviesFromWishlists(user: User, votes: UserVote[]): Promise<MovieDetails[]> {
+  const wishes = flatten(votes.map((u) => (u.wishlist || '').split(','))).filter((m) => !!m && m.length > 0);
+  return await Promise.all(wishes.map((m) => fetchMovie(user.access_token, m)));
+}
+
+export function useProfileMovie(user: User | null) {
+  const [proposed, setProposed] = useState<MovieDetails | null>(null);
+  const [voted, setVoted] = useState<MovieDetails | null>(null);
+  const [wishlist, setWishlist] = useState<MovieDetails[]>([]);
+
+  useEffect(() => {
+    async function request() {
+      if (!user?.profile?.email) return;
+      const userDetails = await fetchUser(user?.access_token, user?.profile.email);
+      if (userDetails?.proposed) {
+        const proposed = await fetchMovie(user.access_token, userDetails.proposed);
+        setProposed(proposed);
+      }
+      if (userDetails?.vote) {
+        const vote = await fetchMovie(user.access_token, userDetails.vote);
+        setVoted(vote);
+      }
+      const wishlist = await getMoviesFromWishlists(user, [userDetails]);
+      setWishlist(wishlist);
+    }
+    request();
+  }, [user]);
+  /** Remove movie from wishlist */
+  const onRemoveWishlist = useCallback(
+    (id: string) => {
+      if (!user?.profile?.email) return;
+      updateWishlist(user, id, 'REMOVE').then((o) => setWishlist((wish) => wish.filter((f) => f.imdbID !== id)));
+    },
+    [user]
+  );
+  return { onRemoveWishlist, proposed, voted, wishlist };
+}
+
+export function useProposalMovies(user: User | null) {
+  const [userProposals, setUserProposals] = useState<UserVote[]>([]);
+  const [movies, setMovies] = useState<MovieDetails[]>([]);
+  const [wishlist, setWishlist] = useState<MovieDetails[]>([]);
+
+  // this runs when `user` changes its value (e.g. when logged in). It uses the API to get all the users' proposals
+  // and their movie details using the state hook variables above
+  useEffect(() => {
+    if (user)
+      getMoviesFromVotes(user.access_token).then(([userProposals, movies]) => {
+        setUserProposals(userProposals);
+        setMovies(movies);
+        getMoviesFromWishlists(user, userProposals).then(setWishlist).catch(console.error);
+      });
+  }, [user]);
+
+  // find the Proposal that belongs to the current logged in user (could use `useMemo` here)
+  const myProposal = userProposals.find((proposal) => proposal.RowKey === user?.profile?.email);
+
+  // Run when the user clicks "vote". Calls `voteAndRefresh` which returns the list of proposals. We use
+  // the return value to update the state variable `userProposals`
+  const onVote = useCallback(
+    (imdbId: string) => {
+      if (user) voteAndRefresh(user, imdbId).then(setUserProposals);
+    },
+    [user]
+  );
+  return { userProposals, movies, wishlist, onVote, myProposal };
 }
