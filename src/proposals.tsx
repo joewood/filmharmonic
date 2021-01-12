@@ -96,9 +96,9 @@ export const Proposals: FC<ProposalsProps> = ({ user }) => {
           </>
         ))}
       </div>
-      <h2>Wishlists from everyone in Woods</h2>
+      <h2 className="wishlist-title">Wishlists from everyone in Woods</h2>
       {wishlist.map((movie) => (
-        <div key={movie.imdbID} style={{ display: "block", margin: 20 }}>
+        <div className="wishlist" key={movie.imdbID} style={{ display: "block", margin: 20 }}>
           <br />
           <img src={movie.Poster} width={80} alt={movie.Title} />
           <div style={{ display: "inline-block", verticalAlign: "middle", padding: 10, height: 50 }}>

@@ -46,7 +46,7 @@ export const Search: FC<SearchProps> = ({ user }) => {
                   alt={movie.Title}
                   width={100}
                 ></img>
-                <p>{movie.Title}</p>
+                <p style={{ width: 100 }}>{movie.Title}</p>
               </a>
             </div>
           ))}

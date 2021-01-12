@@ -70,6 +70,7 @@ h1 {
 .app-body {
   text-align: left;
   margin: 5%;
+  padding: 1% 2%;
 }
 /* ul */
 ul {
@@ -94,11 +95,7 @@ ul {
   margin: 5% 25%;
   padding: 1%;
 }
-.movie {
-  padding: 10px;
-  display: inline-block;
-  color: white;
-}
+
 .con {
   margin: 0 10%;
   justify-content: space-between;
@@ -107,5 +104,19 @@ ul {
   flex-wrap: wrap;
   margin: 0, 10%;
   font-size: 20px;
-  border: 2px black solid;
+  align-items: center;
+}
+
+.con p {
+  white-space: initial;
+  text-decoration: none;
+  color: black;
+}
+.movie a {
+  text-decoration: none;
+}
+
+/*wishlist*/
+.wishlist-title {
+  font-size: 20px;
 }
