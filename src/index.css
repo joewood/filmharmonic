@@ -85,10 +85,15 @@ ul {
   border: 5px ridge#0a94be;
   margin: 5% 25%;
   padding: 1%;
+  display: grid;
+  grid-template: repeat(4, auto) / repeat(6, auto);
+  gap: 20px;
 }
-
-.movie a {
-  text-decoration: none;
+.d {
+  grid-area: 1 / 1 / span 1 / span 2;
+}
+.a {
+  grid-area: 1 / 2 / span 1 / span 2;
 }
 /*Search*/
 .con {
@@ -103,9 +108,16 @@ ul {
   white-space: initial;
   text-decoration: none;
   color: black;
+  display: inline;
+  float: right;
+  padding-left: 10px;
 }
 .movie {
-  padding: 2% 7% 0 0;
+  padding: 2% 5% 0 0;
+  display: inline;
+}
+.movie a {
+  text-decoration: none;
 }
 /*wishlist*/
 .wishlist-title {

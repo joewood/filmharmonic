@@ -29,16 +29,27 @@ export const Movie: FC<MovieProps> = ({ user, movieId }) => {
     <div className="App">
       <Header user={user} />
       <div className="movieinfo">
-        <h1>{movie?.Title}</h1>
-        <button onClick={onPropose}>Make My Proposal</button>
-        <button onClick={onWish}>Add to Wishlist</button>
-        <p>{movie?.Plot}</p>
-        <p>Year: {movie?.Year}</p>
-        <p>Rated: {movie?.Rated}</p>
-        <p>Box Office: {movie?.BoxOffice}</p>
-        <p>Director: {movie?.Director}</p>
-        <p>Metascore: {movie?.Metascore}</p>
-        <img src={!movie?.Poster || movie.Poster === "N/A" ? pop : movie.Poster} alt="poster" width="200" />
+        <h1 className="a">{movie?.Title}</h1>
+        <button onClick={onPropose} className="b">
+          Make My Proposal
+        </button>
+        <button onClick={onWish} className="b">
+          Add to Wishlist
+        </button>
+        <div className="c">
+          <p>{movie?.Plot}</p>
+          <p>Year: {movie?.Year}</p>
+          <p>Rated: {movie?.Rated}</p>
+          <p>Box Office: {movie?.BoxOffice}</p>
+          <p>Director: {movie?.Director}</p>
+          <p>Metascore: {movie?.Metascore}</p>
+        </div>
+        <img
+          className="d"
+          src={!movie?.Poster || movie.Poster === "N/A" ? pop : movie.Poster}
+          alt="poster"
+          width="200"
+        />
       </div>
     </div>
   );
