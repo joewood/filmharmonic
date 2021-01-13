@@ -24,6 +24,7 @@ body {
   display: grid;
   width: 100%;
   grid-template-columns: 20% 30% 50%;
+  grid-template-rows: 100%;
 }
 header {
   background-color: #aeeeb1;
@@ -53,23 +54,26 @@ h2 {
 /*search*/
 .search {
   margin-right: 10%;
-  width: 100px;
-  grid-row-end: 3;
+
   /*
   display: flex;
   justify-content: flex-end;*/
 }
 form {
   width: 100%;
+  width: 100px;
 }
 /*user*/
 .user {
+  /*
   display: flex;
-  align-items: center;
+  align-items: center;*/
 }
 .user-image {
   border-radius: 25px;
 }
+/*header end*/
+
 /*Propositions page*/
 /*Body*/
 h1 {
