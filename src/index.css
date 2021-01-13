@@ -24,22 +24,16 @@ body {
   display: grid;
   width: 100%;
   grid-template: auto / 10% auto auto;
-  border: black solid 1px;
 }
 header {
   background-color: #aeeeb1;
-  /*
-  background-size: cover;
-  background-position: center;
-  position: relative;
-  background-repeat: no-repeat;
-  */
 }
 
 .user {
   color: black;
   text-decoration: none;
-  border: black solid 1px;
+  margin: 1% 0 1% 0;
+  justify-self: start;
 }
 /*logo*/
 .logo {
@@ -51,7 +45,7 @@ header {
 /*search*/
 .search {
   justify-self: end;
-  border: black solid 1px;
+  margin: 1% 5% 0 0;
   /*
   display: flex;
   justify-content: flex-end;*/
@@ -104,6 +98,8 @@ ul {
 
 .con {
   margin: 0 10%;
+  grid-template: auto auto auto / auto auto auto;
+  /*
   justify-content: space-between;
   padding: 20px;
   display: flex;
@@ -111,6 +107,7 @@ ul {
   margin: 0, 10%;
   font-size: 20px;
   align-items: center;
+  */
 }
 
 .con p {
