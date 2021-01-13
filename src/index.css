@@ -87,29 +87,29 @@ ul {
   padding: 1%;
 }
 
+.movie a {
+  text-decoration: none;
+}
+/*Search*/
 .con {
-  margin: 0 10%;
-  grid-template: auto auto auto / auto auto auto;
-  /*
-  justify-content: space-between;
-  padding: 20px;
+  display: flex;
+  justify-content: start;
   display: flex;
   flex-wrap: wrap;
-  margin: 0, 10%;
+  margin: 0 20%;
   font-size: 20px;
-  align-items: center;
-  */
+  align-items: left;
+  margin: 0 10%;
+  align-items: baseline;
 }
-
 .con p {
   white-space: initial;
   text-decoration: none;
   color: black;
 }
-.movie a {
-  text-decoration: none;
+.movie {
+  padding: 1% 5% 0 0;
 }
-
 /*wishlist*/
 .wishlist-title {
   font-size: 20px;

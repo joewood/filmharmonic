@@ -37,20 +37,18 @@ export const Search: FC<SearchProps> = ({ user }) => {
       <Header user={user} />
       <div className="con">
         {movies.length === 0 && <p>No Results Found</p>}
-        <ul>
-          {movies.map((movie) => (
-            <div className="movie" key={movie.Title}>
-              <a href={`/movie/${movie.imdbID}`}>
-                <img
-                  src={!movie?.Poster || movie.Poster === "N/A" ? pop : movie.Poster}
-                  alt={movie.Title}
-                  width={100}
-                ></img>
-                <p style={{ width: 100 }}>{movie.Title}</p>
-              </a>
-            </div>
-          ))}
-        </ul>
+        {movies.map((movie) => (
+          <div className="movie" key={movie.Title}>
+            <a href={`/movie/${movie.imdbID}`}>
+              <img
+                src={!movie?.Poster || movie.Poster === "N/A" ? pop : movie.Poster}
+                alt={movie.Title}
+                width={100}
+              ></img>
+              <p style={{ width: 100 }}>{movie.Title}</p>
+            </a>
+          </div>
+        ))}
       </div>
     </div>
   );
