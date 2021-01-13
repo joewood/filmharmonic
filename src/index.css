@@ -35,6 +35,9 @@ header {
   margin: 1% 0 1% 0;
   justify-self: start;
 }
+.user-image {
+  border-radius: 25px;
+}
 /*logo*/
 .logo {
   background-color: white;
@@ -46,18 +49,6 @@ header {
 .search {
   justify-self: end;
   margin: 1% 5% 0 0;
-  /*
-  display: flex;
-  justify-content: flex-end;*/
-}
-/*user*/
-.user {
-  /*
-  display: flex;
-  align-items: center;*/
-}
-.user-image {
-  border-radius: 25px;
 }
 /*header end*/
 
