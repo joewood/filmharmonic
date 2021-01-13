@@ -1,8 +1,8 @@
-import { User } from 'oidc-client';
-import * as React from 'react';
-import { FC } from 'react';
-import { Header } from './header';
-import { useProposalMovies } from './movies-api';
+import { User } from "oidc-client";
+import * as React from "react";
+import { FC } from "react";
+import { Header } from "./header";
+import { useProposalMovies } from "./movies-api";
 
 interface ProposalsProps {
   user: User | null;
@@ -16,23 +16,23 @@ export const Proposals: FC<ProposalsProps> = ({ user }) => {
     <div className="App">
       <Header user={user} />
       <h1>Proposed Movies in Group: Woods</h1>
-      <div className="app-body" style={{ display: 'grid', backgroundColor: 'rgba(255,255,255,0.5)' }}>
+      <div className="app-body" style={{ display: "grid", backgroundColor: "rgba(255,255,255,0.5)" }}>
         {movies.map((movie, index) => (
           <>
-            <div key={'IMG' + movie?.imdbID} style={{ gridRow: index + 1, gridColumn: 1 }}>
+            <div key={"IMG" + movie?.imdbID} style={{ gridRow: index + 1, gridColumn: 1 }}>
               <img height={150} src={movie.Poster} alt={movie.Title} />
             </div>
             <div key={movie?.imdbID} style={{ gridRow: index + 1, gridColumn: 2 }}>
-              <p style={{ fontWeight: 'bold' }}>{movie.Title}</p>
+              <p style={{ fontWeight: "bold" }}>{movie.Title}</p>
               <p>{movie.Actors}</p>
             </div>
-            <div key={'Details' + movie?.imdbID} style={{ gridRow: index + 1, gridColumn: 3 }}>
+            <div key={"Details" + movie?.imdbID} style={{ gridRow: index + 1, gridColumn: 3 }}>
               <p>{movie.Year}</p>
               <p>{movie.Genre}</p>
               <p>{movie.Rated}</p>
               <p>Metacritic: {movie.Metascore}%</p>
             </div>
-            <div key={'Proposed' + movie?.imdbID} style={{ gridRow: index + 1, gridColumn: 4 }}>
+            <div key={"Proposed" + movie?.imdbID} style={{ gridRow: index + 1, gridColumn: 4 }}>
               <p>Proposed by: </p>
               <ul>
                 {userProposals
@@ -51,9 +51,9 @@ export const Proposals: FC<ProposalsProps> = ({ user }) => {
                 </b>
               )}
             </div>
-            <div key={'Votes' + movie?.imdbID} style={{ gridRow: index + 1, gridColumn: 5 }}>
+            <div key={"Votes" + movie?.imdbID} style={{ gridRow: index + 1, gridColumn: 5 }}>
               <p>Voted by: </p>
-              <ul style={{ textAlign: 'left' }}>
+              <ul style={{ textAlign: "left" }}>
                 {userProposals
                   .filter((user) => user.vote === movie.imdbID)
                   .map((user) => (
@@ -66,27 +66,19 @@ export const Proposals: FC<ProposalsProps> = ({ user }) => {
       </div>
       <h2 className="wishlist-title">Wishlists from everyone in Woods</h2>
       {wishlist.map((movie) => (
-<<<<<<< HEAD
-        <div className="wishlist" key={movie.imdbID} style={{ display: "block", margin: 20 }}>
-          <br />
-          <img src={movie.Poster} width={80} alt={movie.Title} />
-          <div style={{ display: "inline-block", verticalAlign: "middle", padding: 10, height: 50 }}>
-            <a href={`/movie/${movie.imdbID}`}>{movie.Title}</a>
-=======
-        <div key={movie.imdbID} style={{ display: 'block', margin: 20 }}>
+        <div key={movie.imdbID} style={{ display: "block", margin: 20 }}>
           <div
             style={{
-              display: 'inline-block',
+              display: "inline-block",
               padding: 10,
               lineHeight: 2,
               width: 500,
-              backgroundColor: 'rgba(255,255,255,0.2)',
+              backgroundColor: "rgba(255,255,255,0.2)",
             }}
           >
-            <p style={{ fontWeight: 'bold' }}>
+            <p style={{ fontWeight: "bold" }}>
               <a href={`/movie/${movie.imdbID}`}>{movie.Title}</a>
             </p>
->>>>>>> d1deb74357b6dcf39459b043bc2cb967c053805a
           </div>
         </div>
       ))}

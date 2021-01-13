@@ -9,6 +9,7 @@ body {
 }
 
 /*Header*/
+/*
 .App-header {
   display: flex;
   width: 100%;
@@ -17,6 +18,12 @@ body {
   flex-direction: row;
   flex-wrap: nowrap;
   flex-grow: 10;
+}
+*/
+.App-header {
+  display: grid;
+  width: 100%;
+  grid-template-columns: 20% 30% 50%;
 }
 header {
   background-color: #aeeeb1;
@@ -47,8 +54,10 @@ h2 {
 .search {
   margin-right: 10%;
   width: 100px;
+  grid-row-end: 3;
+  /*
   display: flex;
-  justify-content: flex-end;
+  justify-content: flex-end;*/
 }
 form {
   width: 100%;
