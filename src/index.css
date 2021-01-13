@@ -23,34 +23,35 @@ body {
 .App-header {
   display: grid;
   width: 100%;
-  grid-template-columns: 20% 30% 50%;
-  grid-template-rows: 100%;
+  grid-template: auto / 10% auto auto;
+  border: black solid 1px;
 }
 header {
   background-color: #aeeeb1;
-  height: 100%;
+  /*
+  background-size: cover;
+  background-position: center;
+  position: relative;
+  background-repeat: no-repeat;
+  */
 }
-header h1,
-h2 {
-  margin-left: 8%;
-  text-align: left;
-  width: 30%;
-  padding: 1% 1% 2% 1%;
-}
+
 .user {
   color: black;
   text-decoration: none;
+  border: black solid 1px;
 }
 /*logo*/
 .logo {
   background-color: white;
   height: 32px;
-  margin-left: 50%;
+  margin: 3% 0 0 5%;
+  justify-self: start;
 }
 /*search*/
 .search {
-  margin-right: 10%;
-
+  justify-self: end;
+  border: black solid 1px;
   /*
   display: flex;
   justify-content: flex-end;*/
