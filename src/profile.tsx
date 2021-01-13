@@ -48,7 +48,7 @@ export const Profile: FC<ProfileProps> = ({ user }) => {
               </div>
               <button
                 style={{ gridRow: index + 1, gridColumn: 4, alignSelf: 'center', justifySelf: 'start' }}
-                onClick={() => onRemoveWishlist}
+                onClick={() => onRemoveWishlist(movie.imdbID)}
               >
                 Remove
               </button>
