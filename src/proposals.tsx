@@ -22,15 +22,17 @@ export const Proposals: FC<ProposalsProps> = ({ user }) => {
             <div key={"IMG" + movie?.imdbID} style={{ gridRow: index + 1, gridColumn: 1 }}>
               <img height={150} src={movie.Poster} alt={movie.Title} />
             </div>
-            <div key={movie?.imdbID} style={{ gridRow: index + 1, gridColumn: 2 }}>
-              <p style={{ fontWeight: "bold" }}>{movie.Title}</p>
-              <p>{movie.Actors}</p>
-            </div>
-            <div key={"Details" + movie?.imdbID} style={{ gridRow: index + 1, gridColumn: 3 }}>
-              <p>{movie.Year}</p>
-              <p>{movie.Genre}</p>
-              <p>{movie.Rated}</p>
-              <p>Metacritic: {movie.Metascore}%</p>
+            <div className="proposal-info">
+              <div key={movie?.imdbID} style={{ gridRow: index + 1, gridColumn: 2 }}>
+                <p style={{ fontWeight: "bold" }}>{movie.Title}</p>
+                <p>{movie.Actors}</p>
+              </div>
+              <div key={"Details" + movie?.imdbID} style={{ gridRow: index + 1, gridColumn: 3 }}>
+                <p>{movie.Year}</p>
+                <p>{movie.Genre}</p>
+                <p>{movie.Rated}</p>
+                <p>Metacritic: {movie.Metascore}%</p>
+              </div>
             </div>
             <div key={"Proposed" + movie?.imdbID} style={{ gridRow: index + 1, gridColumn: 4 }}>
               <p>Proposed by: </p>
@@ -64,24 +66,25 @@ export const Proposals: FC<ProposalsProps> = ({ user }) => {
           </>
         ))}
       </div>
-      <h2 className="wishlist-title">Wishlists from everyone in Woods</h2>
-      {wishlist.map((movie) => (
-        <div key={movie.imdbID} style={{ display: "block", margin: 20 }}>
-          <div
-            style={{
-              display: "inline-block",
-              padding: 10,
-              lineHeight: 2,
-              width: 500,
-              backgroundColor: "rgba(255,255,255,0.2)",
-            }}
-          >
-            <p style={{ fontWeight: "bold" }}>
-              <a href={`/movie/${movie.imdbID}`}>{movie.Title}</a>
-            </p>
+      <div className="wishlist">
+        <h2 className="wishlist-title">Wishlists from everyone in Woods</h2>
+        {wishlist.map((movie) => (
+          <div key={movie.imdbID} style={{ display: "block", margin: 20 }}>
+            <div
+              style={{
+                display: "inline-block",
+                padding: 10,
+                lineHeight: 2,
+                backgroundColor: "rgba(255,255,255,0.2)",
+              }}
+            >
+              <p style={{ fontWeight: "bold" }}>
+                <a href={`/movie/${movie.imdbID}`}>{movie.Title}</a>
+              </p>
+            </div>
           </div>
-        </div>
-      ))}
+        ))}
+      </div>
     </div>
   );
 };

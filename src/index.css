@@ -9,17 +9,7 @@ body {
 }
 
 /*Header*/
-/*
-.App-header {
-  display: flex;
-  width: 100%;
-  align-items: center;
-  justify-content: space-between;
-  flex-direction: row;
-  flex-wrap: nowrap;
-  flex-grow: 10;
-}
-*/
+
 .App-header {
   display: grid;
   width: 100%;
@@ -80,6 +70,10 @@ ul {
 
 /*Movies*/
 /* movie info */
+h1,
+h2 {
+  margin: 0 2%;
+}
 .movieinfo {
   background-color: white;
   margin: 5% 25%;
@@ -94,6 +88,7 @@ ul {
 .movietitle {
   grid-area: 1 / 2 / span 1 / span 4;
   justify-self: start;
+  padding: 0 0 3% 3%;
 }
 .button-one {
   grid-area: 4 / 6 / span 1 / span 1;
@@ -110,7 +105,8 @@ ul {
 .App button {
   background-color: #aeeeb1; /* Green */
   border: none;
-  color: white;
+  color: black;
+  border: black ridge 1px;
   padding: 15px 32px;
   text-align: center;
   text-decoration: none;
@@ -144,4 +140,54 @@ ul {
 /*wishlist*/
 .wishlist-title {
   font-size: 20px;
+}
+/*Mobile*/
+/*header*/
+@media only screen and (max-width: 768px) {
+  header {
+    width: 100%;
+  }
+  .user-name {
+    display: none;
+  }
+  .user {
+    position: absolute;
+    right: 10px;
+  }
+  /*proposal*/
+  .proposal-info {
+    display: none;
+  }
+  .app-body {
+    font-size: 60%;
+  }
+  .App button {
+    width: 40px;
+    height: 25px;
+    font-size: 10px;
+    text-align: center;
+    padding: 0px;
+  }
+}
+/* wishlist*/
+@media only screen and (max-width: 768px) {
+  .wishlist {
+    margin: 0 5% 0 1%;
+    width: 100%;
+    overflow-wrap: normal;
+  }
+  .wishlist-title {
+    margin: 0 5% 0 1%;
+  }
+}
+/*Movieinfo*/
+@media only screen and (max-width: 768px) {
+  .movieinfo {
+    font-size: 60%;
+    grid-template: repeat(4, auto) / repeat(6, auto);
+    margin: 5% auto;
+  }
+  .movie-poster-info {
+    grid-area: 1 / 1 / span 2 / span 1;
+  }
 }

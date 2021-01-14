@@ -28,7 +28,7 @@ export const Header: FC<{ user: User | null }> = ({ user }) => {
         </a>
         <div className="user">
           <img className="header-object user-image" height={"32"} src={user?.profile.picture} alt="profile" />
-          <a className="user header-object" href="/user">
+          <a className="user user-name" href="/user">
             {user?.profile.name}
           </a>
         </div>
