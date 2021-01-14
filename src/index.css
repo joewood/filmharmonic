@@ -82,18 +82,40 @@ ul {
 /* movie info */
 .movieinfo {
   background-color: white;
-  border: 5px ridge#0a94be;
   margin: 5% 25%;
   padding: 1%;
   display: grid;
-  grid-template: repeat(4, auto) / repeat(6, auto);
+  grid-template: 15% auto auto auto / repeat(6, auto);
   gap: 20px;
 }
-.d {
-  grid-area: 1 / 1 / span 1 / span 2;
+.movie-poster-info {
+  grid-area: 1 / 1 / span 2 / span 1;
 }
-.a {
-  grid-area: 1 / 2 / span 1 / span 2;
+.movietitle {
+  grid-area: 1 / 2 / span 1 / span 4;
+  justify-self: start;
+}
+.button-one {
+  grid-area: 4 / 6 / span 1 / span 1;
+  justify-self: start;
+}
+.button-two {
+  grid-area: 3 / 6 / span 1 / span 1;
+  justify-self: start;
+}
+.movieinformation {
+  grid-area: 2 / 2 / span 3 / span 4;
+  padding: 2%;
+}
+.App button {
+  background-color: #aeeeb1; /* Green */
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
 }
 /*Search*/
 .con {

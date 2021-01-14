@@ -29,14 +29,14 @@ export const Movie: FC<MovieProps> = ({ user, movieId }) => {
     <div className="App">
       <Header user={user} />
       <div className="movieinfo">
-        <h1 className="a">{movie?.Title}</h1>
-        <button onClick={onPropose} className="b">
+        <h1 className="movietitle">{movie?.Title}</h1>
+        <button onClick={onPropose} className="button-one">
           Make My Proposal
         </button>
-        <button onClick={onWish} className="b">
+        <button onClick={onWish} className="button-two">
           Add to Wishlist
         </button>
-        <div className="c">
+        <div className="movieinformation">
           <p>{movie?.Plot}</p>
           <p>Year: {movie?.Year}</p>
           <p>Rated: {movie?.Rated}</p>
@@ -45,7 +45,7 @@ export const Movie: FC<MovieProps> = ({ user, movieId }) => {
           <p>Metascore: {movie?.Metascore}</p>
         </div>
         <img
-          className="d"
+          className="movie-poster-info"
           src={!movie?.Poster || movie.Poster === "N/A" ? pop : movie.Poster}
           alt="poster"
           width="200"
