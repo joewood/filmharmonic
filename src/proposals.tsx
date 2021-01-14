@@ -23,8 +23,11 @@ export const Proposals: FC<ProposalsProps> = ({ user }) => {
               <img height={150} src={movie.Poster} alt={movie.Title} />
             </div>
             <div key={movie?.imdbID} style={{ gridRow: index + 1, gridColumn: 2 }}>
-              <p style={{ fontWeight: "bold" }}>{movie.Title}</p>
+              <p style={{ fontWeight: "bold" }}>
+                <a href={`/movie/${movie.imdbID}`}>{movie.Title}</a>
+              </p>
               <p>{movie.Actors}</p>
+              <p>{movie.Released}</p>
             </div>
             <div key={"Details" + movie?.imdbID} style={{ gridRow: index + 1, gridColumn: 3 }}>
               <p>{movie.Year}</p>

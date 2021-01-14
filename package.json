@@ -37,6 +37,11 @@
       "react-app"
     ]
   },
+  "prettier": {
+    "jsxSingleQuote": false,
+    "tabWidth": 2,
+    "printWidth": 120
+  },
   "proxy": "https://filmharmonic.azurewebsites.net",
   "browserslist": {
     "production": [
