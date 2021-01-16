@@ -15,8 +15,8 @@ interface SearchProps extends RouteComponentProps {
 /** In React a Function is like an HTML element, this is the <App> Component used in index.tsx */
 export const Search: FC<SearchProps> = ({ user }) => {
   const location = useLocation();
-  const { search } = parse(location.search) as { search: string };
-
+  const { search, page } = parse(location.search) as { search: string; page: string };
+  const numberPage = parseInt(page || "1");
   // in React a Component can have state. These are special values that when they change will cause
   // the component to update (to re-render or redraw). The `useState` function returns an array where
   // the first element is the current state value, the second element in the array is the function to
@@ -27,9 +27,9 @@ export const Search: FC<SearchProps> = ({ user }) => {
     // if the ref is null clear the movie list
     if (search === null || search === "" || !user) setMovies([]);
     else {
-      searchMovies(user.access_token, search).then((movies) => setMovies(movies.Search || []));
+      searchMovies(user.access_token, search, numberPage).then((movies) => setMovies(movies.Search || []));
     }
-  }, [search, user]);
+  }, [search, numberPage, user]);
   /** The React elements are the same as HTML other than `className` is used rather than `class`
    * and style looks a bit different. */
   return (
@@ -45,10 +45,16 @@ export const Search: FC<SearchProps> = ({ user }) => {
                 alt={movie.Title}
                 width={100}
               ></img>
-              <p style={{ width: 100 }}>{movie.Title}</p>
+              <p style={{ width: 100 }}>
+                <div style={{ display: "block" }}>{movie.Title}</div>
+                <div style={{ display: "block" }}>{movie.Year}</div>
+              </p>
             </a>
           </div>
         ))}
+        <div className="movie" key="next">
+          <a href={`/search?search=${search}&page=${numberPage + 1}`}>Next Page...</a>
+        </div>
       </div>
     </div>
   );

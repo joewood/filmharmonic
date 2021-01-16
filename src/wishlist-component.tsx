@@ -1,6 +1,7 @@
 import * as React from "react";
 import { FC } from "react";
 import { MovieDetails, MovieDetailsWithWisher } from "./movies-api";
+import pop from "./images/pop.jpg";
 
 export const Wishlist: FC<{
   title?: string;
@@ -28,6 +29,9 @@ export const Wishlist: FC<{
       {wishlist.map((movie, index) => (
         <>
           <div key={movie.imdbID + "1"} style={{ fontWeight: "bold", gridRow: index + 1, gridColumn: 1 }}>
+            <img src={!movie.Poster || movie.Poster === "N/A" ? pop : movie.Poster} width={80} alt={movie.Title} />
+          </div>
+          <div key={movie.imdbID + "1"} style={{ fontWeight: "bold", gridRow: index + 1, gridColumn: 2 }}>
             <a
               style={{
                 maxWidth: 300,
@@ -43,7 +47,7 @@ export const Wishlist: FC<{
             <div>{movie.Type}</div>
             <div>{movie.Metascore !== "N/A" ? "Reviews: " + movie.Metascore + "%" : ""}</div>
           </div>
-          <div key={movie.imdbID + "2"} style={{ gridRow: index + 1, gridColumn: 2 }}>
+          <div key={movie.imdbID + "2"} style={{ gridRow: index + 1, gridColumn: 3 }}>
             <div>{movie.Released}</div>
             <div>
               {movie.Genre.split(",").map((g) => (
@@ -51,23 +55,23 @@ export const Wishlist: FC<{
               ))}
             </div>
           </div>
-          <div key={movie.imdbID + "3"} style={{ gridRow: index + 1, gridColumn: 3 }}>
+          <div key={movie.imdbID + "3"} style={{ gridRow: index + 1, gridColumn: 4 }}>
             {movie.Actors.split(",").map((a) => (
               <div key={a}>{a}</div>
             ))}
           </div>
-          <div key={movie.imdbID + "4"} style={{ gridRow: index + 1, gridColumn: 4 }}>
+          <div key={movie.imdbID + "4"} style={{ gridRow: index + 1, gridColumn: 5 }}>
             {movie.Plot}
           </div>
           {!onRemove && "wishedBy" in movie && (
-            <div key={movie.imdbID + "5"} style={{ gridRow: index + 1, gridColumn: 5 }}>
+            <div key={movie.imdbID + "5"} style={{ gridRow: index + 1, gridColumn: 6 }}>
               {movie.wishedBy.length} {movie.wishedBy.length > 1 ? " Wishlists" : " Wishlist"}
             </div>
           )}
           {onRemove && (
             <div
               key={movie.imdbID + "5"}
-              style={{ gridRow: index + 1, gridColumn: 5, padding: 5, alignSelf: "center", justifySelf: "start" }}
+              style={{ gridRow: index + 1, gridColumn: 6, padding: 5, alignSelf: "center", justifySelf: "start" }}
             >
               <button
                 style={{ gridRow: index + 1, padding: 5, borderRadius: 5 }}
