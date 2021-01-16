@@ -38,6 +38,7 @@ export const Movie: FC<MovieProps> = ({ user, movieId }) => {
         </button>
         <div className="movieinformation">
           <p>{movie?.Plot}</p>
+          <p>{movie?.Actors}</p>
           <p>Year: {movie?.Year}</p>
           <p>Rated: {movie?.Rated}</p>
           <p>Box Office: {movie?.BoxOffice}</p>
