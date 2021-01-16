@@ -2,14 +2,15 @@ import { User } from "oidc-client";
 import * as React from "react";
 import { FC } from "react";
 import { Header } from "./header";
-import { useProposalMovies } from "./movies-api";
+import { useAllUsersMovies } from "./movies-api";
+import { Wishlist } from "./wishlist-component";
 
 interface ProposalsProps {
   user: User | null;
 }
 /** In React a Function is like an HTML element, this is the <App> Component used in index.tsx */
 export const Proposals: FC<ProposalsProps> = ({ user }) => {
-  const { movies, userProposals, wishlist, myProposal, onVote } = useProposalMovies(user);
+  const { movies, userProposals, wishlist, myProposal, onVote } = useAllUsersMovies(user);
   /** The React elements are the same as HTML other than `className` is used rather than `class`
    * and style looks a bit different. */
   return (
@@ -66,25 +67,7 @@ export const Proposals: FC<ProposalsProps> = ({ user }) => {
           </>
         ))}
       </div>
-      <div className="wishlist">
-        <h2 className="wishlist-title">Wishlists from everyone in Woods</h2>
-        {wishlist.map((movie) => (
-          <div key={movie.imdbID} style={{ display: "block", margin: 20 }}>
-            <div
-              style={{
-                display: "inline-block",
-                padding: 10,
-                lineHeight: 2,
-                backgroundColor: "rgba(255,255,255,0.2)",
-              }}
-            >
-              <p style={{ fontWeight: "bold" }}>
-                <a href={`/movie/${movie.imdbID}`}>{movie.Title}</a>
-              </p>
-            </div>
-          </div>
-        ))}
-      </div>
+      <Wishlist wishlist={wishlist} title="Wishlist for Woods Group" />
     </div>
   );
 };
