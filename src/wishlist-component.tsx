@@ -15,12 +15,12 @@ export const Wishlist: FC<{
     <div
       style={{
         display: "grid",
-        gridTemplateColumns: "auto auto auto 1fr auto",
+        gridTemplateColumns: "48px auto auto 1fr auto",
         gridAutoRows: "auto",
         gridRowGap: 20,
         gridColumnGap: 10,
         margin: "auto",
-        maxWidth: "1000px",
+        maxWidth: "min(1000px, 100vw)",
         backgroundColor: "rgba(255,255,255,0.2)",
         justifyContent: "space-between",
         padding: 10,
@@ -28,39 +28,36 @@ export const Wishlist: FC<{
     >
       {wishlist.map((movie, index) => (
         <>
-          <div key={movie.imdbID + "1"} style={{ fontWeight: "bold", gridRow: index + 1, gridColumn: 1 }}>
-            <img src={!movie.Poster || movie.Poster === "N/A" ? pop : movie.Poster} width={80} alt={movie.Title} />
+          <div key={movie.imdbID + "poster  "} style={{ fontWeight: "bold", gridRow: index + 1, gridColumn: 1 }}>
+            <img src={!movie.Poster || movie.Poster === "N/A" ? pop : movie.Poster} width={"40px"} alt={movie.Title} />
           </div>
-          <div key={movie.imdbID + "1"} style={{ fontWeight: "bold", gridRow: index + 1, gridColumn: 2 }}>
+          <div key={movie.imdbID + "title"} style={{ gridRow: index + 1, gridColumn: 2 }}>
             <a
               style={{
-                maxWidth: 300,
-                display: "block",
-                whiteSpace: "nowrap",
-                textOverflow: "ellipsis",
-                overflow: "hidden",
+                width: 200,
+                fontWeight: "bold",
               }}
               href={`/movie/${movie.imdbID}`}
             >
-              {movie.Title}
+              <div style={{ display: "block", whiteSpace: "pre-wrap" }}>{movie.Title}</div>
             </a>
             <div>{movie.Type}</div>
+            <div>{movie.Released}</div>
             <div>{movie.Metascore !== "N/A" ? "Reviews: " + movie.Metascore + "%" : ""}</div>
           </div>
-          <div key={movie.imdbID + "2"} style={{ gridRow: index + 1, gridColumn: 3 }}>
-            <div>{movie.Released}</div>
+          <div key={movie.imdbID + "2"} style={{ gridRow: index + 1, fontSize: "0.75rem", gridColumn: 3 }}>
             <div>
               {movie.Genre.split(",").map((g) => (
                 <div key={g}>{g}</div>
               ))}
             </div>
           </div>
-          <div key={movie.imdbID + "3"} style={{ gridRow: index + 1, gridColumn: 4 }}>
+          <div key={movie.imdbID + "3"} style={{ gridRow: index + 1, fontSize: "0.75rem", gridColumn: 4 }}>
             {movie.Actors.split(",").map((a) => (
               <div key={a}>{a}</div>
             ))}
           </div>
-          <div key={movie.imdbID + "4"} style={{ gridRow: index + 1, gridColumn: 5 }}>
+          <div key={movie.imdbID + "4"} style={{ gridRow: index + 1, fontSize: "0.75rem", gridColumn: 5 }}>
             {movie.Plot}
           </div>
           {!onRemove && "wishedBy" in movie && (
