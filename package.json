@@ -49,5 +49,18 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  }
+  },
+  "description": "Movie Party Voting Site",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/joewood/filmharmonic.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/joewood/filmharmonic/issues"
+  },
+  "homepage": "https://github.com/joewood/filmharmonic#readme"
 }
