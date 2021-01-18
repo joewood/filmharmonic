@@ -2,12 +2,23 @@
     "prettier.printWidth": 120,
     "editor.formatOnSave": true,
     "cSpell.words": [
+        "Metacritic",
         "Metascore",
+        "browserslist",
+        "cust",
+        "dtpr",
         "filmharmonic",
+        "googleusercontent",
         "imdb",
+        "lapbjv",
+        "movieinfo",
+        "movieinformation",
+        "movietitle",
         "oidc",
         "omdb",
         "openid",
+        "profilelayout",
+        "qaiemav",
         "signin"
     ]
 }

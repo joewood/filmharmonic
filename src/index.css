@@ -23,7 +23,7 @@ header {
   color: black;
   text-decoration: none;
   margin: 1% 0 1% 0;
-  justify-self: start;
+  justify-self: flex-start;
 }
 .user-image {
   border-radius: 25px;
@@ -33,7 +33,7 @@ header {
   background-color: white;
   height: 32px;
   margin: 3% 0 0 5%;
-  justify-self: start;
+  justify-self: flex-start;
 }
 /*search*/
 .search {
@@ -87,16 +87,16 @@ h2 {
 }
 .movietitle {
   grid-area: 1 / 2 / span 1 / span 4;
-  justify-self: start;
+  justify-self: flex-start;
   padding: 0 0 3% 3%;
 }
 .button-one {
   grid-area: 4 / 6 / span 1 / span 1;
-  justify-self: start;
+  justify-self: flex-start;
 }
 .button-two {
   grid-area: 3 / 6 / span 1 / span 1;
-  justify-self: start;
+  justify-self: flex-start;
 }
 .movieinformation {
   grid-area: 2 / 2 / span 3 / span 4;
@@ -115,7 +115,7 @@ h2 {
 }
 /*Search*/
 .con {
-  justify-content: start;
+  justify-content: flex-start;
   display: flex;
   flex-wrap: wrap;
   margin: 0 20%;
