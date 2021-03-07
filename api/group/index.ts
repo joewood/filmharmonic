@@ -1,6 +1,5 @@
-import { Container } from "@azure/cosmos";
 import { AzureFunction, Context, HttpRequest } from "@azure/functions";
-import { getContainer, getRow, getRows, getUser, HttpError, upsertRow } from "../common";
+import { getContainer, getUser, HttpError } from "../common";
 
 const httpTrigger: AzureFunction = async function (context: Context, req: HttpRequest): Promise<void> {
     try {
