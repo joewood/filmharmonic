@@ -53,6 +53,7 @@ export interface MovieDetails {
 }
 
 export interface MovieDetailsWithWisher extends MovieDetails {
+  /** Who this movie was wished by */
   wishedBy: string[];
 }
 
@@ -180,7 +181,7 @@ export async function getMoviesFromWishlists(user: User, userMovies: UserMovies[
   return allMovies.map((a) => ({ ...a, wishedBy: wishesByMovie[a.imdbID]?.map((uu) => uu.user) ?? [] }));
 }
 
-interface UseProfileMovieRet {
+interface UseMoviesRet {
   /** call to remove movie from wishlist */
   onRemoveWishlist: (imdbId: string) => void;
   /** movie proposed by the user */
@@ -192,7 +193,7 @@ interface UseProfileMovieRet {
 }
 
 /** React Hook to manage the state of a user's proposed, vote and wishlist movies */
-export function useUserMovies(user: User | null): UseProfileMovieRet {
+export function useUserMovies(user: User | null): UseMoviesRet {
   const [proposed, setProposed] = useState<MovieDetails | null>(null);
   const [voted, setVoted] = useState<MovieDetails | null>(null);
   const [wishlist, setWishlist] = useState<MovieDetails[]>([]);
