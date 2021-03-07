@@ -1,8 +1,8 @@
-# Film Harmonic
+# Group Binge
 
-Movie Party Voting Site
+Movie/TV Streaming Party Voting Site
 
-Running at [filmharmonic.azurewebistes.net](https://filmharmonic.azurewebsites.net)
+Running at [groupbinge.com](https://groupbinge.com)
 
 ## Source Breakdown
 
