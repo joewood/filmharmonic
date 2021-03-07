@@ -87,53 +87,53 @@ app.use(bodyParser.json());
 //     res.status(200);
 // });
 
-app.get("/api/votes", async function (req, res) {
-    const out = {
-        proposals: {
-            movieId: "tt6723592",
-            votes: 1,
-        },
-        wishlists: [
-            {
-                wishlist: ["tt7126948", "tt6723592"],
-                user: "joewood@live.com",
-            },
-        ],
-    };
-    res.send(JSON.stringify(out));
-    res.status(200);
-});
+// app.get("/api/votes", async function (req, res) {
+//     const out = {
+//         proposals: {
+//             movieId: "tt6723592",
+//             votes: 1,
+//         },
+//         wishlists: [
+//             {
+//                 wishlist: ["tt7126948", "tt6723592"],
+//                 user: "joewood@live.com",
+//             },
+//         ],
+//     };
+//     res.send(JSON.stringify(out));
+//     res.status(200);
+// });
 
-app.get("/api/group", async function (req, res) {
-    let resultSet = {};
-    try {
-        resultSet = await new Promise((resolve, reject) =>
-            storageClient.queryEntities(
-                "user",
-                new TableQuery()
-                    .select("proposed", "vote", "wishlist", "RowKey", "name")
-                    .where(TableQuery.stringFilter("PartitionKey", TableUtilities.QueryComparisons.EQUAL, "woods")),
-                null,
-                {},
-                (e, r) => (e ? reject(e) : resolve(r))
-            )
-        );
-    } catch (e) {
-        console.error(e);
-        res.status(503);
-        res.send(JSON.stringify(e));
-        return;
-    }
-    for (const out of resultSet.entries || []) {
-        for (const k in out) {
-            if ("_" in out[k]) out[k] = out[k]._;
-        }
-        delete out[".metadata"];
-        delete out.etag;
-    }
-    res.send(JSON.stringify(resultSet.entries));
-    res.status(200);
-});
+// app.get("/api/group", async function (req, res) {
+//     let resultSet = {};
+//     try {
+//         resultSet = await new Promise((resolve, reject) =>
+//             storageClient.queryEntities(
+//                 "user",
+//                 new TableQuery()
+//                     .select("proposed", "vote", "wishlist", "RowKey", "name")
+//                     .where(TableQuery.stringFilter("PartitionKey", TableUtilities.QueryComparisons.EQUAL, "woods")),
+//                 null,
+//                 {},
+//                 (e, r) => (e ? reject(e) : resolve(r))
+//             )
+//         );
+//     } catch (e) {
+//         console.error(e);
+//         res.status(503);
+//         res.send(JSON.stringify(e));
+//         return;
+//     }
+//     for (const out of resultSet.entries || []) {
+//         for (const k in out) {
+//             if ("_" in out[k]) out[k] = out[k]._;
+//         }
+//         delete out[".metadata"];
+//         delete out.etag;
+//     }
+//     res.send(JSON.stringify(resultSet.entries));
+//     res.status(200);
+// });
 
 // app.use(express.static(__dirname + "/build", options));
 // app.get("*", (req, res) => res.sendFile(__dirname + "/build/index.html"));

@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.cleanResultset = exports.cleanRow = exports.getRows = exports.upsertRow = exports.getRow = exports.getContainer = exports.HttpError = void 0;
+exports.cleanResultset = exports.cleanRow = exports.getRows = exports.upsertRow = exports.getRow = exports.getContainer = exports.getUser = exports.HttpError = void 0;
 const cosmos_1 = require("@azure/cosmos");
 class HttpError extends Error {
     constructor(message, status = 503) {
@@ -18,6 +18,20 @@ class HttpError extends Error {
     }
 }
 exports.HttpError = HttpError;
+function getUser(container, email) {
+    var _a;
+    return __awaiter(this, void 0, void 0, function* () {
+        const result = yield container.items.query(`SELECT * FROM c WHERE c.userid="${email}"`).fetchAll();
+        if (result.resources.length === 0)
+            throw new HttpError(`User ${email} not found`, 404);
+        const user = result.resources[0];
+        const wishlistContainer = yield getContainer("wishlist");
+        const wishlist = yield wishlistContainer.items.query(`SELECT c.moveid from c WHERE c.userid="${email}"`).fetchAll();
+        user.wishlist = ((_a = wishlist.resources) === null || _a === void 0 ? void 0 : _a.map((m) => m.moveid)) || [];
+        return user;
+    });
+}
+exports.getUser = getUser;
 function getContainer(name) {
     const storageClient = new cosmos_1.CosmosClient(process.env["COSMOS"]);
     const db = storageClient.database("filmharmonic");

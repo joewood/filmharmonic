@@ -4,18 +4,18 @@ import { getContainer, getRow, getRows, getUser, HttpError, upsertRow } from "..
 
 const httpTrigger: AzureFunction = async function (context: Context, req: HttpRequest): Promise<void> {
     try {
-        const container = getContainer("users");
+        const container = getContainer("groups");
+        const userContainer = getContainer("users");
         let { id } = req.params;
         id = decodeURIComponent(id);
         if (!id) throw new HttpError("Must specify user", 404);
         if (req.method === "GET") {
-            const user = await getUser(container, id);
-            context.res = { body: JSON.stringify(user) };
+            const result = await container.items.query(`SELECT c.userid from c WHERE c.groupid="${id}"`).fetchAll();
+            if (result.resources.length === 0) throw new HttpError(`Group ${id} not found`, 404);
+            const userids = result.resources.map((c) => c.userid);
+            const users = await Promise.all(userids.map((u) => getUser(userContainer, u)));
+            context.res = { body: JSON.stringify(users) };
             return;
-        } else if (req.method === "PUT") {
-            await container.items.upsert({ ...req.body, userid: id, email: id });
-            const user = getUser(container, id);
-            context.res = { body: JSON.stringify(user) };
         }
     } catch (e) {
         console.error(e);

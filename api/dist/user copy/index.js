@@ -10,6 +10,19 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const common_1 = require("../common");
+function getUser(container, email) {
+    var _a;
+    return __awaiter(this, void 0, void 0, function* () {
+        const result = yield container.items.query(`SELECT * FROM c WHERE c.userid="${email}"`).fetchAll();
+        if (result.resources.length === 0)
+            throw new common_1.HttpError(`User ${email} not found`, 404);
+        const user = result.resources[0];
+        const wishlistContainer = yield common_1.getContainer("wishlist");
+        const wishlist = yield wishlistContainer.items.query(`SELECT c.moveid from c WHERE c.userid="${email}"`).fetchAll();
+        user.wishlist = ((_a = wishlist.resources) === null || _a === void 0 ? void 0 : _a.map((m) => m.moveid)) || [];
+        return user;
+    });
+}
 const httpTrigger = function (context, req) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
@@ -19,13 +32,13 @@ const httpTrigger = function (context, req) {
             if (!id)
                 throw new common_1.HttpError("Must specify user", 404);
             if (req.method === "GET") {
-                const user = yield common_1.getUser(container, id);
+                const user = yield getUser(container, id);
                 context.res = { body: JSON.stringify(user) };
                 return;
             }
             else if (req.method === "PUT") {
                 yield container.items.upsert(Object.assign(Object.assign({}, req.body), { userid: id, email: id }));
-                const user = common_1.getUser(container, id);
+                const user = getUser(container, id);
                 context.res = { body: JSON.stringify(user) };
             }
         }

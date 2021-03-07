@@ -62,8 +62,8 @@ export interface Data {
 }
 
 export interface UserMovies {
-  RowKey: string;
-  PartitionKey: string;
+  userid: string;
+  groupid: string;
   proposed?: string;
   vote?: string;
   wishlist: string[];
@@ -94,7 +94,7 @@ export async function fetchUser(token: string, email: string): Promise<UserMovie
 }
 
 export async function fetchUsers(token: string): Promise<UserMovies[]> {
-  const searchResponse = await fetch("/api/group", {
+  const searchResponse = await fetch("/api/group/woods", {
     headers: { Authorization: "Bearer " + token },
   });
   return (await searchResponse.json()) as UserMovies[];
@@ -168,7 +168,7 @@ export async function getMoviesFromWishlists(user: User, userMovies: UserMovies[
     userMovies.map((userMovie) =>
       (userMovie?.wishlist || [])
         .filter((m) => !!m && m.length > 0)
-        .map((imdbId) => ({ user: userMovie.RowKey, imdbId }))
+        .map((imdbId) => ({ user: userMovie.userid, imdbId }))
     )
   );
   const wishes = uniq(userMoviesId.map((u) => u.imdbId));
@@ -254,7 +254,7 @@ export function useAllUsersMovies(user: User | null): AllUsersMovies {
   }, [user]);
 
   // find the Proposal that belongs to the current logged in user (could use `useMemo` here)
-  const myProposal = userProposals.find((proposal) => proposal.RowKey === user?.profile?.email);
+  const myProposal = userProposals.find((proposal) => proposal.userid === user?.profile?.email);
 
   // Run when the user clicks "vote". Calls `voteAndRefresh` which returns the list of proposals. We use
   // the return value to update the state variable `userProposals`

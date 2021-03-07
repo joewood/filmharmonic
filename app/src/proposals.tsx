@@ -41,7 +41,7 @@ export const Proposals: FC<ProposalsProps> = ({ user }) => {
                 {userProposals
                   .filter((user) => user.proposed === movie.imdbID)
                   .map((user) => (
-                    <li>{user.name || user.RowKey}</li>
+                    <li>{user.name || user.userid}</li>
                   ))}
               </ul>
               <br />
@@ -60,7 +60,7 @@ export const Proposals: FC<ProposalsProps> = ({ user }) => {
                 {userProposals
                   .filter((user) => user.vote === movie.imdbID)
                   .map((user) => (
-                    <li>{`👍 ${user.name || user.RowKey}`}</li>
+                    <li>{`👍 ${user.name || user.userid}`}</li>
                   ))}
               </ul>
             </div>
