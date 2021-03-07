@@ -14,5 +14,5 @@
             "name": "res"
         }
     ],
-    "scriptFile": "../dist/search/index.js"
+    "scriptFile": "../dist/movie/index.js"
 }

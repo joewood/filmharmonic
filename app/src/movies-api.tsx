@@ -66,7 +66,7 @@ export interface UserMovies {
   PartitionKey: string;
   proposed?: string;
   vote?: string;
-  wishlist?: string;
+  wishlist: string[];
   name?: string;
 }
 
@@ -119,13 +119,10 @@ export async function makeProposal(user: User, imdbId: string): Promise<UserMovi
   return await updateUserState(user, userDetails);
 }
 
-export const addWish = (imdbMovie: string, wishlist: string | undefined) =>
-  uniq([imdbMovie, ...(wishlist || "").split(",")]).join(",");
-export const removeWish = (imdbMovie: string, wishlist: string | undefined) =>
-  (wishlist || "")
-    .split(",")
-    .filter((m) => m !== imdbMovie)
-    .join(",");
+export const addWish = (imdbMovie: string, wishlist: string[] | undefined) => uniq([imdbMovie, ...(wishlist || [])]);
+
+export const removeWish = (imdbMovie: string, wishlist: string[] | undefined) =>
+  (wishlist || []).filter((m) => m !== imdbMovie);
 
 export async function updateWishlist(user: User, imdbId: string, addRemove: "ADD" | "REMOVE"): Promise<UserMovies> {
   if (!user.profile?.email) throw new Error("No Email in profile");
@@ -169,8 +166,7 @@ export async function getMoviesFromVotes(token: string): Promise<[UserMovies[], 
 export async function getMoviesFromWishlists(user: User, userMovies: UserMovies[]): Promise<MovieDetailsWithWisher[]> {
   const userMoviesId = flatten(
     userMovies.map((userMovie) =>
-      (userMovie.wishlist || "")
-        .split(",")
+      (userMovie?.wishlist || [])
         .filter((m) => !!m && m.length > 0)
         .map((imdbId) => ({ user: userMovie.RowKey, imdbId }))
     )

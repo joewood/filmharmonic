@@ -14,5 +14,5 @@
             "name": "res"
         }
     ],
-    "scriptFile": "../dist/questions/index.js"
+    "scriptFile": "../dist/user/index.js"
 }

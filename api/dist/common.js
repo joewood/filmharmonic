@@ -9,11 +9,18 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.cleanResultset = exports.cleanRow = exports.getRows = exports.upsertRow = exports.getRow = exports.getContainer = void 0;
+exports.cleanResultset = exports.cleanRow = exports.getRows = exports.upsertRow = exports.getRow = exports.getContainer = exports.HttpError = void 0;
 const cosmos_1 = require("@azure/cosmos");
+class HttpError extends Error {
+    constructor(message, status = 503) {
+        super(message);
+        this.status = status;
+    }
+}
+exports.HttpError = HttpError;
 function getContainer(name) {
     const storageClient = new cosmos_1.CosmosClient(process.env["COSMOS"]);
-    const db = storageClient.database("beyond-piano-db");
+    const db = storageClient.database("filmharmonic");
     return db.container(name);
 }
 exports.getContainer = getContainer;

@@ -1,8 +1,14 @@
 import { Container, CosmosClient } from "@azure/cosmos";
 
+export class HttpError extends Error {
+    constructor(message: string, public status = 503) {
+        super(message);
+    }
+}
+
 export function getContainer(name: string): Container {
     const storageClient = new CosmosClient(process.env["COSMOS"]);
-    const db = storageClient.database("beyond-piano-db");
+    const db = storageClient.database("filmharmonic");
     return db.container(name);
 }
 

@@ -9,13 +9,15 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const node_fetch_1 = require("node-fetch");
 const httpTrigger = function (context, req) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
+            console.log("movie");
             if (req.method === "GET") {
-                if (!req.params.id) {
+                if (!!req.params.id) {
                     const id = req.params.id;
-                    const omdbRequest = yield fetch(`http://www.omdbapi.com/?apikey=d88baf32&i=${id}`, { method: "GET" });
+                    const omdbRequest = yield node_fetch_1.default(`http://www.omdbapi.com/?apikey=d88baf32&i=${id}`, { method: "GET" });
                     if (omdbRequest.ok) {
                         const data = yield omdbRequest.json();
                         context.res = { body: JSON.stringify(data, null, 2) };
@@ -25,11 +27,13 @@ const httpTrigger = function (context, req) {
                     return;
                 }
                 const { search, page } = req.query;
-                const omdbRequest = yield fetch(`http://www.omdbapi.com/?apikey=d88baf32&s=${search}&page=${page || 1}`, {
+                console.log(req.query);
+                const omdbRequest = yield node_fetch_1.default(`http://www.omdbapi.com/?apikey=d88baf32&s=${search}&page=${page || 1}`, {
                     method: "GET",
                 });
                 if (omdbRequest.ok) {
                     const data = yield omdbRequest.json();
+                    console.log(data);
                     context.res = { body: JSON.stringify(data, null, 2) };
                 }
                 else {
@@ -39,7 +43,7 @@ const httpTrigger = function (context, req) {
         }
         catch (e) {
             console.error(e);
-            context.res = { status: e.statusCode, body: JSON.stringify(e) };
+            context.res = { status: e.statusCode || 501, body: JSON.stringify(e.message) };
         }
     });
 };
