@@ -19,6 +19,8 @@
         "openid",
         "profilelayout",
         "qaiemav",
-        "signin"
+        "signin",
+        "upsert",
+        "userid"
     ]
 }

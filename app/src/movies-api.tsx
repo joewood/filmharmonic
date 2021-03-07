@@ -72,7 +72,7 @@ export interface UserMovies {
 
 /** Function that calls `fetch` calling the server to get the movies */
 export async function searchMovies(token: string, search: string, page: number): Promise<Data> {
-  const searchResponse = await fetch(`/api/search/${encodeURIComponent(search)}?page=${page}`, {
+  const searchResponse = await fetch(`/api/movie?search=${encodeURIComponent(search)}&page=${page}`, {
     headers: { Authorization: "Bearer " + token },
   });
   return (await searchResponse.json()) as Data;
