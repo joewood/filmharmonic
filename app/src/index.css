@@ -4,43 +4,8 @@ body {
     "Droid Sans", "Helvetica Neue", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background: rgb(238, 174, 202);
-  background: radial-gradient(circle, rgba(238, 174, 202, 1) 0%, rgba(148, 187, 233, 1) 100%);
+  background: radial-gradient(farthest-corner at 40px 40px, #fff 0%, #eff 100%);
 }
-
-/*Header*/
-
-.App-header {
-  display: grid;
-  width: 100%;
-  grid-template: auto / 10% auto auto;
-}
-header {
-  background-color: #aeeeb1;
-}
-
-.user {
-  color: black;
-  text-decoration: none;
-  margin: 1% 0 1% 0;
-  justify-self: flex-start;
-}
-.user-image {
-  border-radius: 25px;
-}
-/*logo*/
-.logo {
-  background-color: white;
-  height: 32px;
-  margin: 3% 0 0 5%;
-  justify-self: flex-start;
-}
-/*search*/
-.search {
-  justify-self: end;
-  margin: 1% 5% 0 0;
-}
-/*header end*/
 
 /*Propositions page*/
 /*Body*/

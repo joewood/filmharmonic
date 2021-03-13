@@ -1,0 +1,30 @@
+{
+  "editor.formatOnSave": true,
+  "cSpell.words": [
+    "Metacritic",
+    "Metascore",
+    "browserslist",
+    "cust",
+    "dtpr",
+    "filmharmonic",
+    "googleusercontent",
+    "imdb",
+    "lapbjv",
+    "moveid",
+    "movieid",
+    "movieinfo",
+    "movieinformation",
+    "movietitle",
+    "oidc",
+    "omdb",
+    "openid",
+    "profilelayout",
+    "qaiemav",
+    "signin",
+    "upsert",
+    "Chakra",
+    "userid"
+],
+"prettier.printWidth": 120,
+"prettier.tabWidth": 4
+}

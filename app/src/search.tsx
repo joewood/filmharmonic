@@ -3,7 +3,7 @@ import { User } from "oidc-client";
 import { parse } from "query-string";
 import * as React from "react";
 import { FC, useEffect, useState } from "react";
-import { Header } from "./header";
+import { Header } from "./components/header";
 import { Movie, searchMovies } from "./movies-api";
 import pop from "./images/pop.jpg";
 

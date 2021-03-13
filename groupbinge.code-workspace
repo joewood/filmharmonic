@@ -1,0 +1,15 @@
+{
+  "folders": [
+	{
+		"path": "app"
+	},
+	{
+		"path": "api"
+	}
+],
+"settings": {
+	"debug.internalConsoleOptions": "neverOpen",
+	"prettier.printWidth": 120,
+	"prettier.tabWidth": 4
+}
+}

@@ -1,0 +1,9 @@
+{
+    "recommendations": [
+        "ms-azuretools.vscode-azurefunctions",
+        "esbenp.prettier-vscode",
+        "streetsidesoftware.code-spell-checker",
+        "dbaeumer.vscode-eslint",
+        "devzstudio.emoji-snippets"
+    ]
+}

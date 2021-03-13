@@ -2,7 +2,7 @@ import { navigate } from "@reach/router";
 import { User } from "oidc-client";
 import * as React from "react";
 import { FC, useCallback, useEffect, useState } from "react";
-import { Header } from "./header";
+import { Header } from "./components/header";
 import pop from "./images/pop.jpg";
 import { fetchMovie, makeProposal, MovieDetails, updateWishlist } from "./movies-api";
 

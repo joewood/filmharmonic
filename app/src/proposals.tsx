@@ -1,7 +1,7 @@
 import { User } from "oidc-client";
 import * as React from "react";
 import { FC } from "react";
-import { Header } from "./header";
+import { Header } from "./components/header";
 import { useAllUsersMovies } from "./movies-api";
 import { Wishlist } from "./wishlist-component";
 
