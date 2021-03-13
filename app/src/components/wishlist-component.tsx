@@ -1,7 +1,7 @@
 import * as React from "react";
 import { FC } from "react";
-import { MovieDetails, MovieDetailsWithWisher } from "./movies-api";
-import pop from "./images/pop.jpg";
+import { MovieDetails, MovieDetailsWithWisher } from "../movies-api";
+import pop from "../images/pop.jpg";
 
 export const Wishlist: FC<{
   title?: string;

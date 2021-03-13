@@ -3,7 +3,7 @@ import * as React from "react";
 import { FC } from "react";
 import { Header } from "./components/header";
 import { useAllUsersMovies } from "./movies-api";
-import { Wishlist } from "./wishlist-component";
+import { Wishlist } from "./components/wishlist-component";
 
 interface ProposalsProps {
   user: User | null;
