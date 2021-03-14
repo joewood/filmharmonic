@@ -1,3 +1,5 @@
+import { PlusSquareIcon, TimeIcon } from "@chakra-ui/icons";
+import { Box, Button, Grid, Heading, Image, Spacer } from "@chakra-ui/react";
 import { navigate } from "@reach/router";
 import { User } from "oidc-client";
 import * as React from "react";
@@ -26,32 +28,58 @@ export const Movie: FC<MovieProps> = ({ user, movieId }) => {
   /** The React elements are the same as HTML other than `className` is used rather than `class`
    * and style looks a bit different. */
   return (
-    <div className="App">
+    <Box marginLeft={2} marginRight={2}>
       <Header user={user} />
-      <div className="movieinfo">
-        <h1 className="movietitle">{movie?.Title}</h1>
-        <button onClick={onPropose} className="button-one">
+      <Grid
+        marginTop={18}
+        maxWidth="800px"
+        gridTemplateColumns="1fr 1fr"
+        gridTemplateRows="auto auto 18rem 1fr"
+        rowGap={4}
+        ml="auto"
+        mr="auto"
+        columnGap={4}
+        gridTemplateAreas={`"heading heading"
+                            "propose watchList"
+                            "poster info"
+                            "plot plot" `}
+      >
+        <Heading gridArea="heading">{movie?.Title}</Heading>
+        <Button gridArea="propose" justifySelf="stretch" onClick={onPropose} w="100%" leftIcon={<TimeIcon />}>
           Make My Proposal
-        </button>
-        <button onClick={onWish} className="button-two">
-          Add to Wishlist
-        </button>
-        <div className="movieinformation">
-          <p>{movie?.Plot}</p>
+        </Button>
+        <Button gridArea="watchList" onClick={onWish} leftIcon={<PlusSquareIcon />}>
+          Add to Watch List
+        </Button>
+        <Box gridArea="info" justifySelf="left">
+          <p>
+            <b>Year:</b> {movie?.Year}
+          </p>
+          <p>
+            <b>Rated:</b> {movie?.Rated}
+          </p>
+          <p>
+            <b>Box Office:</b> {movie?.BoxOffice}
+          </p>
+          <p>
+            <b>Director:</b> {movie?.Director}
+          </p>
+          <p>
+            <b>Metascore:</b> {movie?.Metascore}
+          </p>
+          <Spacer height={4} />
           <p>{movie?.Actors}</p>
-          <p>Year: {movie?.Year}</p>
-          <p>Rated: {movie?.Rated}</p>
-          <p>Box Office: {movie?.BoxOffice}</p>
-          <p>Director: {movie?.Director}</p>
-          <p>Metascore: {movie?.Metascore}</p>
-        </div>
-        <img
-          className="movie-poster-info"
+        </Box>
+        <Image
+          justifySelf="center"
+          gridArea="poster"
           src={!movie?.Poster || movie.Poster === "N/A" ? pop : movie.Poster}
+          maxHeight="18rem"
           alt="poster"
-          width="200"
+          width="14rem"
         />
-      </div>
-    </div>
+        <Box gridArea="plot">{movie?.Plot}</Box>
+      </Grid>
+    </Box>
   );
 };

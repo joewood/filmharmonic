@@ -8,17 +8,21 @@ import { Movie } from "../movies-api";
 export const MovieTile: FC<{ movie: Movie }> = ({ movie }) => (
   <Box key={movie.Title} w="8rem" mr={5} mb={5} h="14rem" overflow="hidden" position="relative">
     <Link as={RouterLink} to={`/movie/${movie.imdbID}`} textDecoration="none">
-      <Image
-        src={!movie?.Poster || movie.Poster === "N/A" ? substituteImage : movie.Poster}
-        alt={movie.Title}
-        width="8rem"
-        maxHeight="10rem"
-      />
+      <Box w="8rem" h="10rem" bg="gray.100" display="flex" alignItems="center">
+        <Image
+          src={!movie?.Poster || movie.Poster === "N/A" ? substituteImage : movie.Poster}
+          alt={movie.Title}
+          width="8rem"
+          maxHeight="10rem"
+        />
+      </Box>
       <Box
         position="absolute"
         left={0}
         top={0}
+        m={1}
         p={1}
+        borderRadius={3}
         fontSize="0.8rem"
         fontWeight="bold"
         lineHeight={1}

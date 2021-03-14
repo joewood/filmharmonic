@@ -1,5 +1,5 @@
 import { SearchIcon } from "@chakra-ui/icons";
-import { Box, Grid, Image, Input, InputGroup, InputRightElement, Link } from "@chakra-ui/react";
+import { Box, Flex, Image, Input, InputGroup, InputRightElement, Link } from "@chakra-ui/react";
 import { Link as RouterLink, navigate, useLocation } from "@reach/router";
 import { User } from "oidc-client";
 import { parse } from "query-string";
@@ -17,27 +17,29 @@ export const Header: FC<{ user: User | null }> = ({ user }) => {
   // any values to the server. Instead it uses the value of the Search Input box to call the function
   // `searchMovies`. The value of the input bo is in the `.current.value` of the ref.
   return (
-    <Grid
+    <Flex
       as="header"
       w="100%"
       height="4rem"
-      gridTemplate="auto / auto 1fr auto"
       alignItems="center"
-      justifyItems="center"
+      justifyContent="space-between"
       backgroundImage="linear-gradient(to bottom, rgba(255,255,255,1) 85%, rgba(255,255,255,0))"
       position="sticky"
       top={0}
       left={0}
     >
-      <a href="/">
+      <Link as={RouterLink} to="/" flex="0 0 auto" mr={4}>
         <Image alt="logo" src={logo} height="2.5rem" />
-      </a>
+      </Link>
       <Box
         alignSelf="center"
         as="form"
         display="flex"
+        flex="1 1 auto"
+        maxW="38rem"
+        justifySelf="stretch"
         alignItems="center"
-        justifyContent="center"
+        justifyContent="stretch"
         onSubmit={(event: any) => {
           event.preventDefault();
           navigate(`/search?search=${searchRefInputElement.current?.value}`);
@@ -52,7 +54,7 @@ export const Header: FC<{ user: User | null }> = ({ user }) => {
         >
           <Input
             padding={6}
-            maxW="18rem"
+            maxW="28rem"
             pr="1.5rem"
             fontSize="1.6rem"
             border="transparent"
@@ -68,7 +70,7 @@ export const Header: FC<{ user: User | null }> = ({ user }) => {
 
         <input type="submit" style={{ visibility: "collapse" }} />
       </Box>
-      <Box m={5} alignSelf="middle" display="flex" alignItems="center">
+      <Box m={5} alignSelf="middle" display="flex" alignItems="center" justifySelf="flex-end" flex="0 0 auto">
         <Image height="2.5rem" src={user?.profile.picture} alt="profile" borderRadius="50%" />
         <Link
           as={RouterLink}
@@ -80,6 +82,6 @@ export const Header: FC<{ user: User | null }> = ({ user }) => {
           {user?.profile.name}
         </Link>
       </Box>
-    </Grid>
+    </Flex>
   );
 };
