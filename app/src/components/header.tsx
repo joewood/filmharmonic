@@ -1,10 +1,10 @@
 import { SearchIcon } from "@chakra-ui/icons";
-import { Box, Grid, Image, Input, InputGroup, InputRightElement } from "@chakra-ui/react";
-import { navigate, useLocation } from "@reach/router";
+import { Box, Grid, Image, Input, InputGroup, InputRightElement, Link } from "@chakra-ui/react";
+import { Link as RouterLink, navigate, useLocation } from "@reach/router";
 import { User } from "oidc-client";
 import { parse } from "query-string";
 import * as React from "react";
-import { FC, KeyboardEventHandler, useCallback, useRef } from "react";
+import { FC, useRef } from "react";
 import logo from "../images/Logo.png";
 
 export const Header: FC<{ user: User | null }> = ({ user }) => {
@@ -16,15 +16,6 @@ export const Header: FC<{ user: User | null }> = ({ user }) => {
   // When the user presses "Submit" we'll run the `onSubmit` function. This function won't submit
   // any values to the server. Instead it uses the value of the Search Input box to call the function
   // `searchMovies`. The value of the input bo is in the `.current.value` of the ref.
-  const onKeyPress = useCallback<KeyboardEventHandler<HTMLInputElement>>(
-    (event) => {
-      if (event.code === "Enter" && searchRefInputElement.current?.value.length) {
-        event.preventDefault();
-        navigate(`/search?search=${searchRefInputElement.current.value}`);
-      }
-    },
-    [searchRefInputElement]
-  );
   return (
     <Grid
       as="header"
@@ -41,7 +32,18 @@ export const Header: FC<{ user: User | null }> = ({ user }) => {
       <a href="/">
         <Image alt="logo" src={logo} height="2.5rem" />
       </a>
-      <Box alignSelf="center">
+      <Box
+        alignSelf="center"
+        as="form"
+        display="flex"
+        alignItems="center"
+        justifyContent="center"
+        onSubmit={(event: any) => {
+          event.preventDefault();
+          navigate(`/search?search=${searchRefInputElement.current?.value}`);
+          return false;
+        }}
+      >
         <InputGroup
           boxShadow="rgba(160,160,160,0.5) 5px 5px 22px"
           border="1px solid #e0e0e0"
@@ -59,17 +61,24 @@ export const Header: FC<{ user: User | null }> = ({ user }) => {
             spellCheck={false}
             ref={searchRefInputElement}
             type="text"
-            onKeyPress={onKeyPress}
             placeholder="Search Movies &amp; TV"
           />
-          <InputRightElement color="#a0a0a0" padding="0.5rem" children={<SearchIcon />} />
+          <InputRightElement color="#a0a0a0" padding="0.5rem" fontSize="1.6rem" children={<SearchIcon />} />
         </InputGroup>
+
+        <input type="submit" style={{ visibility: "collapse" }} />
       </Box>
-      <Box m={5} alignSelf="middle">
-        <Image height={"32"} src={user?.profile.picture} alt="profile" borderRadius="50%" />
-        <a className="user user-name" href="/user">
+      <Box m={5} alignSelf="middle" display="flex" alignItems="center">
+        <Image height="2.5rem" src={user?.profile.picture} alt="profile" borderRadius="50%" />
+        <Link
+          as={RouterLink}
+          className="user user-name"
+          to="/user"
+          ml={4}
+          visibility={["collapse", "collapse", "visible"]}
+        >
           {user?.profile.name}
-        </a>
+        </Link>
       </Box>
     </Grid>
   );

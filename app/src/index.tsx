@@ -9,9 +9,45 @@ import { Movie } from "./movie";
 import { Search } from "./search";
 import { Profile } from "./profile";
 import { Proposals } from "./proposals";
+import { ChakraProvider, extendTheme } from "@chakra-ui/react";
 
 interface CallbackProps extends RouteComponentProps {}
-
+// 1. Using a style object
+const theme = extendTheme({
+  styles: {
+    global: {
+      h1: {
+        textAlign: "center",
+        textDecoration: "underline",
+      },
+      "html, body": {
+        margin: 0,
+        // fontSize: "sm",
+        color: "gray.600",
+      },
+      body: {
+        fontFamily:
+          '-apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans","Droid Sans", "Helvetica Neue", sans-serif',
+        "-webkit-font-smoothing": "antialiased",
+        "-moz-osx-font-smoothing": "grayscale",
+        background: "radial-gradient(farthest-corner at 40px 40px, #fff 0%, #eff 100%)",
+      },
+      a: {
+        color: "teal.500",
+      },
+      ul: {
+        listStyleType: "none",
+        margin: 0,
+        padding: 0,
+      },
+      /*Movies*/
+      /* movie info */
+      "h1,h2": {
+        margin: "0 2%",
+      },
+    },
+  },
+});
 const CallbackScreen: FC<CallbackProps> = () => (
   <Callback onSuccess={(user) => navigate("/")} userManager={userManager} />
 );
@@ -45,15 +81,20 @@ const AuthProposals = authUser<RouteComponentProps>(() => (
 ));
 
 const Root = () => (
-  <React.StrictMode>
-    <Router>
-      <CallbackScreen path="/callback" />
-      <AuthProposals path="/" />
-      <SearchProposal path="/search" />
-      <AuthMovie path="/movie/:movieId" />
-      <AuthProfile path="/user" />
-    </Router>
-  </React.StrictMode>
+  <Router>
+    <CallbackScreen path="/callback" />
+    <AuthProposals path="/" />
+    <SearchProposal path="/search" />
+    <AuthMovie path="/movie/:movieId" />
+    <AuthProfile path="/user" />
+  </Router>
 );
 
-ReactDOM.render(<Root />, document.getElementById("root"));
+ReactDOM.render(
+  <React.StrictMode>
+    <ChakraProvider theme={theme}>
+      <Root />
+    </ChakraProvider>
+  </React.StrictMode>,
+  document.getElementById("root")
+);

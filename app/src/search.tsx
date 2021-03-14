@@ -5,7 +5,8 @@ import * as React from "react";
 import { FC, useEffect, useState } from "react";
 import { Header } from "./components/header";
 import { Movie, searchMovies } from "./movies-api";
-import pop from "./images/pop.jpg";
+import { MovieTile } from "./components/movie-tile";
+import { Box } from "@chakra-ui/react";
 
 // then
 interface SearchProps extends RouteComponentProps {
@@ -35,27 +36,15 @@ export const Search: FC<SearchProps> = ({ user }) => {
   return (
     <div className="App">
       <Header user={user} />
-      <div className="con">
+      <Box display="flex" flexWrap="wrap" m="1rem" mt="4rem" justifyContent="flex-start">
         {movies.length === 0 && <p>No Results Found</p>}
         {movies.map((movie) => (
-          <div className="movie" key={movie.Title}>
-            <a href={`/movie/${movie.imdbID}`}>
-              <img
-                src={!movie?.Poster || movie.Poster === "N/A" ? pop : movie.Poster}
-                alt={movie.Title}
-                width={100}
-              ></img>
-              <p style={{ width: 100 }}>
-                <div style={{ display: "block" }}>{movie.Title}</div>
-                <div style={{ display: "block" }}>{movie.Year}</div>
-              </p>
-            </a>
-          </div>
+          <MovieTile movie={movie} />
         ))}
         <div className="movie" key="next">
           <a href={`/search?search=${search}&page=${numberPage + 1}`}>Next Page...</a>
         </div>
-      </div>
+      </Box>
     </div>
   );
 };
