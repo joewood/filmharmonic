@@ -22,8 +22,9 @@ export const Header: FC<{ user: User | null }> = ({ user }) => {
       w="100%"
       height="4rem"
       alignItems="center"
+      zIndex="sticky"
       justifyContent="space-between"
-      backgroundImage="linear-gradient(to bottom, rgba(255,255,255,1) 85%, rgba(255,255,255,0))"
+      backgroundImage="linear-gradient(to bottom, rgba(255,255,255,1) 85%, rgba(255,255,255,0.2))"
       position="sticky"
       top={0}
       left={0}

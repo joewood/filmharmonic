@@ -1,4 +1,4 @@
-import { Box, Image, Link } from "@chakra-ui/react";
+import { Box, Link } from "@chakra-ui/react";
 import { Link as RouterLink } from "@reach/router";
 import * as React from "react";
 import { FC } from "react";
@@ -6,14 +6,17 @@ import substituteImage from "../images/pop.jpg";
 import { Movie } from "../movies-api";
 
 export const MovieTile: FC<{ movie: Movie }> = ({ movie }) => (
-  <Box key={movie.Title} w="8rem" mr={5} mb={5} h="14rem" overflow="hidden" position="relative">
+  <Box key={movie.Title} mr={5} mb={5} h="14rem" overflow="hidden" position="relative" width="8rem">
     <Link as={RouterLink} to={`/movie/${movie.imdbID}`} textDecoration="none">
-      <Box w="8rem" h="10rem" bg="gray.100" display="flex" alignItems="center">
-        <Image
+      <Box w="8rem" h="10rem" bg="gray.100" p={0} m={0}>
+        <img
           src={!movie?.Poster || movie.Poster === "N/A" ? substituteImage : movie.Poster}
           alt={movie.Title}
-          width="8rem"
-          maxHeight="10rem"
+          style={{
+            width: "100%",
+            height: "100%",
+            objectFit: "contain",
+          }}
         />
       </Box>
       <Box

@@ -19,7 +19,7 @@ export const Movie: FC<MovieProps> = ({ user, movieId }) => {
     if (user && movieId) makeProposal(user, movieId).then(() => navigate("/"));
   }, [movieId, user]);
   const onWish = useCallback(() => {
-    if (user && movieId) updateWishlist(user, movieId, "ADD").then(() => navigate("/user"));
+    if (user && movieId) updateWishlist(user, movieId, "add").then(() => navigate("/user"));
   }, [movieId, user]);
   useEffect(() => {
     if (movieId && user) fetchMovie(user?.access_token, movieId).then(setMovie);

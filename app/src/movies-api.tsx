@@ -1,4 +1,4 @@
-import { flatten, groupBy, uniq } from "lodash";
+import { uniq } from "lodash";
 import { User } from "oidc-client";
 import { useCallback, useEffect, useState } from "react";
 
@@ -52,9 +52,9 @@ export interface MovieDetails {
   Response: string;
 }
 
-export interface MovieDetailsWithWisher extends MovieDetails {
+export interface MovieDetailsWithVotes extends MovieDetails {
   /** Who this movie was wished by */
-  wishedBy: string[];
+  votes: number;
 }
 
 export interface Data {
@@ -64,10 +64,17 @@ export interface Data {
 export interface UserMovies {
   userid: string;
   groupid: string;
-  proposed?: string;
-  vote?: string;
-  wishlist: string[];
+  proposed?: MovieDetails;
+  vote?: MovieDetails;
+  wishlist: MovieDetails[];
   name?: string;
+}
+
+async function fetchX<T>(token: string, url: string): Promise<T> {
+  const searchResponse = await fetch(url, {
+    headers: { Authorization: "Bearer " + token },
+  });
+  return (await searchResponse.json()) as T;
 }
 
 /** Function that calls `fetch` calling the server to get the movies */
@@ -100,23 +107,25 @@ export async function fetchUsers(token: string): Promise<UserMovies[]> {
   return (await searchResponse.json()) as UserMovies[];
 }
 
-async function updateUserState(user: User, userVote: UserMovies): Promise<UserMovies> {
-  if (!user.profile?.email) throw new Error("No Email in profile");
-  if (!user.access_token) throw new Error("Not Authenticated");
-  const searchResponse = await fetch("/api/user/" + encodeURIComponent(user.profile.email), {
-    method: "PUT",
-    headers: { Authorization: "Bearer " + user.access_token, "Content-Type": "application/json" },
-    body: JSON.stringify(userVote),
-  });
-  return await searchResponse.json();
-}
+// async function updateUserState(user: User, userVote: UserMovies): Promise<UserMovies> {
+//   if (!user.profile?.email) throw new Error("No Email in profile");
+//   if (!user.access_token) throw new Error("Not Authenticated");
+//   const searchResponse = await fetch("/api/user/" + encodeURIComponent(user.profile.email), {
+//     method: "PUT",
+//     headers: { Authorization: "Bearer " + user.access_token, "Content-Type": "application/json" },
+//     body: JSON.stringify(userVote),
+//   });
+//   return await searchResponse.json();
+// }
 
 export async function makeProposal(user: User, imdbId: string): Promise<UserMovies> {
   if (!user.profile?.email) throw new Error("No Email in profile");
   if (!user.access_token) throw new Error("Not Authenticated");
-  const userDetails = await fetchUser(user.access_token, user.profile.email);
-  userDetails.proposed = imdbId;
-  return await updateUserState(user, userDetails);
+  const userDetails = await fetchX<UserMovies>(
+    user.access_token,
+    `/api/user/${encodeURIComponent(user.profile.email)}/propose/${imdbId}`
+  );
+  return await userDetails;
 }
 
 export const addWish = (imdbMovie: string, wishlist: string[] | undefined) => uniq([imdbMovie, ...(wishlist || [])]);
@@ -124,23 +133,25 @@ export const addWish = (imdbMovie: string, wishlist: string[] | undefined) => un
 export const removeWish = (imdbMovie: string, wishlist: string[] | undefined) =>
   (wishlist || []).filter((m) => m !== imdbMovie);
 
-export async function updateWishlist(user: User, imdbId: string, addRemove: "ADD" | "REMOVE"): Promise<UserMovies> {
+export async function updateWishlist(user: User, imdbId: string, addRemove: "add" | "remove"): Promise<UserMovies> {
   if (!user.profile?.email) throw new Error("No Email in profile");
   if (!user.access_token) throw new Error("Not Authenticated");
-  const userDetails = await fetchUser(user.access_token, user.profile.email);
-  userDetails.wishlist =
-    addRemove === "ADD" ? addWish(imdbId, userDetails.wishlist) : removeWish(imdbId, userDetails.wishlist);
-  return await updateUserState(user, userDetails);
+  const userDetails = await fetchX<UserMovies>(
+    user.access_token,
+    `/api/user/${encodeURIComponent(user.profile.email)}/${addRemove}/${imdbId}`
+  );
+  return userDetails;
 }
 
 /** Update vote for the given user */
 async function voteOnMovie(user: User, imdbId: string): Promise<UserMovies> {
   if (!user.profile?.email) throw new Error("No Email in profile");
   if (!user.access_token) throw new Error("Not Authenticated");
-  const userDetails = await fetchUser(user.access_token, user.profile.email);
-  userDetails.vote = imdbId;
-  userDetails.name = user.profile.name;
-  return await updateUserState(user, userDetails);
+  const userDetails = await fetchX<UserMovies>(
+    user.access_token,
+    `/api/user/${encodeURIComponent(user.profile.email)}/vote/${imdbId}`
+  );
+  return userDetails;
 }
 
 /** Update vote for logged in user, return list of updated votes for all users */
@@ -152,106 +163,106 @@ export async function voteAndRefresh(user: User, imdbId: string): Promise<UserMo
 }
 
 /** Return a tuple - a list of User Votes and their Proposed Movies */
-export async function getMoviesFromVotes(token: string): Promise<[UserMovies[], MovieDetails[]]> {
-  const users = await fetchUsers(token);
-  const movies = await Promise.all(
-    users
-      .map((u) => u.proposed)
-      .filter((p) => !!p)
-      .map((p) => fetchMovie(token, p!))
-  );
-  return [users, movies];
-}
+// export async function getMoviesFromVotes(token: string): Promise<[UserMovies[], MovieDetails[]]> {
+//   const users = await fetchUsers(token);
+//   const movies = await Promise.all(
+//     users
+//       .map((u) => u.proposed)
+//       .filter((p) => !!p)
+//       .map((p) => fetchMovie(token, p!))
+//   );
+//   return [users, movies];
+// }
 
-export async function getMoviesFromWishlists(user: User, userMovies: UserMovies[]): Promise<MovieDetailsWithWisher[]> {
-  const userMoviesId = flatten(
-    userMovies.map((userMovie) =>
-      (userMovie?.wishlist || [])
-        .filter((m) => !!m && m.length > 0)
-        .map((imdbId) => ({ user: userMovie.userid, imdbId }))
-    )
-  );
-  const wishes = uniq(userMoviesId.map((u) => u.imdbId));
-  const wishesByMovie = groupBy(userMoviesId, (m) => m.imdbId);
-  const allMovies = await Promise.all(wishes.map((m) => fetchMovie(user.access_token, m)));
-  return allMovies.map((a) => ({ ...a, wishedBy: wishesByMovie[a.imdbID]?.map((uu) => uu.user) ?? [] }));
-}
+// export async function getMoviesFromWishlists(user: User, userMovies: UserMovies[]): Promise<MovieDetailsWithVotes[]> {
+//   const userMoviesId = flatten(
+//     userMovies.map((userMovie) =>
+//       (userMovie?.wishlist || [])
+//         .filter((m) => !!m && m.length > 0)
+//         .map((imdbId) => ({ user: userMovie.userid, imdbId }))
+//     )
+//   );
+//   const wishes = uniq(userMoviesId.map((u) => u.imdbId));
+//   const wishesByMovie = groupBy(userMoviesId, (m) => m.imdbId);
+//   const allMovies = await Promise.all(wishes.map((m) => fetchMovie(user.access_token, m)));
+//   return allMovies.map((a) => ({ ...a, wishedBy: wishesByMovie[a.imdbID]?.map((uu) => uu.user) ?? [] }));
+// }
 
 interface UseMoviesRet {
   /** call to remove movie from wishlist */
   onRemoveWishlist: (imdbId: string) => void;
+  userMovies: UserMovies | undefined;
   /** movie proposed by the user */
-  proposed: MovieDetails | null;
+  // proposed: MovieDetails | null;
   /** movie voted for by the user */
-  voted: MovieDetails | null;
+  // voted: MovieDetails | null;
   /** wishlist of Movies  */
-  wishlist: MovieDetails[];
+  // wishlist: MovieDetails[];
 }
 
 /** React Hook to manage the state of a user's proposed, vote and wishlist movies */
 export function useUserMovies(user: User | null): UseMoviesRet {
-  const [proposed, setProposed] = useState<MovieDetails | null>(null);
-  const [voted, setVoted] = useState<MovieDetails | null>(null);
-  const [wishlist, setWishlist] = useState<MovieDetails[]>([]);
+  // const [proposed, setProposed] = useState<MovieDetails | null>(null);
+  // const [voted, setVoted] = useState<MovieDetails | null>(null);
+  const [userMovies, setUserMovies] = useState<UserMovies>();
 
   useEffect(() => {
-    async function getUseMovies() {
+    (async () => {
       if (!user?.profile?.email) return;
-      const userDetails = await fetchUser(user?.access_token, user?.profile.email);
+      const userDetails = await fetchX<UserMovies>(
+        user?.access_token,
+        `/api/user/${encodeURIComponent(user?.profile?.email)}`
+      );
+      setUserMovies(userDetails);
       if (userDetails?.proposed) {
-        const proposed = await fetchMovie(user.access_token, userDetails.proposed);
-        setProposed(proposed);
+        // const proposed = await fetchMovie(user.access_token, userDetails.proposed);
+        // setProposed(proposed);
       }
       if (userDetails?.vote) {
-        const vote = await fetchMovie(user.access_token, userDetails.vote);
-        setVoted(vote);
+        // const vote = await fetchMovie(user.access_token, userDetails.vote);
+        // setVoted(vote);
       }
-      const wishlist = await getMoviesFromWishlists(user, [userDetails]);
-      setWishlist(wishlist);
-    }
-    getUseMovies();
+      // const wishlist = await getMoviesFromWishlists(user, [userDetails]);
+      // setWishlist(wishlist);
+    })();
   }, [user]);
   /** Remove movie from wishlist */
   const onRemoveWishlist = useCallback(
     (id: string) => {
       if (!user?.profile?.email) return;
-      updateWishlist(user, id, "REMOVE").then((o) => setWishlist((wish) => wish.filter((f) => f.imdbID !== id)));
+      updateWishlist(user, id, "remove").then((o) => setUserMovies(o));
     },
     [user]
   );
-  return { onRemoveWishlist, proposed, voted, wishlist };
+  return { onRemoveWishlist, userMovies };
 }
 
-interface AllUsersMovies {
-  userProposals: UserMovies[];
-  movies: MovieDetails[];
-  wishlist: MovieDetailsWithWisher[];
+interface GroupMovies {
+  // userProposals: UserMovies[];
+  // movies: MovieDetails[];
+  wishlist: MovieDetailsWithVotes[];
   onVote: (imdbId: string) => void;
   myProposal: UserMovies | undefined;
 }
 
 /** React Hook to return all users movies in the group */
-export function useAllUsersMovies(user: User | null): AllUsersMovies {
+export function useGroupMovies(user: User | null, group: string): GroupMovies {
   const [userProposals, setUserProposals] = useState<UserMovies[]>([]);
-  const [movies, setMovies] = useState<MovieDetails[]>([]);
-  const [wishlist, setWishlist] = useState<MovieDetailsWithWisher[]>([]);
+  const [wishlist, setWishlist] = useState<MovieDetailsWithVotes[]>([]);
 
   // this runs when `user` changes its value (e.g. when logged in). It uses the API to get all the users' proposals
   // and their movie details using the state hook variables above
   useEffect(() => {
-    async function getMovies(user: User) {
+    (async () => {
+      if (!user) return [];
       try {
-        const [userProposals, movies] = await getMoviesFromVotes(user.access_token);
-        setUserProposals(userProposals);
-        setMovies(movies);
-        const wishlist = await getMoviesFromWishlists(user, userProposals);
-        setWishlist(wishlist.sort((a, b) => b.wishedBy.length - a.wishedBy.length));
+        const moviesWithVotes = await fetchX<MovieDetailsWithVotes[]>(user.access_token, `/api/group/${group}/movies`);
+        setWishlist(moviesWithVotes.sort((a, b) => b.votes - a.votes));
       } catch (e) {
         console.error(e);
       }
-    }
-    if (user) getMovies(user);
-  }, [user]);
+    })();
+  }, [user, group]);
 
   // find the Proposal that belongs to the current logged in user (could use `useMemo` here)
   const myProposal = userProposals.find((proposal) => proposal.userid === user?.profile?.email);
@@ -264,5 +275,5 @@ export function useAllUsersMovies(user: User | null): AllUsersMovies {
     },
     [user]
   );
-  return { userProposals, movies, wishlist, onVote, myProposal };
+  return { wishlist, onVote, myProposal };
 }
