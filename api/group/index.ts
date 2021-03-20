@@ -7,11 +7,16 @@ const httpTrigger: AzureFunction = async function (context: Context, req: HttpRe
         const userContainer = getContainer("users");
         let { id, movies } = req.params;
         id = decodeURIComponent(id);
+        const memberResult = await container.items.query(`SELECT c.userid from c WHERE c.groupid="${id}"`).fetchAll();
+        if (memberResult.resources.length === 0) throw new HttpError(`Group ${id} not found`, 404);
+        const userids = memberResult.resources.map((c) => c.userid);
+
         if (!!movies && movies === "movies") {
             const wishlistContainer = getContainer("wishlist");
+            const inClause = userids.map((u) => `"${u}"`).join(",");
             const result = await wishlistContainer.items
                 .query(
-                    `SELECT count(c.userid) AS votes,c.moveid as movieid  FROM c  where c.groupid="${id}"        GROUP BY c.moveid`
+                    `SELECT count(c.userid) AS votes,c.moveid as movieid FROM c where c.userid IN (${inClause}) GROUP BY c.moveid`
                 )
                 .fetchAll();
             if (result.resources.length === 0) throw new HttpError(`Group ${id} not found`, 404);
@@ -22,9 +27,6 @@ const httpTrigger: AzureFunction = async function (context: Context, req: HttpRe
         }
         if (!id) throw new HttpError("Must specify user", 404);
         if (req.method === "GET") {
-            const result = await container.items.query(`SELECT c.userid from c WHERE c.groupid="${id}"`).fetchAll();
-            if (result.resources.length === 0) throw new HttpError(`Group ${id} not found`, 404);
-            const userids = result.resources.map((c) => c.userid);
             const users = await Promise.all(userids.map((u) => getUser(userContainer, u)));
             context.res = { body: JSON.stringify(users) };
             return;
