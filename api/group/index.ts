@@ -11,7 +11,7 @@ const httpTrigger: AzureFunction = async function (context: Context, req: HttpRe
             const wishlistContainer = getContainer("wishlist");
             const result = await wishlistContainer.items
                 .query(
-                    `SELECT count(c.userid) AS votes,c.moveid as movieid  FROM c  where c.groupid="${id}" GROUP BY c.moveid`
+                    `SELECT count(c.userid) AS votes,c.moveid as movieid  FROM c  where c.groupid="${id}"        GROUP BY c.moveid`
                 )
                 .fetchAll();
             if (result.resources.length === 0) throw new HttpError(`Group ${id} not found`, 404);

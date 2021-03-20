@@ -6,7 +6,7 @@ import * as React from "react";
 import { FC, useCallback, useEffect, useState } from "react";
 import { Header } from "./components/header";
 import pop from "./images/pop.jpg";
-import { fetchMovie, makeProposal, MovieDetails, updateWishlist } from "./movies-api";
+import { fetchMovie, MovieDetails, updateWatchList  , useUserMovies } from "./movies-api";
 
 interface MovieProps {
   user: User | null;
@@ -15,12 +15,22 @@ interface MovieProps {
 /** In React a Function is like an HTML element, this is the <App> Component used in index.tsx */
 export const Movie: FC<MovieProps> = ({ user, movieId }) => {
   const [movie, setMovie] = useState<MovieDetails | null>(null);
+  const { userMovies } = useUserMovies(user);
+
   const onPropose = useCallback(() => {
-    if (user && movieId) makeProposal(user, movieId).then(() => navigate("/"));
+    (async () => {
+      if (!user || !movieId) return;
+      await updateWatchList(user, movieId, "watched");
+      navigate("/");
+    })();
   }, [movieId, user]);
-  const onWish = useCallback(() => {
-    if (user && movieId) updateWishlist(user, movieId, "add").then(() => navigate("/user"));
-  }, [movieId, user]);
+  const onToggleWatchList = useCallback(() => {
+    (async () => {
+      if (!user || !movieId || !userMovies) return;
+      await updateWatchList(user, movieId, userMovies.wishlist.find((m) => m.imdbID === movieId) ? "remove" : "add");
+      navigate("/");
+    })();
+  }, [movieId, user, userMovies]);
   useEffect(() => {
     if (movieId && user) fetchMovie(user?.access_token, movieId).then(setMovie);
   }, [movieId, user]);
@@ -40,20 +50,23 @@ export const Movie: FC<MovieProps> = ({ user, movieId }) => {
         mr="auto"
         columnGap={4}
         gridTemplateAreas={`"heading heading"
-                            "propose watchList"
+                            "watchList propose"
                             "poster info"
                             "plot plot" `}
       >
         <Heading gridArea="heading">{movie?.Title}</Heading>
-        <Button gridArea="propose" justifySelf="stretch" onClick={onPropose} w="100%" leftIcon={<TimeIcon />}>
-          Make My Proposal
+
+        <Button gridArea="watchList" onClick={onToggleWatchList} leftIcon={<PlusSquareIcon />}>
+          {userMovies?.wishlist.find((m) => m.imdbID === movieId) ? "Remove from Watch List" : "Add to Watch List"}
         </Button>
-        <Button gridArea="watchList" onClick={onWish} leftIcon={<PlusSquareIcon />}>
-          Add to Watch List
-        </Button>
+        {userMovies?.wishlist.find((m) => m.imdbID === movieId) && (
+          <Button gridArea="propose" justifySelf="stretch" onClick={onPropose} w="100%" leftIcon={<TimeIcon />}>
+            Watched
+          </Button>
+        )}
         <Box gridArea="info" justifySelf="left">
           <p>
-            <b>Year:</b> {movie?.Year}
+            <b>Released:</b> {movie?.Released || movie?.Year}
           </p>
           <p>
             <b>Rated:</b> {movie?.Rated}

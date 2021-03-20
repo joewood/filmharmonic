@@ -5,7 +5,7 @@ const httpTrigger: AzureFunction = async function (context: Context, req: HttpRe
     try {
         const userContainer = getContainer("users");
         let { id, action, movieid } = req.params;
-        id = decodeURIComponent(id);
+        // id = decodeURIComponent(id);
         if (!id) throw new HttpError("Must specify user", 404);
         if (req.method === "GET") {
             const user = await getUser(userContainer, id);
@@ -13,21 +13,36 @@ const httpTrigger: AzureFunction = async function (context: Context, req: HttpRe
             context.res = { body: JSON.stringify({ ...user, wishlist: movies }, null, 2) };
             return;
         } else if (req.method === "PUT") {
-            if (action === "propose" || "vote") {
+            if (action === "propose" || action === "vote") {
                 const user = await getUser(userContainer, id, true);
                 await userContainer.items.upsert({ ...user, [action]: movieid });
             } else if (action === "add") {
                 const wishlistContainer = await getContainer("wishlist");
-                await wishlistContainer.items.upsert({ email: id, moveid: movieid });
+                await wishlistContainer.items.upsert({ email: id, userid: id, moveid: movieid });
             } else if (action === "remove") {
+                context.log("REMOVING");
                 const wishlistContainer = await getContainer("wishlist");
                 const ex = await wishlistContainer.items
-                    .query(`select c.id FROM c WHERE c.email="${id}" AND c.moveid="${movieid}"`)
+                    .query(`select c.id FROM c WHERE c.groupid="woods" AND c.userid="${id}" AND c.moveid="${movieid}"`)
                     .fetchAll();
-                const itemId = ex.resources[0].id;
+                const itemId = ex.resources[0]?.id;
                 if (itemId) {
-                    await wishlistContainer.item(itemId).delete();
+                    context.log("Deleting " + itemId);
+                    await wishlistContainer.item(itemId, movieid).delete();
+                } else {
+                    throw new HttpError("Cannot find item", 404);
                 }
+            } else if (action === "watched") {
+                const wishlistContainer = await getContainer("wishlist");
+                const ex = await wishlistContainer.items
+                    .query(`select c.id FROM c WHERE c.userid="${id}" AND c.moveid="${movieid}"`)
+                    .fetchAll();
+                context.log("Getting ", ex.resources);
+                const item = ex.resources[0];
+                if (!item) throw new HttpError("Cannot find item", 404);
+                await wishlistContainer.items.upsert({ ...item, watched: true });
+            } else {
+                throw new HttpError("Unknown command " + action, 501);
             }
             const user = getUser(userContainer, id);
             context.res = { body: JSON.stringify(user) };
