@@ -84,6 +84,7 @@ const Root = () => (
   <Router>
     <CallbackScreen path="/callback" />
     <AuthProposals path="/" />
+    <AuthProposals path="/group/:group" />
     <SearchProposal path="/search" />
     <AuthMovie path="/movie/:movieId" />
     <AuthProfile path="/user" />

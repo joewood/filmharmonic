@@ -20,7 +20,7 @@ export const MyWatchList: FC<{
       mr="auto"
       maxWidth="min(1000px, 100vw)"
     >
-      {userMovies?.wishlist.map((movie, index) => (
+      {userMovies?.wishlist.map((movie) => (
         <MovieTile key={movie.imdbID} movie={movie} />
       ))}
     </Flex>

@@ -57,7 +57,7 @@ export const Header: FC<{ user: User | null }> = ({ user }) => {
             padding={6}
             maxW="28rem"
             pr="1.5rem"
-            fontSize="1.6rem"
+            fontSize="1.3rem"
             border="transparent"
             name="search"
             defaultValue={search}
@@ -66,7 +66,7 @@ export const Header: FC<{ user: User | null }> = ({ user }) => {
             type="text"
             placeholder="Search Movies &amp; TV"
           />
-          <InputRightElement color="#a0a0a0" padding="0.5rem" fontSize="1.6rem" children={<SearchIcon />} />
+          <InputRightElement color="gray.400" padding="0.5rem" fontSize="1.6rem" children={<SearchIcon />} />
         </InputGroup>
 
         <input type="submit" style={{ visibility: "collapse" }} />

@@ -8,17 +8,28 @@ import { Movie } from "../movies-api";
 export const MovieTile: FC<{ movie: Movie }> = ({ movie }) => (
   <Box key={movie.Title} mr={5} mb={5} h="14rem" overflow="hidden" position="relative" width="8rem">
     <Link as={RouterLink} to={`/movie/${movie.imdbID}`} textDecoration="none">
-      <Box w="8rem" h="10rem" bg="gray.100" p={0} m={0}>
+      <div
+        style={{
+          width: "8rem",
+          height: "10rem",
+          padding: 0,
+          margin: 0,
+          verticalAlign: "top",
+          alignContent: "start",
+          textAlign: "start",
+        }}
+      >
         <img
           src={!movie?.Poster || movie.Poster === "N/A" ? substituteImage : movie.Poster}
-          alt={movie.Title}
+          alt={""}
+          onError={(e: any) => (e.target.src = substituteImage)}
           style={{
             width: "100%",
             height: "100%",
             objectFit: "contain",
           }}
         />
-      </Box>
+      </div>
       <Box
         position="absolute"
         left={0}
@@ -33,7 +44,7 @@ export const MovieTile: FC<{ movie: Movie }> = ({ movie }) => (
       >
         {movie.Year}
       </Box>
-      <Box color="black.100" lineHeight={1.1} w="8rem" h="4rem" pt="0.5rem">
+      <Box color="black.100" lineHeight={1.1} w="8rem" h="4rem" pt="0.5rem" fontWeight="bold">
         {movie.Title}
       </Box>
     </Link>
