@@ -1,33 +1,28 @@
 import { AzureFunction, Context, HttpRequest } from "@azure/functions";
-import { getContainer, getMovie, getUser, HttpError } from "../common";
+import { getContainer, getUser, getUserWishlist, HttpError } from "../common";
 
 const httpTrigger: AzureFunction = async function (context: Context, req: HttpRequest): Promise<void> {
     try {
         const userContainer = getContainer("users");
         let { id, action, movieid } = req.params;
-        // id = decodeURIComponent(id);
         if (!id) throw new HttpError("Must specify user", 404);
         if (req.method === "GET") {
+            const wishlistContainer = await getContainer("wishlist");
             const user = await getUser(userContainer, id);
-            const movies = await Promise.all(user.wishlist.map((m) => getMovie(m)));
+            const movies = await getUserWishlist(context, wishlistContainer, id); // Promise.all(user.wishlist.map((m) => getOrUpdateMovie(context, wishlistContainer, m)));
             context.res = { body: JSON.stringify({ ...user, wishlist: movies }, null, 2) };
             return;
         } else if (req.method === "PUT") {
-            if (action === "propose" || action === "vote") {
-                const user = await getUser(userContainer, id, true);
-                await userContainer.items.upsert({ ...user, [action]: movieid });
-            } else if (action === "add") {
+            if (action === "add") {
                 const wishlistContainer = await getContainer("wishlist");
                 await wishlistContainer.items.upsert({ email: id, userid: id, moveid: movieid });
             } else if (action === "remove") {
-                context.log("REMOVING");
                 const wishlistContainer = await getContainer("wishlist");
                 const ex = await wishlistContainer.items
                     .query(`select c.id FROM c WHERE c.groupid="woods" AND c.userid="${id}" AND c.moveid="${movieid}"`)
                     .fetchAll();
                 const itemId = ex.resources[0]?.id;
                 if (itemId) {
-                    context.log("Deleting " + itemId);
                     await wishlistContainer.item(itemId, movieid).delete();
                 } else {
                     throw new HttpError("Cannot find item", 404);
@@ -37,7 +32,6 @@ const httpTrigger: AzureFunction = async function (context: Context, req: HttpRe
                 const ex = await wishlistContainer.items
                     .query(`select c.id FROM c WHERE c.userid="${id}" AND c.moveid="${movieid}"`)
                     .fetchAll();
-                context.log("Getting ", ex.resources);
                 const item = ex.resources[0];
                 if (!item) throw new HttpError("Cannot find item", 404);
                 await wishlistContainer.items.upsert({ ...item, watched: true });

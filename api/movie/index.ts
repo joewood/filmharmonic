@@ -3,7 +3,6 @@ import fetch from "node-fetch";
 
 const httpTrigger: AzureFunction = async function (context: Context, req: HttpRequest): Promise<void> {
     try {
-        console.log("movie");
         if (req.method === "GET") {
             if (!!req.params.id) {
                 const id = req.params.id;
@@ -17,13 +16,11 @@ const httpTrigger: AzureFunction = async function (context: Context, req: HttpRe
                 return;
             }
             const { search, page } = req.query;
-            console.log(req.query);
             const omdbRequest = await fetch(`http://www.omdbapi.com/?apikey=d88baf32&s=${search}&page=${page || 1}`, {
                 method: "GET",
             });
             if (omdbRequest.ok) {
                 const data = await omdbRequest.json();
-                console.log(data);
                 context.res = { body: JSON.stringify(data, null, 2) };
             } else {
                 context.res = { body: omdbRequest.statusText, status: omdbRequest.status || 501 };

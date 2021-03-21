@@ -82,11 +82,19 @@ async function fetchPut<T>(token: string, url: string): Promise<T | null> {
   }
   return (await response.json()) as T;
 }
+export class HttpError extends Error {
+  constructor(message: string, public status: number) {
+    super(message);
+  }
+}
 
-async function fetchGet<T>(token: string, url: string): Promise<T> {
+async function fetchGet<T>(token: string, url: string): Promise<T | undefined> {
   const searchResponse = await fetch(url, {
     headers: { Authorization: "Bearer " + token },
   });
+  if (!searchResponse.ok) {
+    throw new HttpError("fetchGet Failed: " + searchResponse.statusText, searchResponse.status);
+  }
   return (await searchResponse.json()) as T;
 }
 
@@ -160,31 +168,17 @@ export function useUserMovies(user: User | null): UseMoviesRet {
   useEffect(() => {
     (async () => {
       if (!user?.profile?.email) return;
-      const userDetails = await fetchGet<UserMovies>(
-        user?.access_token,
-        `/api/user/${encodeURIComponent(user?.profile?.email)}`
-      );
-      setUserMovies(userDetails);
-      if (userDetails?.proposed) {
-        // const proposed = await fetchMovie(user.access_token, userDetails.proposed);
-        // setProposed(proposed);
+      try {
+        const userDetails = await fetchGet<UserMovies>(
+          user?.access_token,
+          `/api/user/${encodeURIComponent(user?.profile?.email)}`
+        );
+        setUserMovies(userDetails);
+      } catch (e) {
+        console.error(e);
       }
-      if (userDetails?.vote) {
-        // const vote = await fetchMovie(user.access_token, userDetails.vote);
-        // setVoted(vote);
-      }
-      // const wishlist = await getMoviesFromWishlists(user, [userDetails]);
-      // setWishlist(wishlist);
     })();
   }, [user]);
-  /** Remove movie from wishlist */
-  // const onRemoveWishlist = useCallback(
-  //   (id: string) => {
-  //     if (!user?.profile?.email) return;
-  //     updateWatchList(user, id, "remove").then((o) => setUserMovies(o));
-  //   },
-  //   [user]
-  // );
   return { userMovies };
 }
 
@@ -210,7 +204,7 @@ export function useGroupMovies(user: User | null, group: string): GroupMovies {
           user.access_token,
           `/api/group/${group}/movies`
         );
-        setWishlist(moviesWithVotes.sort((a, b) => b.votes - a.votes));
+        setWishlist(moviesWithVotes?.sort((a, b) => b.votes - a.votes) || []);
       } catch (e) {
         console.error(e);
       }

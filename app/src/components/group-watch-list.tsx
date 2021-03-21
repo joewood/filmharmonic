@@ -45,13 +45,13 @@ export const GroupWatchList: FC<{ group: string; user: User | null }> = ({ group
   );
   return (
     <Flex flexDirection="column">
-      {watchNow.map((movie) => (
-        <MovieWithVotes movie={movie} />
+      {watchNow.map((movie, i) => (
+        <MovieWithVotes key={movie.imdbID + i} movie={movie} />
       ))}
       <hr />
       {comingSoon.length > 0 && <Heading pb="2rem">Coming Soon</Heading>}
-      {comingSoon.map((movie) => (
-        <MovieWithVotes movie={movie} comingSoon={true} />
+      {comingSoon.map((movie, i) => (
+        <MovieWithVotes key={movie.imdbID + i} movie={movie} comingSoon={true} />
       ))}
     </Flex>
   );

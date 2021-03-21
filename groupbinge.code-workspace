@@ -10,6 +10,10 @@
 "settings": {
 	"debug.internalConsoleOptions": "neverOpen",
 	"prettier.printWidth": 120,
-	"prettier.tabWidth": 4
+	"prettier.tabWidth": 4,
+	"cSpell.words": [
+		"userids"
+	],
+	"editor.formatOnSave": true
 }
 }

@@ -1,5 +1,69 @@
 import { Container, CosmosClient } from "@azure/cosmos";
+import { Context } from "@azure/functions";
 import fetch from "node-fetch";
+import { watch } from "node:fs";
+
+/** one month in milliseconds */
+const oneMonth = 1000 * 60 * 60 * 24 * 31;
+
+/**  Movie Search Results from the search */
+export interface Movie {
+    /** Poster URL image */
+    Poster: string;
+    /** TItle of the Movie */
+    Title: string;
+    Type: string;
+    /** Year that it was released */
+    Year: string;
+    /** imdbID code to use to get the movie details */
+    imdbID: string;
+}
+
+/**
+ * API Stuff in this file - ignore
+ */
+
+interface Rating {
+    Source: string;
+    Value: string;
+}
+
+export interface MovieDetails {
+    Title: string;
+    Year: string;
+    Rated: string;
+    Released: string;
+    Runtime: string;
+    Genre: string;
+    Director: string;
+    Writer: string;
+    Actors: string;
+    Plot: string;
+    Language: string;
+    Country: string;
+    Awards: string;
+    Poster: string;
+    Ratings: Rating[];
+    Metascore: string;
+    imdbRating: string;
+    imdbVotes: string;
+    imdbID: string;
+    Type: string;
+    DVD: string;
+    BoxOffice: string;
+    Production: string;
+    Website: string;
+    Response: string;
+}
+
+export interface WatchListItem {
+    moveid: string;
+    userid: string;
+    moviedetails: MovieDetails | undefined;
+    movieupdated: string | undefined;
+}
+
+export type WatchListCorrectItem = Omit<WatchListItem, "moveid"> & { movieid: string };
 
 export class HttpError extends Error {
     constructor(message: string, public status = 503) {
@@ -7,25 +71,57 @@ export class HttpError extends Error {
     }
 }
 
-export async function getMovie(id: string) {
+export async function getMovie(id: string): Promise<MovieDetails> {
     const omdbRequest = await fetch(`http://www.omdbapi.com/?apikey=d88baf32&i=${id}`, { method: "GET" });
     if (omdbRequest.ok) {
         return await omdbRequest.json();
+    } else {
+        throw new HttpError(omdbRequest.statusText, omdbRequest.status);
     }
-    return null;
 }
 
-export async function getUser(container: Container, email: string, shallow = false) {
+export async function getOrUpdateMovie(
+    context: Context,
+    container: Container | null,
+    item: WatchListItem
+): Promise<WatchListItem> {
+    let { moveid, moviedetails, movieupdated, ...listItem } = item;
+    if (!moviedetails || !movieupdated || new Date(movieupdated).getTime() + oneMonth > new Date().getTime()) {
+        try {
+            moviedetails = await getMovie(moveid);
+            const watchListItem = {
+                ...listItem,
+                moveid,
+                moviedetails,
+                movieupdated: new Date().toISOString(),
+            };
+            if (!!container) await container.items.upsert(watchListItem);
+            return watchListItem;
+        } catch (e) {
+            context.log("Error ", e.message);
+            return item;
+        }
+    }
+    return item;
+}
+
+export async function getUserWishlist(
+    context: Context,
+    wishlistContainer: Container,
+    email: string
+): Promise<Partial<MovieDetails>[]> {
+    const wishlist = await wishlistContainer.items
+        .query<WatchListItem>(`SELECT * from c WHERE c.userid="${email}"`)
+        .fetchAll();
+    const wishlistItems = wishlist.resources.filter((i) => !!i.moveid);
+    const movies = await Promise.all(wishlistItems.map((m) => getOrUpdateMovie(context, wishlistContainer, m)));
+    return movies.map(({ moveid, moviedetails }) => moviedetails || { imdbID: moveid });
+}
+
+export async function getUser(container: Container, email: string) {
     const result = await container.items.query(`SELECT * FROM c WHERE c.userid="${email}"`).fetchAll();
     if (result.resources.length === 0) throw new HttpError(`User ${email} not found`, 404);
     const user = result.resources[0];
-    if (!shallow) {
-        const wishlistContainer = await getContainer("wishlist");
-        const wishlist = await wishlistContainer.items
-            .query(`SELECT c.moveid from c WHERE c.userid="${email}"`)
-            .fetchAll();
-        user.wishlist = wishlist.resources?.map((m) => m.moveid) || [];
-    }
     return user;
 }
 

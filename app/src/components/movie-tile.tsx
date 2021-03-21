@@ -40,7 +40,7 @@ export const MovieTile: FC<{ movie: Movie }> = ({ movie }) => (
         fontSize="0.8rem"
         fontWeight="bold"
         lineHeight={1}
-        bg="rgba(255,255,255,0.5)"
+        bg="rgba(255,255,255,0.7)"
       >
         {movie.Year}
       </Box>

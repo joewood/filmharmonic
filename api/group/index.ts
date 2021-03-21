@@ -1,5 +1,6 @@
 import { AzureFunction, Context, HttpRequest } from "@azure/functions";
-import { getContainer, getMovie, getUser, HttpError } from "../common";
+import { stringify } from "node:querystring";
+import { getContainer, getMovie, getOrUpdateMovie, getUser, HttpError, MovieDetails } from "../common";
 
 const httpTrigger: AzureFunction = async function (context: Context, req: HttpRequest): Promise<void> {
     try {
@@ -7,7 +8,9 @@ const httpTrigger: AzureFunction = async function (context: Context, req: HttpRe
         const userContainer = getContainer("users");
         let { id, movies } = req.params;
         id = decodeURIComponent(id);
-        const memberResult = await container.items.query(`SELECT c.userid from c WHERE c.groupid="${id}"`).fetchAll();
+        const memberResult = await container.items
+            .query<{ userid: string }>(`SELECT c.userid from c WHERE c.groupid="${id}"`)
+            .fetchAll();
         if (memberResult.resources.length === 0) throw new HttpError(`Group ${id} not found`, 404);
         const userids = memberResult.resources.map((c) => c.userid);
 
@@ -15,13 +18,22 @@ const httpTrigger: AzureFunction = async function (context: Context, req: HttpRe
             const wishlistContainer = getContainer("wishlist");
             const inClause = userids.map((u) => `"${u}"`).join(",");
             const result = await wishlistContainer.items
-                .query(
-                    `SELECT count(c.userid) AS votes,c.moveid as movieid FROM c where c.userid IN (${inClause}) GROUP BY c.moveid`
+                .query<{ votes: number; movieid: string; moviedetails?: MovieDetails }>(
+                    `SELECT count(c.userid) AS votes,
+                            c.moveid as movieid, 
+                            c.moviedetails as moviedetails
+                    FROM c where c.userid IN (${inClause}) 
+                    GROUP BY c.moveid,c.moviedetails`
                 )
                 .fetchAll();
-            if (result.resources.length === 0) throw new HttpError(`Group ${id} not found`, 404);
-            const movies = await Promise.all(result.resources.map((m) => getMovie(m.movieid)));
-            const movieVotes = result.resources.map((v, i) => ({ ...v, ...(movies[i] || {}) }));
+            const resultFill = result.resources.filter((r) => !!r.movieid);
+            // if (result.resources.length === 0) throw new HttpError(`Group ${id} not found`, 404);
+            const movies = await Promise.all(
+                resultFill.map(({ moviedetails, ...m }) =>
+                    !moviedetails && !!m.movieid ? getMovie(m.movieid) : moviedetails
+                )
+            );
+            const movieVotes = resultFill.map((v, i) => ({ ...v, ...(movies[i] || {}) }));
             context.res = { body: JSON.stringify(movieVotes) };
             return;
         }
