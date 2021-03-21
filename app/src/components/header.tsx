@@ -39,6 +39,7 @@ export const Header: FC<{ user: User | null }> = ({ user }) => {
         flex="1 1 auto"
         maxW="38rem"
         justifySelf="stretch"
+        bg="green.100"
         alignItems="center"
         justifyContent="stretch"
         onSubmit={(event: any) => {
@@ -56,8 +57,8 @@ export const Header: FC<{ user: User | null }> = ({ user }) => {
           <Input
             padding={6}
             maxW="28rem"
-            pr="1.5rem"
             fontSize="1.3rem"
+            style={{ paddingRight: 40 }}
             border="transparent"
             name="search"
             defaultValue={search}
@@ -66,10 +67,18 @@ export const Header: FC<{ user: User | null }> = ({ user }) => {
             type="text"
             placeholder="Search Movies &amp; TV"
           />
-          <InputRightElement color="gray.400" padding="0.5rem" fontSize="1.6rem" children={<SearchIcon />} />
+          <InputRightElement
+            color="gray.400"
+            padding="0.5rem"
+            fontSize="1.6rem"
+            children={
+              <>
+                <SearchIcon />
+                <input type="submit" style={{ visibility: "collapse", width: 0 }} />
+              </>
+            }
+          />
         </InputGroup>
-
-        <input type="submit" style={{ visibility: "collapse" }} />
       </Box>
       <Box m={5} alignSelf="middle" display="flex" alignItems="center" justifySelf="flex-end" flex="0 0 auto">
         <Image height="2.5rem" src={user?.profile.picture} alt="profile" borderRadius="50%" />

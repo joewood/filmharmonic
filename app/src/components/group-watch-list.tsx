@@ -11,7 +11,7 @@ const MovieWithVotes: FC<{ movie: MovieDetailsWithVotes; comingSoon?: boolean }>
     <Box flex="0 0 8rem">
       <MovieTile movie={movie} />
     </Box>
-    <Box flex="1 1 auto" ml="3rem">
+    <Box flex="1 1 auto" ml="1rem">
       <p>{movie.Actors}</p>
       <p>
         {!!movie.Rated && movie.Rated !== "N/A" && <b style={{ paddingRight: "0.5rem" }}>{movie.Rated}</b>}
