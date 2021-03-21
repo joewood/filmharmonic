@@ -145,21 +145,11 @@ export async function updateWatchList(
 }
 
 interface UseMoviesRet {
-  /** call to remove movie from wishlist */
-  // onRemoveWishlist: (imdbId: string) => void;
   userMovies: UserMovies | undefined;
-  /** movie proposed by the user */
-  // proposed: MovieDetails | null;
-  /** movie voted for by the user */
-  // voted: MovieDetails | null;
-  /** wishlist of Movies  */
-  // wishlist: MovieDetails[];
 }
 
 /** React Hook to manage the state of a user's proposed, vote and wishlist movies */
 export function useUserMovies(user: User | null): UseMoviesRet {
-  // const [proposed, setProposed] = useState<MovieDetails | null>(null);
-  // const [voted, setVoted] = useState<MovieDetails | null>(null);
   const [userMovies, setUserMovies] = useState<UserMovies>();
 
   useEffect(() => {
@@ -180,11 +170,7 @@ export function useUserMovies(user: User | null): UseMoviesRet {
 }
 
 interface GroupMovies {
-  // userProposals: UserMovies[];
-  // movies: MovieDetails[];
   wishlist: MovieDetailsWithVotes[];
-  // onVote: (imdbId: string) => void;
-  // myProposal: UserMovies | undefined;
 }
 
 /** React Hook to return all users movies in the group */
@@ -208,15 +194,5 @@ export function useGroupMovies(user: User | null, group: string): GroupMovies {
     })();
   }, [user, group]);
 
-  // find the Proposal that belongs to the current logged in user (could use `useMemo` here)
-
-  // Run when the user clicks "vote". Calls `voteAndRefresh` which returns the list of proposals. We use
-  // the return value to update the state variable `userProposals`
-  // const onVote = useCallback(
-  //   (imdbId: string) => {
-  //     if (user) voteAndRefresh(user, imdbId).then(setUserProposals);
-  //   },
-  //   [user]
-  // );
   return { wishlist };
 }

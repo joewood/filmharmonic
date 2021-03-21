@@ -1,5 +1,6 @@
-import { CheckCircleIcon } from "@chakra-ui/icons";
+import { StarIcon } from "@chakra-ui/icons";
 import { Box, Flex, Heading } from "@chakra-ui/react";
+import { range } from "lodash";
 import { User } from "oidc-client";
 import * as React from "react";
 import { FC } from "react";
@@ -25,9 +26,12 @@ const MovieWithVotes: FC<{ movie: MovieDetailsWithVotes; comingSoon?: boolean }>
       <p>
         <b>Release Date:</b> {movie.Released}
       </p>
-      <Flex bg="gray.100" mt="0.5rem" p="1.25rem" fontWeight="bold" justifyContent="space-between">
-        <Box>Watched By: {movie.votes} members </Box>
-        <CheckCircleIcon />
+      <Flex bg="gray.100" mt="0.5rem" p="3px" fontWeight="bold" justifyContent="space-between">
+        <Box>
+          {range(0, movie.votes).map((i) => (
+            <StarIcon pr={1} />
+          ))}
+        </Box>
       </Flex>
     </Box>
   </Flex>
