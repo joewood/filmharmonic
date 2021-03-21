@@ -86,8 +86,15 @@ export async function getOrUpdateMovie(
     item: WatchListItem
 ): Promise<WatchListItem> {
     let { moveid, moviedetails, movieupdated, ...listItem } = item;
-    if (!moviedetails || !movieupdated || new Date(movieupdated).getTime() + oneMonth > new Date().getTime()) {
+    if (!moviedetails || !movieupdated || new Date(movieupdated).getTime() + oneMonth < new Date().getTime()) {
         try {
+            context.log(
+                "UPDATING",
+                !moviedetails,
+                !movieupdated,
+                new Date(movieupdated).toISOString(),
+                new Date(movieupdated).getTime() + oneMonth < new Date().getTime()
+            );
             moviedetails = await getMovie(moveid);
             const watchListItem = {
                 ...listItem,
