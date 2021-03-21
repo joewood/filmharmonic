@@ -39,7 +39,6 @@ export const Header: FC<{ user: User | null }> = ({ user }) => {
         flex="1 1 auto"
         maxW="38rem"
         justifySelf="stretch"
-        bg="green.100"
         alignItems="center"
         justifyContent="stretch"
         onSubmit={(event: any) => {
