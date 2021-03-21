@@ -121,7 +121,7 @@ export async function getUserWishlist(
         .query<WatchListItem>(`SELECT * from c WHERE c.userid="${email}"`)
         .fetchAll();
     const wishlistItems = wishlist.resources.filter((i) => !!i.moveid);
-    const movies = await Promise.all(wishlistItems.map((m) => getOrUpdateMovie(context, wishlistContainer, m)));
+    const movies = await Promise.all(wishlistItems.map((item) => getOrUpdateMovie(context, wishlistContainer, item)));
     return movies.map(({ moveid, moviedetails }) => moviedetails || { imdbID: moveid });
 }
 

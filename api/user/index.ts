@@ -15,11 +15,11 @@ const httpTrigger: AzureFunction = async function (context: Context, req: HttpRe
         } else if (req.method === "PUT") {
             if (action === "add") {
                 const wishlistContainer = await getContainer("wishlist");
-                await wishlistContainer.items.upsert({ email: id, userid: id, moveid: movieid });
+                await wishlistContainer.items.upsert({ userid: id, moveid: movieid });
             } else if (action === "remove") {
                 const wishlistContainer = await getContainer("wishlist");
                 const ex = await wishlistContainer.items
-                    .query(`select c.id FROM c WHERE c.groupid="woods" AND c.userid="${id}" AND c.moveid="${movieid}"`)
+                    .query(`select c.id FROM c WHERE c.userid="${id}" AND c.moveid="${movieid}"`)
                     .fetchAll();
                 const itemId = ex.resources[0]?.id;
                 if (itemId) {

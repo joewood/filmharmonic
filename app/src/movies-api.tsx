@@ -63,9 +63,6 @@ export interface Data {
 
 export interface UserMovies {
   userid: string;
-  groupid: string;
-  proposed?: MovieDetails;
-  vote?: MovieDetails;
   wishlist: MovieDetails[];
   name?: string;
 }
