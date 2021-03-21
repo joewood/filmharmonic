@@ -86,30 +86,34 @@ export async function getOrUpdateMovie(
     item: WatchListItem
 ): Promise<WatchListItem> {
     let { moveid, moviedetails, movieupdated, ...listItem } = item;
-    if (!moviedetails || !movieupdated || new Date(movieupdated).getTime() + oneMonth < new Date().getTime()) {
-        try {
-            context.log(
-                "UPDATING",
-                !moviedetails,
-                !movieupdated,
-                new Date(movieupdated).toISOString(),
-                new Date(movieupdated).getTime() + oneMonth < new Date().getTime()
-            );
-            moviedetails = await getMovie(moveid);
-            const watchListItem = {
-                ...listItem,
-                moveid,
-                moviedetails,
-                movieupdated: new Date().toISOString(),
-            };
-            if (!!container) await container.items.upsert(watchListItem);
-            return watchListItem;
-        } catch (e) {
-            context.log("Error ", e.message);
+    try {
+        if (!!moviedetails && !!movieupdated && new Date(movieupdated).getTime() + oneMonth > new Date().getTime()) {
             return item;
         }
+    } catch (e) {
+        context.log("Warning: " + e.message);
     }
-    return item;
+    try {
+        context.log(
+            "UPDATING"
+            // !moviedetails,
+            // !movieupdated,
+            // new Date(movieupdated).toISOString(),
+            // new Date(movieupdated).getTime() + oneMonth < new Date().getTime()
+        );
+        moviedetails = await getMovie(moveid);
+        const watchListItem = {
+            ...listItem,
+            moveid,
+            moviedetails,
+            movieupdated: new Date().toISOString(),
+        };
+        if (!!container) await container.items.upsert(watchListItem);
+        return watchListItem;
+    } catch (e) {
+        context.log("Error ", e.message);
+        return item;
+    }
 }
 
 export async function getUserWishlist(
