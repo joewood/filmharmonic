@@ -6,7 +6,7 @@ import * as React from "react";
 import { FC, useCallback, useEffect, useState } from "react";
 import { Header } from "./components/header";
 import pop from "./images/pop.jpg";
-import { fetchMovie, MovieDetails, updateWatchList  , useUserMovies } from "./movies-api";
+import { fetchMovie, MovieDetails, updateWatchList, useUserMovies } from "./movies-api";
 
 interface MovieProps {
   user: User | null;
@@ -57,7 +57,7 @@ export const Movie: FC<MovieProps> = ({ user, movieId }) => {
         <Heading gridArea="heading">{movie?.Title}</Heading>
 
         <Button gridArea="watchList" onClick={onToggleWatchList} leftIcon={<PlusSquareIcon />}>
-          {userMovies?.wishlist.find((m) => m.imdbID === movieId) ? "Remove from Watch List" : "Add to Watch List"}
+          {userMovies?.wishlist.find((m) => m.imdbID === movieId) ? "Remove" : "Add to List"}
         </Button>
         {userMovies?.wishlist.find((m) => m.imdbID === movieId) && (
           <Button gridArea="propose" justifySelf="stretch" onClick={onPropose} w="100%" leftIcon={<TimeIcon />}>

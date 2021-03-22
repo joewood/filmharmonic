@@ -34,9 +34,18 @@ export const Search: FC<SearchProps> = ({ user }) => {
   /** The React elements are the same as HTML other than `className` is used rather than `class`
    * and style looks a bit different. */
   return (
-    <div className="App">
+    <div>
       <Header user={user} />
-      <Box display="flex" flexWrap="wrap" m="1rem" mt="4rem" justifyContent="flex-start">
+      <Box
+        display="flex"
+        flexWrap="wrap"
+        mt="2rem"
+        justifyContent="space-around"
+        maxWidth="800px"
+        ml="auto"
+        mr="auto"
+        padding={2}
+      >
         {movies.length === 0 && <p>No Results Found</p>}
         {movies.map((movie) => (
           <MovieTile movie={movie} />

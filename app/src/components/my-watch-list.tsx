@@ -20,15 +20,7 @@ export const MyWatchList: FC<{
 
   return (
     <>
-      <Flex
-        flexWrap="wrap"
-        m="1rem"
-        mt="4rem"
-        justifyContent="flex-start"
-        ml="auto"
-        mr="auto"
-        maxWidth="min(1000px, 100vw)"
-      >
+      <Flex flexWrap="wrap" mt="4rem" justifyContent="space-around" ml="auto" mr="auto" maxWidth="min(1000px, 100vw)">
         {watchNow.map((movie, i) => (
           <MovieTile key={movie.imdbID + i} movie={movie} />
         ))}
@@ -36,15 +28,7 @@ export const MyWatchList: FC<{
       <hr />
       {comingSoon.length > 0 && <Heading pb="2rem">Coming Soon</Heading>}
       {comingSoon.length > 0 && (
-        <Flex
-          flexWrap="wrap"
-          m="1rem"
-          mt="4rem"
-          justifyContent="flex-start"
-          ml="auto"
-          mr="auto"
-          maxWidth="min(1000px, 100vw)"
-        >
+        <Flex flexWrap="wrap" m="1rem" mt="4rem" justifyContent="space-around" ml="auto" mr="auto" maxWidth="800px">
           {comingSoon.map((movie, i) => (
             <MovieTile key={movie.imdbID + i} movie={movie} />
           ))}
