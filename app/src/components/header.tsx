@@ -56,7 +56,7 @@ export const Header: FC<{ user: User | null }> = ({ user }) => {
           <Input
             padding={6}
             maxW="28rem"
-            fontSize="1.3rem"
+            fontSize="1.2rem"
             style={{ paddingRight: 40 }}
             border="transparent"
             name="search"

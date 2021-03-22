@@ -33,7 +33,7 @@ export const Proposals: FC<ProposalsProps> = ({ user }) => {
         index={!group ? 0 : 1}
         onChange={onTabChange}
       >
-        <TabList position="sticky" top="4rem" left={0} background="white" zIndex="sticky">
+        <TabList left={0} background="white" zIndex="sticky" position="sticky" top="4.7rem">
           <Tab index={0}>My Watch List</Tab>
           <Tab index={1}>Group: Woods</Tab>
         </TabList>
