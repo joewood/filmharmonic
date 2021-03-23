@@ -28,8 +28,11 @@ const MovieWithVotes: FC<{ movie: MovieDetailsWithVotes; comingSoon?: boolean }>
       </p>
       <Flex bg="gray.100" mt="0.5rem" p="3px" fontWeight="bold" justifyContent="space-between">
         <Box>
-          {range(0, movie.votes).map((i) => (
+          {range(0, movie.votes - movie.watched).map((i) => (
             <StarIcon pr={1} />
+          ))}
+          {range(0, movie.watched).map((i) => (
+            <StarIcon color="red.100" pr={1} />
           ))}
         </Box>
       </Flex>
@@ -47,15 +50,22 @@ export const GroupWatchList: FC<{ group: string; user: User | null }> = ({ group
   comingSoon = comingSoon.sort(
     (a, b) => new Date(a.Released || a.Year).getTime() - new Date(b.Released || b.Year).getTime()
   );
+  const watched = watchNow.filter((w) => w.votes === w.watched);
+  watchNow = watchNow.filter((w) => w.votes !== w.watched);
   return (
     <Flex flexDirection="column">
       {watchNow.map((movie, i) => (
         <MovieWithVotes key={movie.imdbID + i} movie={movie} />
       ))}
-      <hr />
+      {comingSoon.length > 0 && <hr />}
       {comingSoon.length > 0 && <Heading pb="2rem">Coming Soon</Heading>}
       {comingSoon.map((movie, i) => (
         <MovieWithVotes key={movie.imdbID + i} movie={movie} comingSoon={true} />
+      ))}
+      {watched.length > 0 && <hr />}
+      {watched.length > 0 && <Heading pb="2rem">Watched and Liked</Heading>}
+      {watched.map((movie, i) => (
+        <MovieWithVotes key={movie.imdbID + i} movie={movie} />
       ))}
     </Flex>
   );

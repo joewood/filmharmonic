@@ -57,11 +57,11 @@ export const Movie: FC<MovieProps> = ({ user, movieId }) => {
         <Heading gridArea="heading">{movie?.Title}</Heading>
 
         <Button gridArea="watchList" onClick={onToggleWatchList} leftIcon={<PlusSquareIcon />}>
-          {userMovies?.wishlist.find((m) => m.imdbID === movieId) ? "Remove" : "Add to List"}
+          {userMovies?.wishlist.find((m) => m.imdbID === movieId) ? "Remove / Didn't Like" : "Add to List"}
         </Button>
         {userMovies?.wishlist.find((m) => m.imdbID === movieId) && (
           <Button gridArea="propose" justifySelf="stretch" onClick={onPropose} w="100%" leftIcon={<TimeIcon />}>
-            Watched
+            Watched &amp; Liked
           </Button>
         )}
         <Box gridArea="info" justifySelf="left">

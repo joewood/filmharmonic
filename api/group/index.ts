@@ -1,6 +1,5 @@
 import { AzureFunction, Context, HttpRequest } from "@azure/functions";
-import { stringify } from "node:querystring";
-import { getContainer, getMovie, getOrUpdateMovie, getUser, HttpError, MovieDetails } from "../common";
+import { getContainer, getMovie, getUser, HttpError, MovieDetails } from "../common";
 
 const httpTrigger: AzureFunction = async function (context: Context, req: HttpRequest): Promise<void> {
     try {
@@ -18,8 +17,9 @@ const httpTrigger: AzureFunction = async function (context: Context, req: HttpRe
             const wishlistContainer = getContainer("wishlist");
             const inClause = userids.map((u) => `"${u}"`).join(",");
             const result = await wishlistContainer.items
-                .query<{ votes: number; movieid: string; moviedetails?: MovieDetails }>(
+                .query<{ votes: number; watched: number; movieid: string; moviedetails?: MovieDetails }>(
                     `SELECT count(c.userid) AS votes,
+                            count(c.watched) AS watched,
                             c.moveid as movieid, 
                             c.moviedetails as moviedetails
                     FROM c where c.userid IN (${inClause}) 

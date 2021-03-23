@@ -30,7 +30,7 @@ const httpTrigger: AzureFunction = async function (context: Context, req: HttpRe
             } else if (action === "watched") {
                 const wishlistContainer = await getContainer("wishlist");
                 const ex = await wishlistContainer.items
-                    .query(`select c.id FROM c WHERE c.userid="${id}" AND c.moveid="${movieid}"`)
+                    .query(`select * FROM c WHERE c.userid="${id}" AND c.moveid="${movieid}"`)
                     .fetchAll();
                 const item = ex.resources[0];
                 if (!item) throw new HttpError("Cannot find item", 404);

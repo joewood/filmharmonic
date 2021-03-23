@@ -55,6 +55,7 @@ export interface MovieDetails {
 export interface MovieDetailsWithVotes extends MovieDetails {
   /** Who this movie was wished by */
   votes: number;
+  watched: number;
 }
 
 export interface Data {

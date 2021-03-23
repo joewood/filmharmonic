@@ -61,6 +61,7 @@ export interface WatchListItem {
     userid: string;
     moviedetails: MovieDetails | undefined;
     movieupdated: string | undefined;
+    watched?: boolean;
 }
 
 export type WatchListCorrectItem = Omit<WatchListItem, "moveid"> & { movieid: string };
@@ -94,13 +95,7 @@ export async function getOrUpdateMovie(
         context.log("Warning: " + e.message);
     }
     try {
-        context.log(
-            "UPDATING"
-            // !moviedetails,
-            // !movieupdated,
-            // new Date(movieupdated).toISOString(),
-            // new Date(movieupdated).getTime() + oneMonth < new Date().getTime()
-        );
+        context.log("UPDATING");
         moviedetails = await getMovie(moveid);
         const watchListItem = {
             ...listItem,
@@ -126,7 +121,9 @@ export async function getUserWishlist(
         .fetchAll();
     const wishlistItems = wishlist.resources.filter((i) => !!i.moveid);
     const movies = await Promise.all(wishlistItems.map((item) => getOrUpdateMovie(context, wishlistContainer, item)));
-    return movies.map(({ moveid, moviedetails }) => moviedetails || { imdbID: moveid });
+    return movies.map(({ moveid, watched, moviedetails }) =>
+        moviedetails ? { ...moviedetails, watched } : { imdbID: moveid }
+    );
 }
 
 export async function getUser(container: Container, email: string) {
