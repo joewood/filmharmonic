@@ -17,7 +17,7 @@ export const Movie: FC<MovieProps> = ({ user, movieId }) => {
   const [movie, setMovie] = useState<MovieDetails | null>(null);
   const { userMovies } = useUserMovies(user);
 
-  const onPropose = useCallback(() => {
+  const onWatched = useCallback(() => {
     (async () => {
       if (!user || !movieId) return;
       await updateWatchList(user, movieId, "watched");
@@ -60,7 +60,7 @@ export const Movie: FC<MovieProps> = ({ user, movieId }) => {
           {userMovies?.wishlist.find((m) => m.imdbID === movieId) ? "Remove / Didn't Like" : "Add to List"}
         </Button>
         {userMovies?.wishlist.find((m) => m.imdbID === movieId) && (
-          <Button gridArea="propose" justifySelf="stretch" onClick={onPropose} w="100%" leftIcon={<TimeIcon />}>
+          <Button gridArea="propose" justifySelf="stretch" onClick={onWatched} w="100%" leftIcon={<TimeIcon />}>
             Watched &amp; Liked
           </Button>
         )}

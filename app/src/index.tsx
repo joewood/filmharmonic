@@ -1,10 +1,9 @@
-import { navigate, RouteComponentProps, Router } from "@reach/router";
+import { navigate, Redirect, RouteComponentProps, Router } from "@reach/router";
 import { UserManagerSettings } from "oidc-client";
 import * as React from "react";
-import { FC } from "react";
+import { FC, memo } from "react";
 import ReactDOM from "react-dom";
 import { Callback, makeAuthenticator, makeUserManager, UserData } from "react-oidc";
-import "./index.css";
 import { Movie } from "./movie";
 import { Search } from "./search";
 import { Profile } from "./profile";
@@ -16,13 +15,8 @@ interface CallbackProps extends RouteComponentProps {}
 const theme = extendTheme({
   styles: {
     global: {
-      h1: {
-        textAlign: "center",
-        textDecoration: "underline",
-      },
       "html, body": {
         margin: 0,
-        // fontSize: "sm",
         color: "gray.600",
       },
       body: {
@@ -33,17 +27,7 @@ const theme = extendTheme({
         background: "radial-gradient(farthest-corner at 40px 40px, #fff 0%, #eff 100%)",
       },
       a: {
-        color: "teal.500",
-      },
-      ul: {
-        listStyleType: "none",
-        margin: 0,
-        padding: 0,
-      },
-      /*Movies*/
-      /* movie info */
-      "h1,h2": {
-        margin: "0 2%",
+        color: "gray.700",
       },
     },
   },
@@ -64,38 +48,45 @@ const userManagerConfig: UserManagerSettings = {
 const userManager = makeUserManager(userManagerConfig);
 const authUser = makeAuthenticator({ userManager });
 
-const SearchProposal = authUser<RouteComponentProps>(() => (
-  <UserData.Consumer>{(context) => <Search user={context.user} />}</UserData.Consumer>
-));
+const SearchProposal = memo(
+  authUser<RouteComponentProps>(() => (
+    <UserData.Consumer>{(context) => <Search user={context.user} />}</UserData.Consumer>
+  ))
+);
 
-const AuthMovie = authUser<RouteComponentProps<{ movieId: string }>>(({ movieId }) => (
-  <UserData.Consumer>{(context) => <Movie user={context.user} movieId={movieId} />}</UserData.Consumer>
-));
+const AuthMovie = memo(
+  authUser<RouteComponentProps<{ movieId: string }>>(({ movieId }) => (
+    <UserData.Consumer>{(context) => <Movie user={context.user} movieId={movieId} />}</UserData.Consumer>
+  ))
+);
 
 const AuthProfile = authUser<RouteComponentProps>(() => (
   <UserData.Consumer>{(context) => <Profile user={context.user} />}</UserData.Consumer>
 ));
 
-const AuthProposals = authUser<RouteComponentProps>(() => (
-  <UserData.Consumer>{(context) => <Proposals user={context.user} />}</UserData.Consumer>
-));
-
-const Root = () => (
-  <Router>
-    <CallbackScreen path="/callback" />
-    <AuthProposals path="/" />
-    <AuthProposals path="/group/:group" />
-    <SearchProposal path="/search" />
-    <AuthMovie path="/movie/:movieId" />
-    <AuthProfile path="/user" />
-  </Router>
+const AuthMain = memo(
+  authUser<RouteComponentProps>((props) => (
+    <UserData.Consumer>{(context) => <Proposals user={context.user} {...props} />}</UserData.Consumer>
+  ))
 );
 
-ReactDOM.render(
+const Root = memo(() => (
+  <Router>
+    <Redirect from="/" to="/group/me" noThrow />
+    <CallbackScreen key="cb" path="/callback" />
+    <AuthMain key="group" path="/group/:group" />
+    <SearchProposal key="search" path="/search" />
+    <AuthMovie key="movie" path="/movie/:movieId" />
+    <AuthProfile key="prof" path="/user" />
+  </Router>
+));
+
+const MainApp = memo<{}>(() => (
   <React.StrictMode>
     <ChakraProvider theme={theme}>
       <Root />
     </ChakraProvider>
-  </React.StrictMode>,
-  document.getElementById("root")
-);
+  </React.StrictMode>
+));
+
+ReactDOM.render(<MainApp />, document.getElementById("root"));

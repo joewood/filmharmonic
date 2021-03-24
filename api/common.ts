@@ -2,6 +2,7 @@ import { Container, CosmosClient } from "@azure/cosmos";
 import { Context } from "@azure/functions";
 import fetch from "node-fetch";
 import { watch } from "node:fs";
+import { stringify } from "node:querystring";
 
 /** one month in milliseconds */
 const oneMonth = 1000 * 60 * 60 * 24 * 31;
@@ -117,7 +118,10 @@ export async function getUserWishlist(
     email: string
 ): Promise<Partial<MovieDetails>[]> {
     const wishlist = await wishlistContainer.items
-        .query<WatchListItem>(`SELECT * from c WHERE c.userid="${email}"`)
+        .query<WatchListItem>({
+            query: "SELECT * from c WHERE c.userid=@email",
+            parameters: [{ name: "@email", value: email }],
+        })
         .fetchAll();
     const wishlistItems = wishlist.resources.filter((i) => !!i.moveid);
     const movies = await Promise.all(wishlistItems.map((item) => getOrUpdateMovie(context, wishlistContainer, item)));
@@ -130,7 +134,14 @@ export async function getUser(container: Container, email: string) {
     const result = await container.items.query(`SELECT * FROM c WHERE c.userid="${email}"`).fetchAll();
     if (result.resources.length === 0) throw new HttpError(`User ${email} not found`, 404);
     const user = result.resources[0];
-    return user;
+    const groupContainer = await getContainer("groups");
+    const members = await groupContainer.items
+        .query<{ userid: string; groupid: string }>({
+            query: "select * from c where c.userid=@userid",
+            parameters: [{ name: "@userid", value: email }],
+        })
+        .fetchAll();
+    return { ...user, membership: members.resources };
 }
 
 export function getContainer(name: string): Container {

@@ -29,10 +29,10 @@ const MovieWithVotes: FC<{ movie: MovieDetailsWithVotes; comingSoon?: boolean }>
       <Flex bg="gray.100" mt="0.5rem" p="3px" fontWeight="bold" justifyContent="space-between">
         <Box>
           {range(0, movie.votes - movie.watched).map((i) => (
-            <StarIcon pr={1} />
+            <StarIcon key={i} pr={1} />
           ))}
           {range(0, movie.watched).map((i) => (
-            <StarIcon color="red.100" pr={1} />
+            <StarIcon key={i} color="red.100" pr={1} />
           ))}
         </Box>
       </Flex>

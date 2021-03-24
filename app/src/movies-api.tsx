@@ -1,4 +1,3 @@
-import { uniq } from "lodash";
 import { User } from "oidc-client";
 import { useEffect, useState } from "react";
 
@@ -68,6 +67,13 @@ export interface UserMovies {
   name?: string;
 }
 
+export interface UserLogin {
+  userid: string;
+  membership: {
+    groupid: string;
+  }[];
+}
+
 async function fetchPut<T>(token: string, url: string): Promise<T | null> {
   console.log("PUT", url);
   const response = await fetch(url, {
@@ -112,25 +118,6 @@ export async function fetchMovie(token: string, imdbId: string): Promise<MovieDe
   return (await searchResponse.json()) as MovieDetails;
 }
 
-export async function fetchUser(token: string, email: string): Promise<UserMovies> {
-  const searchResponse = await fetch("/api/user/" + encodeURIComponent(email), {
-    headers: { Authorization: "Bearer " + token },
-  });
-  return (await searchResponse.json()) as UserMovies;
-}
-
-export async function fetchUsers(token: string): Promise<UserMovies[]> {
-  const searchResponse = await fetch("/api/group/woods", {
-    headers: { Authorization: "Bearer " + token },
-  });
-  return (await searchResponse.json()) as UserMovies[];
-}
-
-export const addWish = (imdbMovie: string, wishlist: string[] | undefined) => uniq([imdbMovie, ...(wishlist || [])]);
-
-export const removeWish = (imdbMovie: string, wishlist: string[] | undefined) =>
-  (wishlist || []).filter((m) => m !== imdbMovie);
-
 export async function updateWatchList(
   user: User,
   imdbId: string,
@@ -159,7 +146,7 @@ export function useUserMovies(user: User | null): UseMoviesRet {
       try {
         const userDetails = await fetchGet<UserMovies>(
           user?.access_token,
-          `/api/user/${encodeURIComponent(user?.profile?.email)}`
+          `/api/user/${encodeURIComponent(user?.profile?.email)}/watchlist`
         );
         setUserMovies(userDetails);
       } catch (e) {
@@ -170,6 +157,26 @@ export function useUserMovies(user: User | null): UseMoviesRet {
   return { userMovies };
 }
 
+/** React Hook to return all users movies in the group */
+export function useUser(user: User | null): UserLogin | undefined {
+  const [userLogin, setUserLogin] = useState<UserLogin>();
+  // this runs when `user` changes its value (e.g. when logged in). It uses the API to get all the users' proposals
+  // and their movie details using the state hook variables above
+  useEffect(() => {
+    (async () => {
+      console.log("Requesting User", user?.access_token);
+      if (!user?.access_token) return;
+      try {
+        const moviesWithVotes = await fetchGet<UserLogin>(user.access_token, `/api/user/${user.profile.email}`);
+        setUserLogin(moviesWithVotes);
+      } catch (e) {
+        console.error(e);
+      }
+    })();
+  }, [user?.access_token, user?.profile?.email]);
+  return userLogin;
+}
+
 interface GroupMovies {
   wishlist: MovieDetailsWithVotes[];
 }
@@ -177,7 +184,6 @@ interface GroupMovies {
 /** React Hook to return all users movies in the group */
 export function useGroupMovies(user: User | null, group: string): GroupMovies {
   const [wishlist, setWishlist] = useState<MovieDetailsWithVotes[]>([]);
-
   // this runs when `user` changes its value (e.g. when logged in). It uses the API to get all the users' proposals
   // and their movie details using the state hook variables above
   useEffect(() => {
@@ -193,7 +199,7 @@ export function useGroupMovies(user: User | null, group: string): GroupMovies {
         console.error(e);
       }
     })();
-  }, [user, group]);
+  }, [user?.access_token, user, group]);
 
   return { wishlist };
 }

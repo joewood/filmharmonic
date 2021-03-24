@@ -9,8 +9,11 @@ const httpTrigger: AzureFunction = async function (context: Context, req: HttpRe
         if (req.method === "GET") {
             const wishlistContainer = await getContainer("wishlist");
             const user = await getUser(userContainer, id);
-            const movies = await getUserWishlist(context, wishlistContainer, id); // Promise.all(user.wishlist.map((m) => getOrUpdateMovie(context, wishlistContainer, m)));
-            context.res = { body: JSON.stringify({ ...user, wishlist: movies }, null, 2) };
+            if (action === "watchlist") {
+                const movies = await getUserWishlist(context, wishlistContainer, id); // Promise.all(user.wishlist.map((m) => getOrUpdateMovie(context, wishlistContainer, m)));
+                user.wishlist = movies;
+            }
+            context.res = { body: JSON.stringify(user, null, 2) };
             return;
         } else if (req.method === "PUT") {
             if (action === "add") {
