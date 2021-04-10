@@ -1,8 +1,9 @@
-import { Flex, Heading } from "@chakra-ui/react";
+import { AlertDialog, Flex, Heading, Spinner } from "@chakra-ui/react";
 import { User } from "oidc-client";
 import * as React from "react";
 import { FC } from "react";
 import { MovieDetails, useUserMovies } from "../movies-api";
+import { ServerError } from "./alerts";
 import { MovieTile } from "./movie-tile";
 
 type MD = MovieDetails & { watched?: boolean };
@@ -10,7 +11,7 @@ type MD = MovieDetails & { watched?: boolean };
 export const MyWatchList: FC<{
   user: User | null;
 }> = ({ user }) => {
-  const { userMovies } = useUserMovies(user);
+  const { userMovies, error } = useUserMovies(user);
   const today = new Date().getTime();
   let [watchNow, comingSoon] = userMovies?.wishlist?.reduce(
     ([wn, cs], c) => (new Date(c.Released || c.Year).getTime() < today ? [[...wn, c], cs] : [wn, [...cs, c]]),
@@ -23,6 +24,8 @@ export const MyWatchList: FC<{
   watchNow = watchNow.filter((w) => !w.watched);
   return (
     <>
+      {userMovies === null && <Spinner margin={20} alignSelf="center" />}
+      {!!error && <ServerError message={error} />}
       <Flex flexWrap="wrap" mt="4rem" justifyContent="space-around" ml="auto" mr="auto" maxWidth="min(1000px, 100vw)">
         {watchNow.map((movie, i) => (
           <MovieTile key={movie.imdbID + i} movie={movie} />

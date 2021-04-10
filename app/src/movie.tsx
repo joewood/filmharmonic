@@ -1,5 +1,5 @@
 import { PlusSquareIcon, TimeIcon } from "@chakra-ui/icons";
-import { Box, Button, Grid, Heading, Image, Spacer } from "@chakra-ui/react";
+import { Box, Button, Grid, Heading, Image, Spacer, Spinner } from "@chakra-ui/react";
 import { navigate } from "@reach/router";
 import { User } from "oidc-client";
 import * as React from "react";
@@ -57,7 +57,13 @@ export const Movie: FC<MovieProps> = ({ user, movieId }) => {
         <Heading gridArea="heading">{movie?.Title}</Heading>
 
         <Button gridArea="watchList" onClick={onToggleWatchList} leftIcon={<PlusSquareIcon />}>
-          {userMovies?.wishlist.find((m) => m.imdbID === movieId) ? "Remove / Didn't Like" : "Add to List"}
+          {userMovies === null ? (
+            <Spinner size="sm" />
+          ) : userMovies.wishlist.find((m) => m.imdbID === movieId) ? (
+            "Remove / Didn't Like"
+          ) : (
+            "Add to List"
+          )}
         </Button>
         {userMovies?.wishlist.find((m) => m.imdbID === movieId) && (
           <Button gridArea="propose" justifySelf="stretch" onClick={onWatched} w="100%" leftIcon={<TimeIcon />}>

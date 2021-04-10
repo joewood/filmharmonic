@@ -6,7 +6,7 @@ import { FC, useEffect, useState } from "react";
 import { Header } from "./components/header";
 import { Movie, searchMovies } from "./movies-api";
 import { MovieTile } from "./components/movie-tile";
-import { Box } from "@chakra-ui/react";
+import { Box, Spinner } from "@chakra-ui/react";
 
 // then
 interface SearchProps extends RouteComponentProps {
@@ -22,7 +22,7 @@ export const Search: FC<SearchProps> = ({ user }) => {
   // the component to update (to re-render or redraw). The `useState` function returns an array where
   // the first element is the current state value, the second element in the array is the function to
   // change that value. We're using state to keep the list of Movies returned by the search
-  const [movies, setMovies] = useState<Movie[]>([]);
+  const [movies, setMovies] = useState<Movie[] | null>(null);
 
   useEffect(() => {
     // if the ref is null clear the movie list
@@ -46,13 +46,16 @@ export const Search: FC<SearchProps> = ({ user }) => {
         mr="auto"
         padding={2}
       >
-        {movies.length === 0 && <p>No Results Found</p>}
-        {movies.map((movie) => (
+        {movies === null && <Spinner />}
+        {movies?.length === 0 && <p>No Results Found</p>}
+        {movies?.map((movie) => (
           <MovieTile movie={movie} />
         ))}
-        <div className="movie" key="next">
-          <a href={`/search?search=${search}&page=${numberPage + 1}`}>Next Page...</a>
-        </div>
+        {movies !== null && (
+          <div className="movie" key="next">
+            <a href={`/search?search=${search}&page=${numberPage + 1}`}>Next Page...</a>
+          </div>
+        )}
       </Box>
     </div>
   );

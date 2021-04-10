@@ -1,5 +1,5 @@
 import { StarIcon } from "@chakra-ui/icons";
-import { Box, Flex, Heading } from "@chakra-ui/react";
+import { Box, Flex, Heading, Spinner } from "@chakra-ui/react";
 import { range } from "lodash";
 import { User } from "oidc-client";
 import * as React from "react";
@@ -43,28 +43,29 @@ const MovieWithVotes: FC<{ movie: MovieDetailsWithVotes; comingSoon?: boolean }>
 export const GroupWatchList: FC<{ group: string; user: User | null }> = ({ group, user }) => {
   const { wishlist } = useGroupMovies(user, group);
   const today = new Date().getTime();
-  let [watchNow, comingSoon] = wishlist.reduce(
+  let [watchNow, comingSoon] = wishlist?.reduce(
     ([wn, cs], c) => (new Date(c.Released || c.Year).getTime() < today ? [[...wn, c], cs] : [wn, [...cs, c]]),
     [[], []] as [MovieDetailsWithVotes[], MovieDetailsWithVotes[]]
-  );
-  comingSoon = comingSoon.sort(
-    (a, b) => new Date(a.Released || a.Year).getTime() - new Date(b.Released || b.Year).getTime()
-  );
-  const watched = watchNow.filter((w) => w.votes === w.watched);
-  watchNow = watchNow.filter((w) => w.votes !== w.watched);
+  ) || [null, null];
+  comingSoon =
+    comingSoon?.sort((a, b) => new Date(a.Released || a.Year).getTime() - new Date(b.Released || b.Year).getTime()) ||
+    null;
+  const watched = watchNow?.filter((w) => w.votes === w.watched);
+  watchNow = watchNow?.filter((w) => w.votes !== w.watched) || null;
   return (
     <Flex flexDirection="column">
-      {watchNow.map((movie, i) => (
+      {watchNow === null && <Spinner alignSelf="center" margin={20} />}
+      {watchNow?.map((movie, i) => (
         <MovieWithVotes key={movie.imdbID + i} movie={movie} />
       ))}
-      {comingSoon.length > 0 && <hr />}
-      {comingSoon.length > 0 && <Heading pb="2rem">Coming Soon</Heading>}
-      {comingSoon.map((movie, i) => (
+      {!!comingSoon?.length && <hr />}
+      {!!comingSoon?.length && <Heading pb="2rem">Coming Soon</Heading>}
+      {comingSoon?.map((movie, i) => (
         <MovieWithVotes key={movie.imdbID + i} movie={movie} comingSoon={true} />
       ))}
-      {watched.length > 0 && <hr />}
-      {watched.length > 0 && <Heading pb="2rem">Watched and Liked</Heading>}
-      {watched.map((movie, i) => (
+      {!!watched?.length && <hr />}
+      {!!watched?.length && <Heading pb="2rem">Watched and Liked</Heading>}
+      {watched?.map((movie, i) => (
         <MovieWithVotes key={movie.imdbID + i} movie={movie} />
       ))}
     </Flex>

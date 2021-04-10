@@ -92,7 +92,7 @@ export class HttpError extends Error {
   }
 }
 
-async function fetchGet<T>(token: string, url: string): Promise<T | undefined> {
+async function fetchGet<T>(token: string, url: string): Promise<T> {
   const searchResponse = await fetch(url, {
     headers: { Authorization: "Bearer " + token },
   });
@@ -133,12 +133,14 @@ export async function updateWatchList(
 }
 
 interface UseMoviesRet {
-  userMovies: UserMovies | undefined;
+  userMovies: UserMovies | null;
+  error?: string;
 }
 
 /** React Hook to manage the state of a user's proposed, vote and wishlist movies */
 export function useUserMovies(user: User | null): UseMoviesRet {
-  const [userMovies, setUserMovies] = useState<UserMovies>();
+  const [userMovies, setUserMovies] = useState<UserMovies | null>(null);
+  const [error, setError] = useState<string>();
 
   useEffect(() => {
     (async () => {
@@ -151,10 +153,12 @@ export function useUserMovies(user: User | null): UseMoviesRet {
         setUserMovies(userDetails);
       } catch (e) {
         console.error(e);
+        setUserMovies({ userid: "error", wishlist: [] });
+        setError(e.message);
       }
     })();
   }, [user]);
-  return { userMovies };
+  return { userMovies, error };
 }
 
 /** React Hook to return all users movies in the group */
@@ -178,12 +182,12 @@ export function useUser(user: User | null): UserLogin | undefined {
 }
 
 interface GroupMovies {
-  wishlist: MovieDetailsWithVotes[];
+  wishlist: MovieDetailsWithVotes[] | null;
 }
 
 /** React Hook to return all users movies in the group */
 export function useGroupMovies(user: User | null, group: string): GroupMovies {
-  const [wishlist, setWishlist] = useState<MovieDetailsWithVotes[]>([]);
+  const [wishlist, setWishlist] = useState<MovieDetailsWithVotes[] | null>(null);
   // this runs when `user` changes its value (e.g. when logged in). It uses the API to get all the users' proposals
   // and their movie details using the state hook variables above
   useEffect(() => {

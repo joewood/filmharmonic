@@ -27,10 +27,9 @@ const httpTrigger: AzureFunction = async function (context: Context, req: HttpRe
                 )
                 .fetchAll();
             const resultFill = result.resources.filter((r) => !!r.movieid);
-            // if (result.resources.length === 0) throw new HttpError(`Group ${id} not found`, 404);
             const movies = await Promise.all(
-                resultFill.map(({ moviedetails, ...m }) =>
-                    !moviedetails && !!m.movieid ? getMovie(m.movieid) : moviedetails
+                resultFill.map(({ moviedetails, movieid }) =>
+                    !moviedetails && !!movieid ? getMovie(movieid) : moviedetails
                 )
             );
             const movieVotes = resultFill.map((v, i) => ({ ...v, ...(movies[i] || {}) }));
