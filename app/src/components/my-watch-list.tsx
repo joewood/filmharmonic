@@ -1,4 +1,4 @@
-import { AlertDialog, Flex, Heading, Spinner } from "@chakra-ui/react";
+import { Flex, Heading, Spinner } from "@chakra-ui/react";
 import { User } from "oidc-client";
 import * as React from "react";
 import { FC } from "react";
